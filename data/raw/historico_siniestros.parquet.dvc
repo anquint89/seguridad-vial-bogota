@@ -1,0 +1,5 @@
+outs:
+- md5: 0d3a3aab645a3a9165857434205bda84
+  size: 8231149
+  hash: md5
+  path: historico_siniestros.parquet

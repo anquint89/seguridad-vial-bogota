@@ -1,0 +1,5 @@
+outs:
+- md5: 0448d57371f106a38d05672c95730f46
+  size: 19281525
+  hash: md5
+  path: malla_vial_integral.parquet

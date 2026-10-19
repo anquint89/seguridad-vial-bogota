@@ -1,0 +1,30 @@
+# Tuberia del proyecto. Cada etapa declara sus entradas y sus salidas, de modo
+# que `dvc repro` rehace solo lo que quedo desactualizado.
+#
+# Los datos crudos no son una etapa: se descargan con
+# `python -m src.extraccion.descargar` y se versionan con `dvc add`, porque
+# vienen de un servicio externo cuyo contenido no controlamos. De data/raw en
+# adelante todo es derivado y lo produce este pipeline.
+
+stages:
+
+  perfilar:
+    cmd: python -m src.exploracion.perfilamiento
+    deps:
+      - src/exploracion/perfilamiento.py
+      - data/raw
+    outs:
+      - reportes/perfilamiento.json:
+          cache: false
+      - reportes/figuras/concentracion.png:
+          cache: false
+      - reportes/figuras/tendencia_tratados.png:
+          cache: false
+
+  maqueta:
+    cmd: python -m src.tablero.maqueta
+    deps:
+      - src/tablero/maqueta.py
+    outs:
+      - reportes/figuras/maqueta_tablero.png:
+          cache: false

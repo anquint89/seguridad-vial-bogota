@@ -1,0 +1,7 @@
+[core]
+    remote = almacen
+['remote "almacen"']
+    url = s3://svb-dvcstore/datos
+    region = us-east-1
+['remote "respaldo"']
+    url = ../../almacen-dvc-local

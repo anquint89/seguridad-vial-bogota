@@ -1,0 +1,31 @@
+{
+  "capa": "victimas",
+  "servicio": "Victima_2021_may2025_Loc",
+  "url": "https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services/Victima_2021_may2025_Loc/FeatureServer/0",
+  "descripcion": "Victimas 2021 - mayo 2025. No trae CIV: se cruza por FORMULARIO.",
+  "consultado": "2026-10-19T04:18:08+00:00",
+  "registros": 94902,
+  "registros_reportados_por_el_servicio": 94902,
+  "srs_origen": {
+    "wkid": 4686,
+    "latestWkid": 4686
+  },
+  "srs_salida": 3116,
+  "campos": [
+    "OBJECTID",
+    "CODIGO_ACCIDENTADO",
+    "FORMULARIO",
+    "FECHA_OCURRENCIA_ACC",
+    "ANO_OCURRENCIA_ACC",
+    "CLASE_ACC",
+    "LOCALIDAD",
+    "CONDICION",
+    "GENERO",
+    "EDAD",
+    "TIPO_VICTIMA",
+    "MUERTE_POSTERIOR",
+    "LOCNOMBRE",
+    "LOCCODIGO",
+    "geometry"
+  ]
+}

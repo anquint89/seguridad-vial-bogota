@@ -1,0 +1,5 @@
+outs:
+- md5: f6e1f772a3eb9daa7cd994f159050047
+  size: 659254
+  hash: md5
+  path: intervenciones_seguridad_vial.parquet

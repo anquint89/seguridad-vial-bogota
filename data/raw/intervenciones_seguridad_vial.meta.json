@@ -1,0 +1,26 @@
+{
+  "capa": "intervenciones",
+  "servicio": "Intervenciones_Seguridad_Vial",
+  "url": "https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services/Intervenciones_Seguridad_Vial/FeatureServer/0",
+  "descripcion": "Intervenciones ejecutadas. Tratamiento del diseno causal.",
+  "consultado": "2026-10-19T04:18:22+00:00",
+  "registros": 27950,
+  "registros_reportados_por_el_servicio": 27950,
+  "srs_origen": {
+    "wkid": 102100,
+    "latestWkid": 3857
+  },
+  "srs_salida": null,
+  "campos": [
+    "OBJECTID",
+    "CIV",
+    "TIPO",
+    "CATEGORIA",
+    "DESCRIPCIO",
+    "DIRECCION",
+    "FECHA_FIN_",
+    "ANIO",
+    "LATITUD_TR",
+    "LONGITUD_T"
+  ]
+}

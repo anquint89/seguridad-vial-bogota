@@ -1,0 +1,28 @@
+{
+  "capa": "siniestros",
+  "servicio": "HistoricoSiniestros",
+  "url": "https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services/HistoricoSiniestros/FeatureServer/0",
+  "descripcion": "Historico de siniestros 2015-2021. Variable respuesta.",
+  "consultado": "2026-10-19T04:17:18+00:00",
+  "registros": 209861,
+  "registros_reportados_por_el_servicio": 209861,
+  "srs_origen": {
+    "wkid": 4686,
+    "latestWkid": 4686
+  },
+  "srs_salida": null,
+  "campos": [
+    "OBJECTID",
+    "FORMULARIO",
+    "CODIGO_ACCIDENTE",
+    "FECHA_OCURRENCIA_ACC",
+    "ANO_OCURRENCIA_ACC",
+    "GRAVEDAD",
+    "CLASE_ACC",
+    "LOCALIDAD",
+    "CIV",
+    "PK_CALZADA",
+    "LATITUD",
+    "LONGITUD"
+  ]
+}

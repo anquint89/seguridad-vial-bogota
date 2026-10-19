@@ -1,0 +1,28 @@
+{
+  "capa": "malla",
+  "servicio": "Malla_Vial_Integral",
+  "url": "https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services/Malla_Vial_Integral/FeatureServer/0",
+  "descripcion": "Malla Vial Integral. Unidad de analisis del proyecto.",
+  "consultado": "2026-10-19T04:15:26+00:00",
+  "registros": 139107,
+  "registros_reportados_por_el_servicio": 139107,
+  "srs_origen": {
+    "wkid": 4686,
+    "latestWkid": 4686
+  },
+  "srs_salida": 3116,
+  "campos": [
+    "OBJECTID",
+    "MVICIV",
+    "MVICODIGO",
+    "MVICCAT",
+    "MVITIPO",
+    "MVITCLA",
+    "MVINUMC",
+    "MVIVELREG",
+    "MVICCALZAD",
+    "MVINOMBRE",
+    "Shape__Length",
+    "geometry"
+  ]
+}
