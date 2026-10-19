@@ -1,0 +1,39 @@
+schema: '2.0'
+stages:
+  perfilar:
+    cmd: python -m src.exploracion.perfilamiento
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: bd01b47f65bb5e567c4d80a7bb3f1f8f.dir
+      size: 32012630
+      nfiles: 13
+    - path: src/exploracion/perfilamiento.py
+      hash: md5
+      md5: e4535e12670e91be5bade8125c37a0d2
+      size: 13019
+    outs:
+    - path: reportes/figuras/concentracion.png
+      hash: md5
+      md5: 5a505ee6352eebf4f05f2ac98f972ce9
+      size: 53158
+    - path: reportes/figuras/tendencia_tratados.png
+      hash: md5
+      md5: cff0b42db1e15268882abcd6fd0da02e
+      size: 60414
+    - path: reportes/perfilamiento.json
+      hash: md5
+      md5: 76f5ff6f8d4aec85dd1b0bd6e277ad15
+      size: 3882
+  maqueta:
+    cmd: python -m src.tablero.maqueta
+    deps:
+    - path: src/tablero/maqueta.py
+      hash: md5
+      md5: 97df229ed6e5efaa5c63d77143a75f24
+      size: 9903
+    outs:
+    - path: reportes/figuras/maqueta_tablero.png
+      hash: md5
+      md5: c2961bd916fd7be92eb6d567f39e1d6f
+      size: 325126
