@@ -1,0 +1,4 @@
+# Archivos que DVC no debe rastrear dentro de las carpetas de datos.
+*.log
+*.tmp
+.ipynb_checkpoints/

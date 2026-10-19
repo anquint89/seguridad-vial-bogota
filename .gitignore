@@ -1,0 +1,24 @@
+# Los datos los versiona DVC, no Git. DVC escribe por su cuenta el .gitignore
+# de cada carpeta con los archivos que rastrea.
+
+# Credenciales. Las de AWS Academy rotan cada sesion del Learner Lab y nunca
+# entran al repositorio.
+.env
+*.pem
+credentials
+.aws/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env-dsa/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
