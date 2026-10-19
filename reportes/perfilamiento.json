@@ -1,0 +1,153 @@
+{
+  "malla": {
+    "registros": 139107,
+    "civ_cero": 1887,
+    "civ_distintos": 116322,
+    "civ_con_mas_de_un_registro": 11590,
+    "maximo_registros_por_civ": 28,
+    "velocidad_reglamentada_vacia": 56377,
+    "velocidad_reglamentada_vacia_pct": 40.5,
+    "clase_via_nulos": 0,
+    "carriles_nulos": 0,
+    "longitud_total_km": 9392.5,
+    "longitud_mediana_m_por_civ": 52.3,
+    "segmentos_menores_a_1_m": 47
+  },
+  "siniestros": {
+    "registros": 209861,
+    "graves": 75049,
+    "con_muertos": 3393,
+    "sin_civ": 2052,
+    "sin_civ_pct": 0.98,
+    "civ_fuera_de_la_malla_vigente": 10108,
+    "civ_fuera_de_la_malla_vigente_pct": 4.82,
+    "por_anio": {
+      "2015": {
+        "total": 27885,
+        "graves": 10210
+      },
+      "2016": {
+        "total": 31928,
+        "graves": 10312
+      },
+      "2017": {
+        "total": 32415,
+        "graves": 10182
+      },
+      "2018": {
+        "total": 33418,
+        "graves": 11928
+      },
+      "2019": {
+        "total": 32962,
+        "graves": 12145
+      },
+      "2020": {
+        "total": 22424,
+        "graves": 8817
+      },
+      "2021": {
+        "total": 28829,
+        "graves": 11455
+      }
+    },
+    "por_clase": {
+      "CHOQUE": 180154,
+      "ATROPELLO": 21029,
+      "CAIDA DE OCUPANTE": 4872,
+      "VOLCAMIENTO": 2901,
+      "OTRO": 871,
+      "INCENDIO": 24,
+      "AUTOLESION": 10
+    }
+  },
+  "distribucion_respuesta": {
+    "graves_asignables_a_un_civ": 71268,
+    "civ_sin_ningun_grave": 91372,
+    "civ_sin_ningun_grave_pct": 78.6,
+    "media_por_civ": 0.613,
+    "varianza_por_civ": 5.671,
+    "indice_de_dispersion": 9.26,
+    "maximo_en_un_civ": 103,
+    "concentracion": {
+      "top_1_pct": 30.2,
+      "top_2_pct": 42.9,
+      "top_5_pct": 63.4,
+      "top_10_pct": 81.3
+    }
+  },
+  "linea_base": {
+    "universo": 116322,
+    "tamano_top_5_pct": 5816,
+    "entrena_2015_2020_valida_2021": {
+      "capturados": 4772,
+      "total": 10717,
+      "pct": 44.5
+    },
+    "entrena_2015_2019_valida_2020": {
+      "capturados": 4630,
+      "total": 8361,
+      "pct": 55.4
+    }
+  },
+  "intervenciones": {
+    "registros": 27950,
+    "sin_civ": 88,
+    "categorias_crudas": 6,
+    "categorias_normalizadas": 5,
+    "registros_por_categoria": {
+      "señalización": 16366,
+      "kilometros demarcados": 5502,
+      "paso peatonal": 3399,
+      "tráfico calmado": 1439,
+      "zona escolar": 1244
+    },
+    "civ_tratados": 7722,
+    "civ_con_mas_de_una_categoria": 4329,
+    "fuera_de_la_malla_vigente": 343,
+    "fecha_fin_minima": "2016-01-04",
+    "fecha_fin_maxima": "2017-08-15",
+    "registros_por_anio": {
+      "2016": 27862,
+      "2017": 88
+    }
+  },
+  "comparacion_preliminar": {
+    "nota": "Diferencia en diferencias cruda, sin exposicion, sin covariables y sin emparejamiento. Solo orienta el diseno causal.",
+    "tratados_2015": 1206,
+    "tratados_promedio_2018_2021": 1238.0,
+    "tratados_variacion_pct": 2.7,
+    "control_2015": 8550,
+    "control_promedio_2018_2021": 9261.8,
+    "control_variacion_pct": 8.3,
+    "diferencia_en_diferencias_pp": -5.7
+  },
+  "victimas": {
+    "registros": 94902,
+    "fallecidos": 2285,
+    "por_condicion": {
+      "MOTOCICLISTA": 35528,
+      "PASAJERO": 23271,
+      "PEATON": 13626,
+      "CONDUCTOR": 13105,
+      "CICLISTA": 9372
+    },
+    "por_anio": {
+      "2021": 18829,
+      "2022": 22036,
+      "2023": 23513,
+      "2024": 23183,
+      "2025": 7341
+    },
+    "edad_nula": 369,
+    "edad_implausible": 336,
+    "puente_formulario_2021": {
+      "victimas_2021": 18829,
+      "cruzan_con_siniestros": 18811,
+      "cruzan_pct": 99.9,
+      "con_civ_valido": 18383,
+      "con_civ_valido_pct": 97.6,
+      "formularios_duplicados_en_siniestros": 0
+    }
+  }
+}
