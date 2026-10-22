@@ -225,16 +225,7 @@ def main(argumentos: list[str] | None = None) -> int:
         "por_anio": victimas.ANO_OCURRENCIA_ACC.value_counts().sort_index().to_dict(),
         "edad_nula": int(victimas.EDAD.isna().sum()),
         "edad_implausible": edad_implausible,
-        "puente_formulario_2021": {
-            "victimas_2021": int(len(victimas_2021)),
-            "cruzan_con_siniestros": int(cruzan.sum()),
-            "cruzan_pct": round(100 * cruzan.mean(), 1),
-            "con_civ_valido": int((civ_asignado != 0).sum()),
-            "con_civ_valido_pct": round(100 * (civ_asignado != 0).mean(), 1),
-            "formularios_duplicados_en_siniestros": int(
-                siniestros_2021.FORMULARIO.duplicated().sum()
-            ),
-        },
+        "puente_formulario_2021": puente_formulario(victimas, siniestros)
     }
 
     (salida / "perfilamiento.json").write_text(
