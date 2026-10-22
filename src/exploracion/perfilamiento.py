@@ -210,11 +210,7 @@ def main(argumentos: list[str] | None = None) -> int:
     }
 
     # --- Victimas y puente FORMULARIO -------------------------------------
-    #victimas_2021 = victimas[victimas.ANO_OCURRENCIA_ACC == 2021]
-    #siniestros_2021 = siniestros[siniestros.ANO_OCURRENCIA_ACC == 2021]
-    #puente = siniestros_2021.drop_duplicates("FORMULARIO").set_index("FORMULARIO").CIV
-    #cruzan = victimas_2021.FORMULARIO.isin(puente.index)
-    #civ_asignado = victimas_2021.FORMULARIO.map(puente).fillna(0)
+
     edad_implausible = int(((victimas.EDAD > 100) | (victimas.EDAD == 0)).sum())
 
     edad_valid = victimas.EDAD.where(victimas.EDAD.between(1,100))
