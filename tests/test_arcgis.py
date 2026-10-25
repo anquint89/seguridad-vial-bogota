@@ -12,9 +12,10 @@ import io
 import json
 import urllib.error
 
+import pandas as pd
 import pytest
 
-from src.extraccion import arcgis
+from src.extraccion import arcgis, descargar
 
 
 # ----------------------------------------------------------------- auxiliares
@@ -171,3 +172,41 @@ def test_paginar_con_geometria_la_pide_reproyectada(monkeypatch):
     assert pedidos[0]["returnGeometry"] == "true"
     assert pedidos[0]["outSR"] == 3116
     assert all(r["geometry"] == {"paths": [[[0, 0], [1, 1]]]} for r in registros)
+
+
+# ----------------------------------------------------------- descargar_capa
+
+
+def simular_servicio(monkeypatch, reportados: int, entregados: int) -> None:
+    """Reemplaza el cliente dentro de descargar por uno que no usa la red."""
+    monkeypatch.setattr(descargar.arcgis, "describir", lambda servicio: {})
+    monkeypatch.setattr(descargar.arcgis, "contar", lambda servicio: reportados)
+    monkeypatch.setattr(
+        descargar.arcgis,
+        "paginar",
+        lambda servicio, **opciones: iter(
+            {"OBJECTID": i, "CIV": 1000 + i, "FECHA_FIN_": 1451606400000}
+            for i in range(entregados)
+        ),
+    )
+
+
+def test_descargar_capa_escribe_parquet_y_ficha(monkeypatch, tmp_path):
+    simular_servicio(monkeypatch, reportados=5, entregados=5)
+    destino = descargar.descargar_capa("intervenciones", tmp_path)
+
+    tabla = pd.read_parquet(destino)
+    assert len(tabla) == 5
+    # Las fechas llegan en milisegundos y se convierten a fecha real.
+    assert tabla.FECHA_FIN_.iloc[0] == pd.Timestamp("2016-01-01")
+
+    ficha = json.loads((tmp_path / "intervenciones_seguridad_vial.meta.json").read_text("utf-8"))
+    assert ficha["registros"] == ficha["registros_reportados_por_el_servicio"] == 5
+    assert ficha["servicio"] == "Intervenciones_Seguridad_Vial"
+
+
+def test_descargar_capa_no_escribe_si_el_conteo_no_cuadra(monkeypatch, tmp_path):
+    simular_servicio(monkeypatch, reportados=10, entregados=7)
+    with pytest.raises(RuntimeError, match="Se descargaron 7 registros"):
+        descargar.descargar_capa("intervenciones", tmp_path)
+    assert list(tmp_path.iterdir()) == []
