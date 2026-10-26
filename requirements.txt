@@ -12,3 +12,6 @@ dvc[s3]==3.56.0
 
 # Generacion de los documentos de la entrega
 python-docx==1.1.2
+
+#Ejecución de pruebas
+pytest==8.3.3

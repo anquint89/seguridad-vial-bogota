@@ -45,6 +45,20 @@ def captura(ranking: pd.Series, validacion: pd.Series, k: int) -> tuple[int, int
     total = int(validacion.sum())
     return capturados, total, 100 * capturados / total
 
+def puente_formulario(victimas: pd.DataFrame, siniestros: pd.DataFrame) -> dict:
+    """Cruza las victimas de 2021 con los siniestros por FORMULARIO"""
+    victimas_2021 = victimas[victimas.ANO_OCURRENCIA_ACC == 2021]
+    siniestros_2021 = siniestros[siniestros.ANO_OCURRENCIA_ACC == 2021]
+    puente = siniestros_2021.drop_duplicates("FORMULARIO").set_index("FORMULARIO").CIV
+    cruzan = victimas_2021.FORMULARIO.isin(puente.index)
+    civ_asignado = victimas_2021.FORMULARIO.map(puente).fillna(0)
+    return {"victimas_2021": int(len(victimas_2021)),
+        "cruzan_con_siniestros": int(cruzan.sum()),
+        "cruzan_pct": round(100 * cruzan.mean(), 1),
+        "con_civ_valido": int((civ_asignado != 0).sum()),
+        "con_civ_valido_pct": round(100 * (civ_asignado != 0).mean(), 1),
+        "formularios_duplicados_en_siniestros": int(siniestros_2021.FORMULARIO.duplicated().sum())}
+
 
 def main(argumentos: list[str] | None = None) -> int:
     analizador = argparse.ArgumentParser(description=__doc__)
@@ -196,12 +210,9 @@ def main(argumentos: list[str] | None = None) -> int:
     }
 
     # --- Victimas y puente FORMULARIO -------------------------------------
-    victimas_2021 = victimas[victimas.ANO_OCURRENCIA_ACC == 2021]
-    siniestros_2021 = siniestros[siniestros.ANO_OCURRENCIA_ACC == 2021]
-    puente = siniestros_2021.drop_duplicates("FORMULARIO").set_index("FORMULARIO").CIV
-    cruzan = victimas_2021.FORMULARIO.isin(puente.index)
-    civ_asignado = victimas_2021.FORMULARIO.map(puente).fillna(0)
+
     edad_implausible = int(((victimas.EDAD > 100) | (victimas.EDAD == 0)).sum())
+
     edad_valid = victimas.EDAD.where(victimas.EDAD.between(1,100))
     victimas["grupo_edad"] = pd.cut(edad_valid, bins=[0,17,29,59,100], labels=["0-17", "18-29", "30-59", "60+"])
     ficha["victimas"] = {
@@ -214,16 +225,7 @@ def main(argumentos: list[str] | None = None) -> int:
         "por_anio": victimas.ANO_OCURRENCIA_ACC.value_counts().sort_index().to_dict(),
         "edad_nula": int(victimas.EDAD.isna().sum()),
         "edad_implausible": edad_implausible,
-        "puente_formulario_2021": {
-            "victimas_2021": int(len(victimas_2021)),
-            "cruzan_con_siniestros": int(cruzan.sum()),
-            "cruzan_pct": round(100 * cruzan.mean(), 1),
-            "con_civ_valido": int((civ_asignado != 0).sum()),
-            "con_civ_valido_pct": round(100 * (civ_asignado != 0).mean(), 1),
-            "formularios_duplicados_en_siniestros": int(
-                siniestros_2021.FORMULARIO.duplicated().sum()
-            ),
-        },
+        "puente_formulario_2021": puente_formulario(victimas, siniestros)
     }
 
     (salida / "perfilamiento.json").write_text(
