@@ -202,10 +202,15 @@ def main(argumentos: list[str] | None = None) -> int:
     cruzan = victimas_2021.FORMULARIO.isin(puente.index)
     civ_asignado = victimas_2021.FORMULARIO.map(puente).fillna(0)
     edad_implausible = int(((victimas.EDAD > 100) | (victimas.EDAD == 0)).sum())
+    edad_valid = victimas.EDAD.where(victimas.EDAD.between(1,100))
+    victimas["grupo_edad"] = pd.cut(edad_valid, bins=[0,17,29,59,100], labels=["0-17", "18-29", "30-59", "60+"])
     ficha["victimas"] = {
         "registros": len(victimas),
         "fallecidos": int(victimas.TIPO_VICTIMA.eq("Fallecido").sum()),
         "por_condicion": victimas.CONDICION.value_counts().to_dict(),
+        "por_localidad": victimas.LOCALIDAD.fillna("SIN DATO").value_counts().to_dict(),
+        "por_grupo_edad": victimas.grupo_edad.value_counts(sort=False).to_dict(),
+        "condicion_por_grupo_edad": pd.crosstab(victimas.CONDICION, victimas.grupo_edad).to_dict("index"),
         "por_anio": victimas.ANO_OCURRENCIA_ACC.value_counts().sort_index().to_dict(),
         "edad_nula": int(victimas.EDAD.isna().sum()),
         "edad_implausible": edad_implausible,
