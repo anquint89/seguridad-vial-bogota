@@ -48,7 +48,10 @@ datos, que pesan y se regeneran desde la API.
 
 ## Puesta en marcha
 
-Requiere Python 3.11, Git y una sesion activa del AWS Academy Learner Lab.
+Requiere Python 3.13, Git y una sesion activa del AWS Academy Learner Lab. Las
+versiones de `requirements.txt` estan verificadas contra 3.13: en un entorno
+limpio el perfilamiento reproduce `reportes/perfilamiento.json` sin mover una
+cifra.
 
 ```bash
 git clone https://github.com/anquint89/seguridad-vial-bogota.git
