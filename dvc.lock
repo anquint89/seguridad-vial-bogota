@@ -10,8 +10,8 @@ stages:
       nfiles: 13
     - path: src/exploracion/perfilamiento.py
       hash: md5
-      md5: e4535e12670e91be5bade8125c37a0d2
-      size: 13019
+      md5: cdcf116cfc824c5e87f034538d0e4dac
+      size: 13616
     outs:
     - path: reportes/figuras/concentracion.png
       hash: md5
@@ -23,8 +23,8 @@ stages:
       size: 60414
     - path: reportes/perfilamiento.json
       hash: md5
-      md5: 76f5ff6f8d4aec85dd1b0bd6e277ad15
-      size: 3882
+      md5: 074cb51ff82e9f8fb2aa2425e0b219b8
+      size: 5245
   maqueta:
     cmd: python -m src.tablero.maqueta
     deps:
