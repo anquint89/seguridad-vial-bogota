@@ -37,3 +37,24 @@ stages:
       hash: md5
       md5: c2961bd916fd7be92eb6d567f39e1d6f
       size: 325126
+  panel:
+    cmd: python -m src.preparacion.panel
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 118248196ec796b7464de7648ea086e4.dir
+      size: 32640278
+      nfiles: 13
+    - path: src/preparacion/exposicion.py
+      hash: md5
+      md5: f4266d3cce865965af6cdc53d929019d
+      size: 1319
+    - path: src/preparacion/panel.py
+      hash: md5
+      md5: 08bf802417017b658c57415c41c63503
+      size: 4727
+    outs:
+    - path: data/procesado/panel.parquet
+      hash: md5
+      md5: 44ce52923f0d2cf0cf3ca5b238dc7112
+      size: 10717726
