@@ -28,3 +28,12 @@ stages:
     outs:
       - reportes/figuras/maqueta_tablero.png:
           cache: false
+
+  panel:
+    cmd: python -m src.preparacion.panel
+    deps:
+      - src/preparacion/panel.py
+      - src/preparacion/exposicion.py
+      - data/raw
+    outs:
+      - data/procesado/panel.parquet
