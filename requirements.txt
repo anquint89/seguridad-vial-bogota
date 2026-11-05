@@ -1,7 +1,11 @@
 # Extraccion. El cliente REST usa solo la libreria estandar; pandas y pyarrow
 # escriben los parquet de data/raw.
+#
+# pyarrow 18.0.0 es la primera version con rueda para Python 3.13. Con la 17.0.0
+# pip baja el fuente e intenta compilarlo, y el build falla. El perfilamiento da
+# las mismas cifras con las dos.
 pandas==2.2.3
-pyarrow==17.0.0
+pyarrow==18.0.0
 
 # Exploracion y figuras del reporte
 numpy==2.1.3
