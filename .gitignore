@@ -22,3 +22,10 @@ env-dsa/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Almacen local de MLflow. Los experimentos que cuentan son los de la EC2;
+# esto es solo la copia de trabajo y pesa, asi que no entra ni a Git ni al
+# repositorio. Se regenera con `python -m src.modelos.experimentos`.
+mlruns/
+mlartifacts/
+mlflow.db
