@@ -13,12 +13,12 @@ POR QUE UN SEGUNDO MODELO
 QUE COMPARA
   Regresion logistica, que da razones de momios interpretables, contra
   LightGBM, que captura no linealidades e interacciones. Las dos sobre la
-  MISMA matriz de diseno del modelo de conteo, para que la comparacion sea de
-  forma funcional y no de informacion disponible.
+  matriz de caracteristicas.py, la misma que usa el modelo de conteo, para que
+  la comparacion sea de forma funcional y no de informacion disponible.
 
-VENTANA
-  Igual que el conteo: entrena 2016-2020, valida 2021. La ventana empieza en
-  2016 porque desde 2017 las columnas post_ y tratado_ son identicas.
+VENTANA Y VARIABLES
+  Las define caracteristicas.py: entrena 2016-2020, valida 2021, e incluye la
+  historia de los segmentos vecinos.
 
 NOTA DE ENTORNO
   lightgbm se importa ANTES que pandas. Si pyarrow carga primero su runtime de
@@ -42,7 +42,16 @@ import statsmodels.api as sm
 from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_score
 
 from src.exploracion.perfilamiento import captura
-from src.modelos.conteo import ANIO_FIN_ENTRENA, ANIO_INICIO, ANIO_VALIDA, matriz_diseno, preparar
+from src.modelos.caracteristicas import (
+    ANIO_FIN_ENTRENA,
+    ANIO_INICIO,
+    ANIO_VALIDA,
+    PANEL,
+    VECINDAD,
+    cargar,
+    matriz_diseno,
+    particion,
+)
 
 RAIZ = Path(__file__).resolve().parents[2]
 PERCENTILES = (0.01, 0.02, 0.05, 0.10)
@@ -111,20 +120,20 @@ def _ranking(prob: pd.Series, graves: pd.Series, universo: int) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--panel", type=Path, default=RAIZ / "data" / "procesado" / "panel.parquet")
+    ap.add_argument("--panel", type=Path, default=PANEL)
+    ap.add_argument("--vecindad", type=Path, default=VECINDAD)
     ap.add_argument("--salida", type=Path, default=RAIZ / "reportes" / "modelos")
     ap.add_argument("--predicciones", type=Path, default=RAIZ / "data" / "procesado")
     a = ap.parse_args()
     a.salida.mkdir(parents=True, exist_ok=True)
     a.predicciones.mkdir(parents=True, exist_ok=True)
 
-    p = preparar(pd.read_parquet(a.panel))
+    p = cargar(a.panel, a.vecindad)
     universo = int(p.CIV.nunique())
 
     X = matriz_diseno(p)
     y = (p.graves >= 1).astype(float)  # ocurrencia, no conteo
-    entrena = p.anio.between(ANIO_INICIO, ANIO_FIN_ENTRENA).to_numpy()
-    valida = (p.anio == ANIO_VALIDA).to_numpy()
+    entrena, valida = particion(p)
     yv = y[valida].to_numpy()
 
     # --- Regresion logistica ----------------------------------------------

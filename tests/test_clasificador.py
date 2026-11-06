@@ -4,9 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.modelos import clasificador
-from src.modelos.conteo import matriz_diseno, preparar
-from tests.test_conteo import _panel_minimo
+from src.modelos import caracteristicas, clasificador
 
 
 def test_la_respuesta_es_ocurrencia_no_conteo():
@@ -17,13 +15,10 @@ def test_la_respuesta_es_ocurrencia_no_conteo():
 
 
 def test_los_dos_modelos_ven_la_misma_matriz():
-    """El clasificador reutiliza matriz_diseno del conteo a proposito: si se
-    separan, la comparacion deja de ser de forma funcional."""
-    p = preparar(_panel_minimo())
-    X = matriz_diseno(p)
-    assert clasificador.matriz_diseno is matriz_diseno
-    assert "hist_media_log" in X.columns
-    assert "const" in X.columns
+    """El clasificador reutiliza la capa compartida a proposito: si cada modelo
+    construyera la suya, la comparacion dejaria de ser de forma funcional."""
+    assert clasificador.matriz_diseno is caracteristicas.matriz_diseno
+    assert clasificador.particion is caracteristicas.particion
 
 
 def test_el_brier_se_omite_cuando_el_puntaje_no_es_probabilidad():
@@ -46,6 +41,6 @@ def test_el_brier_se_calcula_cuando_si_lo_es():
 
 def test_la_ventana_coincide_con_la_del_conteo():
     """Las dos empiezan en 2016: desde 2017 post_ y tratado_ son identicas."""
-    assert clasificador.ANIO_INICIO == 2016
-    assert clasificador.ANIO_FIN_ENTRENA == 2020
-    assert clasificador.ANIO_VALIDA == 2021
+    assert clasificador.ANIO_INICIO == caracteristicas.ANIO_INICIO == 2016
+    assert clasificador.ANIO_FIN_ENTRENA == caracteristicas.ANIO_FIN_ENTRENA == 2020
+    assert clasificador.ANIO_VALIDA == caracteristicas.ANIO_VALIDA == 2021

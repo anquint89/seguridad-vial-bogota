@@ -65,19 +65,27 @@ stages:
       hash: md5
       md5: ae23358687210b1f0b095351c6be730f
       size: 10715284
+    - path: data/procesado/vecindad.parquet
+      hash: md5
+      md5: d46826adb115661089e1748994ef1819
+      size: 3083095
+    - path: src/modelos/caracteristicas.py
+      hash: md5
+      md5: d12cae499f33b2b15992791f68136db9
+      size: 5511
     - path: src/modelos/conteo.py
       hash: md5
-      md5: 5f0f4ada50a8e53c39c7b6f5e6a24747
-      size: 11553
+      md5: 769352cf1eac011c1a67b22c8a17d1f1
+      size: 9421
     outs:
     - path: data/procesado/prediccion_conteo.parquet
       hash: md5
-      md5: c59cc67e5d1bf366c76f8f30c5502c55
+      md5: 3ec1ef9bb7327d20076c74c33e2094ca
       size: 3127506
     - path: reportes/modelos/conteo.json
       hash: md5
-      md5: ad2b2a042d3258c92ca5aec9d27e87ec
-      size: 8935
+      md5: fcb5349b2cb702273398d874688671a5
+      size: 9329
   modelo_clasificador:
     cmd: python -m src.modelos.clasificador
     deps:
@@ -85,20 +93,40 @@ stages:
       hash: md5
       md5: ae23358687210b1f0b095351c6be730f
       size: 10715284
+    - path: data/procesado/vecindad.parquet
+      hash: md5
+      md5: d46826adb115661089e1748994ef1819
+      size: 3083095
+    - path: src/modelos/caracteristicas.py
+      hash: md5
+      md5: d12cae499f33b2b15992791f68136db9
+      size: 5511
     - path: src/modelos/clasificador.py
       hash: md5
-      md5: 9f03c60ff0dd55de81d82e8eb577e68a
-      size: 8678
-    - path: src/modelos/conteo.py
-      hash: md5
-      md5: 5f0f4ada50a8e53c39c7b6f5e6a24747
-      size: 11553
+      md5: b8192bd424f5229d6e17c3087b0ce92f
+      size: 8685
     outs:
     - path: data/procesado/prediccion_clasificador.parquet
       hash: md5
-      md5: b6d1f46d42375f3684f49b766e6cf651
-      size: 2291592
+      md5: efea75845396ea400f965fe05ce10ad5
+      size: 2573523
     - path: reportes/modelos/clasificador.json
       hash: md5
-      md5: 894271816218a2b4594f1c1e9601c9d1
-      size: 9036
+      md5: 2c1a9f52417a4cc787241902a7bc8c1b
+      size: 9426
+  vecindad:
+    cmd: python -m src.modelos.vecindad
+    deps:
+    - path: data/raw/malla_vial_integral.parquet
+      hash: md5
+      md5: 0448d57371f106a38d05672c95730f46
+      size: 19281525
+    - path: src/modelos/vecindad.py
+      hash: md5
+      md5: dffced2f59e7d27cfba1cbadc3ec1d3b
+      size: 3331
+    outs:
+    - path: data/procesado/vecindad.parquet
+      hash: md5
+      md5: d46826adb115661089e1748994ef1819
+      size: 3083095
