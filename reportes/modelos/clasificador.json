@@ -1,0 +1,390 @@
+{
+  "ventana": {
+    "entrena": [
+      2016,
+      2020
+    ],
+    "valida": 2021,
+    "filas_entrena": 581610,
+    "filas_valida": 116322,
+    "universo_civ": 116322
+  },
+  "respuesta": {
+    "definicion": "al menos un siniestro grave en el anio",
+    "positivos_entrena": 33401,
+    "tasa_entrena": 0.05743,
+    "positivos_valida": 7035,
+    "tasa_valida": 0.06048
+  },
+  "desempeno_2021": {
+    "regresion_logistica": {
+      "auc_roc": 0.7979,
+      "auc_pr": 0.3179,
+      "brier": 0.04927,
+      "top_1_pct": {
+        "segmentos": 1163,
+        "capturados": 2277,
+        "de": 10717,
+        "pct": 21.2
+      },
+      "top_2_pct": {
+        "segmentos": 2326,
+        "capturados": 3251,
+        "de": 10717,
+        "pct": 30.3
+      },
+      "top_5_pct": {
+        "segmentos": 5816,
+        "capturados": 4708,
+        "de": 10717,
+        "pct": 43.9
+      },
+      "top_10_pct": {
+        "segmentos": 11632,
+        "capturados": 6010,
+        "de": 10717,
+        "pct": 56.1
+      }
+    },
+    "lightgbm": {
+      "auc_roc": 0.8072,
+      "auc_pr": 0.326,
+      "brier": 0.04844,
+      "top_1_pct": {
+        "segmentos": 1163,
+        "capturados": 2204,
+        "de": 10717,
+        "pct": 20.6
+      },
+      "top_2_pct": {
+        "segmentos": 2326,
+        "capturados": 3214,
+        "de": 10717,
+        "pct": 30.0
+      },
+      "top_5_pct": {
+        "segmentos": 5816,
+        "capturados": 4871,
+        "de": 10717,
+        "pct": 45.5
+      },
+      "top_10_pct": {
+        "segmentos": 11632,
+        "capturados": 6162,
+        "de": 10717,
+        "pct": 57.5
+      }
+    },
+    "linea_base_conteo_historico": {
+      "auc_roc": 0.7395,
+      "auc_pr": 0.2744,
+      "top_1_pct": {
+        "segmentos": 1163,
+        "capturados": 2217,
+        "de": 10717,
+        "pct": 20.7
+      },
+      "top_2_pct": {
+        "segmentos": 2326,
+        "capturados": 3181,
+        "de": 10717,
+        "pct": 29.7
+      },
+      "top_5_pct": {
+        "segmentos": 5816,
+        "capturados": 4769,
+        "de": 10717,
+        "pct": 44.5
+      },
+      "top_10_pct": {
+        "segmentos": 11632,
+        "capturados": 6002,
+        "de": 10717,
+        "pct": 56.0
+      }
+    }
+  },
+  "calibracion_2021": {
+    "regresion_logistica": {
+      "probabilidad_media": 0.06773,
+      "tasa_observada": 0.06048,
+      "por_decil": {
+        "0": {
+          "probabilidad_media": 0.00803,
+          "tasa_observada": 0.00817,
+          "segmentos": 11633
+        },
+        "1": {
+          "probabilidad_media": 0.01573,
+          "tasa_observada": 0.01221,
+          "segmentos": 11632
+        },
+        "2": {
+          "probabilidad_media": 0.0207,
+          "tasa_observada": 0.01522,
+          "segmentos": 11632
+        },
+        "3": {
+          "probabilidad_media": 0.02438,
+          "tasa_observada": 0.0202,
+          "segmentos": 11632
+        },
+        "4": {
+          "probabilidad_media": 0.02883,
+          "tasa_observada": 0.03155,
+          "segmentos": 11632
+        },
+        "5": {
+          "probabilidad_media": 0.03429,
+          "tasa_observada": 0.03791,
+          "segmentos": 11632
+        },
+        "6": {
+          "probabilidad_media": 0.04267,
+          "tasa_observada": 0.0484,
+          "segmentos": 11632
+        },
+        "7": {
+          "probabilidad_media": 0.06355,
+          "tasa_observada": 0.06482,
+          "segmentos": 11632
+        },
+        "8": {
+          "probabilidad_media": 0.1028,
+          "tasa_observada": 0.09646,
+          "segmentos": 11632
+        },
+        "9": {
+          "probabilidad_media": 0.33626,
+          "tasa_observada": 0.26984,
+          "segmentos": 11633
+        }
+      }
+    },
+    "lightgbm": {
+      "probabilidad_media": 0.0528,
+      "tasa_observada": 0.06048,
+      "por_decil": {
+        "0": {
+          "probabilidad_media": 0.00279,
+          "tasa_observada": 0.00679,
+          "segmentos": 11633
+        },
+        "1": {
+          "probabilidad_media": 0.00608,
+          "tasa_observada": 0.01143,
+          "segmentos": 11632
+        },
+        "2": {
+          "probabilidad_media": 0.00948,
+          "tasa_observada": 0.01582,
+          "segmentos": 11632
+        },
+        "3": {
+          "probabilidad_media": 0.01271,
+          "tasa_observada": 0.02055,
+          "segmentos": 11632
+        },
+        "4": {
+          "probabilidad_media": 0.01682,
+          "tasa_observada": 0.03086,
+          "segmentos": 11632
+        },
+        "5": {
+          "probabilidad_media": 0.02117,
+          "tasa_observada": 0.03293,
+          "segmentos": 11632
+        },
+        "6": {
+          "probabilidad_media": 0.02953,
+          "tasa_observada": 0.04333,
+          "segmentos": 11632
+        },
+        "7": {
+          "probabilidad_media": 0.04763,
+          "tasa_observada": 0.0619,
+          "segmentos": 11632
+        },
+        "8": {
+          "probabilidad_media": 0.08133,
+          "tasa_observada": 0.10093,
+          "segmentos": 11632
+        },
+        "9": {
+          "probabilidad_media": 0.30049,
+          "tasa_observada": 0.28024,
+          "segmentos": 11633
+        }
+      }
+    }
+  },
+  "razones_de_momios": {
+    "const": {
+      "coef": -2.6447,
+      "razon_de_momios": 0.071,
+      "ee": 0.0747,
+      "p": 0.0
+    },
+    "hist_media_log": {
+      "coef": 2.1746,
+      "razon_de_momios": 8.7989,
+      "ee": 0.0349,
+      "p": 0.0
+    },
+    "rezago1_log": {
+      "coef": 0.3606,
+      "razon_de_momios": 1.4342,
+      "ee": 0.0286,
+      "p": 0.0
+    },
+    "log_km": {
+      "coef": 0.4705,
+      "razon_de_momios": 1.6009,
+      "ee": 0.0091,
+      "p": 0.0
+    },
+    "carriles": {
+      "coef": 0.2814,
+      "razon_de_momios": 1.325,
+      "ee": 0.0107,
+      "p": 0.0
+    },
+    "vel_reg": {
+      "coef": -0.0045,
+      "razon_de_momios": 0.9955,
+      "ee": 0.0022,
+      "p": 0.042115
+    },
+    "vel_faltante": {
+      "coef": -0.0653,
+      "razon_de_momios": 0.9367,
+      "ee": 0.0301,
+      "p": 0.029678
+    },
+    "tendencia": {
+      "coef": 0.0528,
+      "razon_de_momios": 1.0543,
+      "ee": 0.0065,
+      "p": 0.0
+    },
+    "pandemia": {
+      "coef": -0.4036,
+      "razon_de_momios": 0.6679,
+      "ee": 0.023,
+      "p": 0.0
+    },
+    "post_kilometros_demarcados": {
+      "coef": -0.1031,
+      "razon_de_momios": 0.902,
+      "ee": 0.103,
+      "p": 0.316885
+    },
+    "post_paso_peatonal": {
+      "coef": -0.0112,
+      "razon_de_momios": 0.9889,
+      "ee": 0.1152,
+      "p": 0.92268
+    },
+    "post_senalizacion": {
+      "coef": -0.0823,
+      "razon_de_momios": 0.921,
+      "ee": 0.0768,
+      "p": 0.284104
+    },
+    "post_trafico_calmado": {
+      "coef": -0.112,
+      "razon_de_momios": 0.894,
+      "ee": 0.138,
+      "p": 0.417027
+    },
+    "post_zona_escolar": {
+      "coef": 0.089,
+      "razon_de_momios": 1.0931,
+      "ee": 0.1529,
+      "p": 0.560219
+    },
+    "tratado_kilometros_demarcados": {
+      "coef": -0.0021,
+      "razon_de_momios": 0.9979,
+      "ee": 0.0919,
+      "p": 0.98207
+    },
+    "tratado_paso_peatonal": {
+      "coef": -0.0966,
+      "razon_de_momios": 0.9079,
+      "ee": 0.1026,
+      "p": 0.346486
+    },
+    "tratado_senalizacion": {
+      "coef": 0.2867,
+      "razon_de_momios": 1.3321,
+      "ee": 0.0689,
+      "p": 3.2e-05
+    },
+    "tratado_trafico_calmado": {
+      "coef": 0.2125,
+      "razon_de_momios": 1.2367,
+      "ee": 0.1225,
+      "p": 0.082814
+    },
+    "tratado_zona_escolar": {
+      "coef": -0.0771,
+      "razon_de_momios": 0.9258,
+      "ee": 0.1363,
+      "p": 0.57149
+    },
+    "clase_1": {
+      "coef": 1.5276,
+      "razon_de_momios": 4.6069,
+      "ee": 0.0365,
+      "p": 0.0
+    },
+    "clase_2": {
+      "coef": 1.1303,
+      "razon_de_momios": 3.0966,
+      "ee": 0.0309,
+      "p": 0.0
+    },
+    "clase_4": {
+      "coef": -0.707,
+      "razon_de_momios": 0.4931,
+      "ee": 0.0628,
+      "p": 0.0
+    },
+    "clase_5": {
+      "coef": -1.8,
+      "razon_de_momios": 0.1653,
+      "ee": 0.0988,
+      "p": 0.0
+    },
+    "clase_6": {
+      "coef": -0.9322,
+      "razon_de_momios": 0.3937,
+      "ee": 0.0819,
+      "p": 0.0
+    },
+    "clase_7": {
+      "coef": -1.7438,
+      "razon_de_momios": 0.1748,
+      "ee": 0.502,
+      "p": 0.000514
+    }
+  },
+  "importancia_lightgbm": {
+    "hist_media_log": 34.34,
+    "rezago1_log": 23.42,
+    "clase_1": 10.06,
+    "clase_2": 9.3,
+    "log_km": 8.23,
+    "carriles": 4.45,
+    "vel_reg": 3.33,
+    "tendencia": 2.36,
+    "vel_faltante": 1.77,
+    "clase_5": 0.81,
+    "clase_4": 0.51,
+    "tratado_senalizacion": 0.36,
+    "clase_6": 0.31,
+    "pandemia": 0.27,
+    "tratado_trafico_calmado": 0.07
+  }
+}
