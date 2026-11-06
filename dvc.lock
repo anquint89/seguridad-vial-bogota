@@ -58,3 +58,47 @@ stages:
       hash: md5
       md5: 44ce52923f0d2cf0cf3ca5b238dc7112
       size: 10717726
+  modelo_conteo:
+    cmd: python -m src.modelos.conteo
+    deps:
+    - path: data/procesado/panel.parquet
+      hash: md5
+      md5: ae23358687210b1f0b095351c6be730f
+      size: 10715284
+    - path: src/modelos/conteo.py
+      hash: md5
+      md5: 5f0f4ada50a8e53c39c7b6f5e6a24747
+      size: 11553
+    outs:
+    - path: data/procesado/prediccion_conteo.parquet
+      hash: md5
+      md5: c59cc67e5d1bf366c76f8f30c5502c55
+      size: 3127506
+    - path: reportes/modelos/conteo.json
+      hash: md5
+      md5: ad2b2a042d3258c92ca5aec9d27e87ec
+      size: 8935
+  modelo_clasificador:
+    cmd: python -m src.modelos.clasificador
+    deps:
+    - path: data/procesado/panel.parquet
+      hash: md5
+      md5: ae23358687210b1f0b095351c6be730f
+      size: 10715284
+    - path: src/modelos/clasificador.py
+      hash: md5
+      md5: 9f03c60ff0dd55de81d82e8eb577e68a
+      size: 8678
+    - path: src/modelos/conteo.py
+      hash: md5
+      md5: 5f0f4ada50a8e53c39c7b6f5e6a24747
+      size: 11553
+    outs:
+    - path: data/procesado/prediccion_clasificador.parquet
+      hash: md5
+      md5: b6d1f46d42375f3684f49b766e6cf651
+      size: 2291592
+    - path: reportes/modelos/clasificador.json
+      hash: md5
+      md5: 894271816218a2b4594f1c1e9601c9d1
+      size: 9036

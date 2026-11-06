@@ -37,3 +37,24 @@ stages:
       - data/raw
     outs:
       - data/procesado/panel.parquet
+
+  modelo_conteo:
+    cmd: python -m src.modelos.conteo
+    deps:
+      - src/modelos/conteo.py
+      - data/procesado/panel.parquet
+    outs:
+      - data/procesado/prediccion_conteo.parquet
+      - reportes/modelos/conteo.json:
+          cache: false
+
+  modelo_clasificador:
+    cmd: python -m src.modelos.clasificador
+    deps:
+      - src/modelos/clasificador.py
+      - src/modelos/conteo.py
+      - data/procesado/panel.parquet
+    outs:
+      - data/procesado/prediccion_clasificador.parquet
+      - reportes/modelos/clasificador.json:
+          cache: false
