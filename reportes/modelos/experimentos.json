@@ -1,0 +1,311 @@
+{
+  "origen": {
+    "tracking_uri": "sqlite:///mlflow.db",
+    "experimento": "seguridad-vial-bogota",
+    "corridas": 12
+  },
+  "conteo": {
+    "ordenado_por": "captura_top_5_pct",
+    "corridas": [
+      {
+        "nombre": "lightgbm_poisson_h31_lr0.1",
+        "familia": "LightGBM",
+        "estado": "FINISHED",
+        "metricas": {
+          "captura_top_10_pct": 58.85,
+          "captura_top_1_pct": 20.88,
+          "captura_top_2_pct": 30.07,
+          "captura_top_5_pct": 45.87,
+          "razon_suma_predicha": 0.821
+        },
+        "parametros": {
+          "anio_valida": "2021",
+          "bagging_fraction": "0.8",
+          "bagging_freq": "1",
+          "familia": "LightGBM",
+          "feature_fraction": "0.8",
+          "learning_rate": "0.1",
+          "min_data_in_leaf": "200",
+          "num_boost_round": "200",
+          "num_leaves": "31",
+          "objetivo": "poisson",
+          "seed": "7",
+          "ventana_entrena": "2016-2020",
+          "verbose": "-1"
+        }
+      },
+      {
+        "nombre": "lightgbm_poisson_h63_lr0.05",
+        "familia": "LightGBM",
+        "estado": "FINISHED",
+        "metricas": {
+          "captura_top_10_pct": 58.96,
+          "captura_top_1_pct": 20.9,
+          "captura_top_2_pct": 30.21,
+          "captura_top_5_pct": 45.77,
+          "razon_suma_predicha": 0.808
+        },
+        "parametros": {
+          "anio_valida": "2021",
+          "bagging_fraction": "0.8",
+          "bagging_freq": "1",
+          "familia": "LightGBM",
+          "feature_fraction": "0.8",
+          "learning_rate": "0.05",
+          "min_data_in_leaf": "200",
+          "num_boost_round": "400",
+          "num_leaves": "63",
+          "objetivo": "poisson",
+          "seed": "7",
+          "ventana_entrena": "2016-2020",
+          "verbose": "-1"
+        }
+      },
+      {
+        "nombre": "lightgbm_poisson_h31_lr0.05",
+        "familia": "LightGBM",
+        "estado": "FINISHED",
+        "metricas": {
+          "captura_top_10_pct": 58.81,
+          "captura_top_1_pct": 20.77,
+          "captura_top_2_pct": 30.16,
+          "captura_top_5_pct": 45.63,
+          "razon_suma_predicha": 0.81
+        },
+        "parametros": {
+          "anio_valida": "2021",
+          "bagging_fraction": "0.8",
+          "bagging_freq": "1",
+          "familia": "LightGBM",
+          "feature_fraction": "0.8",
+          "learning_rate": "0.05",
+          "min_data_in_leaf": "200",
+          "num_boost_round": "400",
+          "num_leaves": "31",
+          "objetivo": "poisson",
+          "seed": "7",
+          "ventana_entrena": "2016-2020",
+          "verbose": "-1"
+        }
+      },
+      {
+        "nombre": "binomial_negativa_eb",
+        "familia": "BinomialNegativa",
+        "estado": "FINISHED",
+        "metricas": {
+          "captura_top_10_pct": 57.32,
+          "captura_top_1_pct": 20.54,
+          "captura_top_2_pct": 29.28,
+          "captura_top_5_pct": 44.85,
+          "razon_suma_predicha": 1.171
+        },
+        "parametros": {
+          "alpha": "0.4624",
+          "anio_valida": "2021",
+          "familia": "BinomialNegativa",
+          "posproceso": "EmpiricalBayes_Hauer",
+          "ventana_entrena": "2016-2020"
+        }
+      },
+      {
+        "nombre": "linea_base_conteo_historico",
+        "familia": "ninguna",
+        "estado": "FINISHED",
+        "metricas": {
+          "captura_top_10_pct": 56.0,
+          "captura_top_1_pct": 20.69,
+          "captura_top_2_pct": 29.68,
+          "captura_top_5_pct": 44.5,
+          "mae": 0.1336,
+          "rmse": 0.4544
+        },
+        "parametros": {
+          "anio_valida": "2021",
+          "descripcion": "orden por conteo historico de graves",
+          "familia": "ninguna",
+          "ventana_entrena": "2016-2020"
+        }
+      },
+      {
+        "nombre": "binomial_negativa_glm",
+        "familia": "BinomialNegativa",
+        "estado": "FINISHED",
+        "metricas": {
+          "aic": 246329.6,
+          "captura_top_10_pct": 56.55,
+          "captura_top_1_pct": 21.13,
+          "captura_top_2_pct": 30.25,
+          "captura_top_5_pct": 44.36,
+          "elasticidad_longitud": 0.3041,
+          "log_verosimilitud": -123136.8,
+          "razon_suma_predicha": 1.143
+        },
+        "parametros": {
+          "alpha": "0.4624",
+          "anio_valida": "2021",
+          "desplazamiento": "log_km",
+          "enlace": "log",
+          "familia": "BinomialNegativa",
+          "reescalado": "0.8769",
+          "ventana_entrena": "2016-2020"
+        }
+      },
+      {
+        "nombre": "poisson_glm",
+        "familia": "Poisson",
+        "estado": "FINISHED",
+        "metricas": {
+          "aic": 253394.9,
+          "captura_top_10_pct": 56.04,
+          "captura_top_1_pct": 21.21,
+          "captura_top_2_pct": 30.15,
+          "captura_top_5_pct": 44.08,
+          "log_verosimilitud": -126669.4
+        },
+        "parametros": {
+          "alpha": "0.0",
+          "anio_valida": "2021",
+          "desplazamiento": "log_km",
+          "enlace": "log",
+          "familia": "Poisson",
+          "ventana_entrena": "2016-2020"
+        }
+      }
+    ]
+  },
+  "clasificacion": {
+    "ordenado_por": "auc_roc",
+    "corridas": [
+      {
+        "nombre": "lightgbm_binario_h31_lr0.05",
+        "familia": "LightGBM",
+        "estado": "FINISHED",
+        "metricas": {
+          "auc_pr": 0.3358,
+          "auc_roc": 0.8274,
+          "brier": 0.04808,
+          "captura_top_10_pct": 58.83,
+          "captura_top_1_pct": 20.68,
+          "captura_top_2_pct": 30.13,
+          "captura_top_5_pct": 45.54
+        },
+        "parametros": {
+          "anio_valida": "2021",
+          "bagging_fraction": "0.8",
+          "bagging_freq": "1",
+          "familia": "LightGBM",
+          "feature_fraction": "0.8",
+          "learning_rate": "0.05",
+          "min_data_in_leaf": "200",
+          "num_boost_round": "400",
+          "num_leaves": "31",
+          "objetivo": "binary",
+          "seed": "7",
+          "ventana_entrena": "2016-2020",
+          "verbose": "-1"
+        }
+      },
+      {
+        "nombre": "catboost",
+        "familia": "CatBoost",
+        "estado": "FINISHED",
+        "metricas": {
+          "auc_pr": 0.3358,
+          "auc_roc": 0.8269,
+          "brier": 0.04809,
+          "captura_top_10_pct": 59.03,
+          "captura_top_1_pct": 20.66,
+          "captura_top_2_pct": 30.04,
+          "captura_top_5_pct": 45.78
+        },
+        "parametros": {
+          "anio_valida": "2021",
+          "depth": "6",
+          "familia": "CatBoost",
+          "iterations": "400",
+          "learning_rate": "0.05",
+          "ventana_entrena": "2016-2020"
+        }
+      },
+      {
+        "nombre": "lightgbm_binario_h31_lr0.1",
+        "familia": "LightGBM",
+        "estado": "FINISHED",
+        "metricas": {
+          "auc_pr": 0.3345,
+          "auc_roc": 0.8269,
+          "brier": 0.0482,
+          "captura_top_10_pct": 58.88,
+          "captura_top_1_pct": 20.57,
+          "captura_top_2_pct": 29.66,
+          "captura_top_5_pct": 45.32
+        },
+        "parametros": {
+          "anio_valida": "2021",
+          "bagging_fraction": "0.8",
+          "bagging_freq": "1",
+          "familia": "LightGBM",
+          "feature_fraction": "0.8",
+          "learning_rate": "0.1",
+          "min_data_in_leaf": "200",
+          "num_boost_round": "200",
+          "num_leaves": "31",
+          "objetivo": "binary",
+          "seed": "7",
+          "ventana_entrena": "2016-2020",
+          "verbose": "-1"
+        }
+      },
+      {
+        "nombre": "lightgbm_binario_h63_lr0.05",
+        "familia": "LightGBM",
+        "estado": "FINISHED",
+        "metricas": {
+          "auc_pr": 0.3336,
+          "auc_roc": 0.8266,
+          "brier": 0.04819,
+          "captura_top_10_pct": 58.87,
+          "captura_top_1_pct": 20.5,
+          "captura_top_2_pct": 30.12,
+          "captura_top_5_pct": 45.44
+        },
+        "parametros": {
+          "anio_valida": "2021",
+          "bagging_fraction": "0.8",
+          "bagging_freq": "1",
+          "familia": "LightGBM",
+          "feature_fraction": "0.8",
+          "learning_rate": "0.05",
+          "min_data_in_leaf": "200",
+          "num_boost_round": "400",
+          "num_leaves": "63",
+          "objetivo": "binary",
+          "seed": "7",
+          "ventana_entrena": "2016-2020",
+          "verbose": "-1"
+        }
+      },
+      {
+        "nombre": "regresion_logistica",
+        "familia": "Binomial",
+        "estado": "FINISHED",
+        "metricas": {
+          "aic": 188440.7,
+          "auc_pr": 0.3242,
+          "auc_roc": 0.8097,
+          "brier": 0.04915,
+          "captura_top_10_pct": 57.21,
+          "captura_top_1_pct": 21.15,
+          "captura_top_2_pct": 30.39,
+          "captura_top_5_pct": 44.84
+        },
+        "parametros": {
+          "anio_valida": "2021",
+          "enlace": "logit",
+          "familia": "Binomial",
+          "ventana_entrena": "2016-2020"
+        }
+      }
+    ]
+  }
+}

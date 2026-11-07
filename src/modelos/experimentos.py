@@ -25,6 +25,13 @@ DONDE REGISTRA
     python -m src.modelos.experimentos
     python -m src.modelos.experimentos --tracking-uri http://54.0.0.1:5000
 
+EXPORTAR LAS CIFRAS
+  Las metricas de la rejilla solo viven en MLflow, y el servidor de la EC2 se
+  apaga al cerrar la entrega. Con --exportar se vuelcan a
+  reportes/modelos/experimentos.json, que es de donde el reporte las cita.
+
+    python -m src.modelos.experimentos --exportar --tracking-uri sqlite:///mlflow.db
+
 NOTA DE ENTORNO
   lightgbm se importa ANTES que pandas. Si pyarrow carga primero su runtime de
   OpenMP, la DLL nativa de lightgbm se cae con una violacion de acceso.
@@ -35,6 +42,7 @@ from __future__ import annotations
 import lightgbm as lgb  # noqa: I001  debe ir antes que pandas/pyarrow
 
 import argparse
+import json
 from pathlib import Path
 
 import mlflow
@@ -56,8 +64,15 @@ from src.modelos.caracteristicas import (
 )
 from src.modelos.conteo import empirical_bayes, estimar_alpha
 
+RAIZ = Path(__file__).resolve().parents[2]
+EXPORTACION = RAIZ / "reportes" / "modelos" / "experimentos.json"
+
 EXPERIMENTO = "seguridad-vial-bogota"
 PERCENTILES = (0.01, 0.02, 0.05, 0.10)
+
+# La metrica con la que se ordena cada tarea al exportar: la de negocio en el
+# conteo, el AUC en la clasificacion.
+METRICA_PRINCIPAL = {"conteo": "captura_top_5_pct", "clasificacion": "auc_roc"}
 
 REJILLA_LGB = (
     {"num_leaves": 31, "learning_rate": 0.05, "num_boost_round": 400},
@@ -313,6 +328,56 @@ def experimentos_de_clasificacion(p, X, y_conteo, entrena, valida, universo, gra
     )
 
 
+def exportar(experimento: str, destino: Path) -> int:
+    """Vuelca las corridas registradas a un JSON, para citarlas en el reporte.
+
+    Las metricas de la rejilla solo viven en MLflow, y el servidor de la EC2 se
+    apaga al terminar la entrega. Esto las deja en el repositorio, ordenadas por
+    la metrica principal de cada tarea, para que ninguna cifra se transcriba a
+    mano.
+    """
+    from mlflow.tracking import MlflowClient
+
+    cliente = MlflowClient()
+    encontrado = [e for e in cliente.search_experiments() if e.name == experimento]
+    if not encontrado:
+        print(f"no hay ningun experimento llamado {experimento} en {mlflow.get_tracking_uri()}")
+        return 1
+
+    corridas = cliente.search_runs([encontrado[0].experiment_id], max_results=1000)
+    ficha = {
+        "origen": {
+            "tracking_uri": mlflow.get_tracking_uri(),
+            "experimento": experimento,
+            "corridas": len(corridas),
+        }
+    }
+    for tarea, metrica in METRICA_PRINCIPAL.items():
+        de_la_tarea = [c for c in corridas if c.data.tags.get("tarea") == tarea]
+        de_la_tarea.sort(key=lambda c: c.data.metrics.get(metrica, -1), reverse=True)
+        ficha[tarea] = {
+            "ordenado_por": metrica,
+            "corridas": [
+                {
+                    "nombre": c.info.run_name,
+                    "familia": c.data.params.get("familia", "linea base"),
+                    "estado": c.info.status,
+                    "metricas": {k: round(v, 5) for k, v in sorted(c.data.metrics.items())},
+                    "parametros": dict(sorted(c.data.params.items())),
+                }
+                for c in de_la_tarea
+            ],
+        }
+
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    destino.write_text(json.dumps(ficha, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"escrito {destino} con {len(corridas)} corridas")
+    for tarea, metrica in METRICA_PRINCIPAL.items():
+        mejor = ficha[tarea]["corridas"][0]
+        print(f"  mejor en {tarea}: {mejor['nombre']} con {metrica} {mejor['metricas'][metrica]}")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--panel", type=Path, default=PANEL)
@@ -320,10 +385,15 @@ def main() -> int:
     ap.add_argument("--tracking-uri", default=None,
                     help="http://<ip>:5000 para registrar contra la EC2. Sin esto, ./mlruns")
     ap.add_argument("--experimento", default=EXPERIMENTO)
+    ap.add_argument("--exportar", action="store_true",
+                    help="no entrena: vuelca las corridas ya registradas a un JSON")
+    ap.add_argument("--salida", type=Path, default=EXPORTACION)
     a = ap.parse_args()
 
     if a.tracking_uri:
         mlflow.set_tracking_uri(a.tracking_uri)
+    if a.exportar:
+        return exportar(a.experimento, a.salida)
     mlflow.set_experiment(a.experimento)
     print(f"registrando en: {mlflow.get_tracking_uri()}  |  experimento: {a.experimento}\n")
 
