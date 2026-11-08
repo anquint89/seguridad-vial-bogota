@@ -1,0 +1,11 @@
+{
+  "modelo": "eb_grupos_referencia_v1",
+  "phi_2021": 0.552,
+  "captura_top5_2021": {
+    "esperado": 37.1,
+    "esperado_eb": 45.0,
+    "linea_base_historico": 44.5
+  },
+  "mae_2021": 0.1285,
+  "phi_2022": 0.574
+}

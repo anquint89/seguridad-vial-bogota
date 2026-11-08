@@ -75,3 +75,14 @@ input.costo { width: 70px; padding: 2px 4px; }
   .mapa-cuerpo { grid-template-columns: 1fr; }
   .barra { flex-wrap: wrap; }
 }
+
+.supuesto {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.supuesto label {
+  flex: 1;
+}

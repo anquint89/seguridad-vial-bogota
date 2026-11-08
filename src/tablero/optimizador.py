@@ -45,8 +45,8 @@ def opciones(
                     "clave": f["clave"],
                     "costo": costo,
                     "reduccion": eb * -f["factor"],
-                    "reduccion_bajo": eb * -min(f["ic90"][1], 0.0),
-                    "reduccion_alto": eb * -f["ic90"][0],
+                    "reduccion_bajo": eb * -min(f["rango"][1], 0.0),
+                    "reduccion_alto": eb * -f["rango"][0],
                 }
             )
         )
