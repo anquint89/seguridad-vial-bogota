@@ -38,6 +38,49 @@ stages:
     outs:
       - data/procesado/panel.parquet
 
+  # Dos desvios respecto al resto del pipeline, los dos por el mismo problema
+  # de Windows con el cache de DVC en esta ruta de OneDrive:
+  #   - Depende del archivo de la malla y no del directorio data/raw, porque
+  #     el hash del directorio completo aborta con WinError 3. Ademas la etapa
+  #     solo lee esa capa.
+  #     Nota: en una maquina Linux, por ejemplo la EC2, no hace falta ninguno
+  #     de los dos desvios.
+  #   - La salida va con cache: false y se versiona en Git, como ya se hace
+  #     con perfilamiento.json y las figuras. Al cachearla, el movimiento del
+  #     archivo al cache falla con el mismo WinError 3. Son 2,9 MB.
+  vecindad:
+    cmd: python -m src.modelos.vecindad
+    deps:
+      - src/modelos/vecindad.py
+      - data/raw/malla_vial_integral.parquet
+    outs:
+      - data/procesado/vecindad.parquet:
+          cache: false
+
+  modelo_conteo:
+    cmd: python -m src.modelos.conteo
+    deps:
+      - src/modelos/conteo.py
+      - src/modelos/caracteristicas.py
+      - data/procesado/panel.parquet
+      - data/procesado/vecindad.parquet
+    outs:
+      - data/procesado/prediccion_conteo.parquet
+      - reportes/modelos/conteo.json:
+          cache: false
+
+  modelo_clasificador:
+    cmd: python -m src.modelos.clasificador
+    deps:
+      - src/modelos/clasificador.py
+      - src/modelos/caracteristicas.py
+      - data/procesado/panel.parquet
+      - data/procesado/vecindad.parquet
+    outs:
+      - data/procesado/prediccion_clasificador.parquet
+      - reportes/modelos/clasificador.json:
+          cache: false
+
   # Predictor provisional (Empirical Bayes por grupos de referencia). Cuando el
   # modelo de conteo de MLflow quede listo, su etapa escribe el mismo archivo con
   # el mismo contrato y esta etapa se retira.

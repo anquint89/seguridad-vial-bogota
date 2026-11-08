@@ -1,0 +1,409 @@
+{
+  "ventana": {
+    "entrena": [
+      2016,
+      2020
+    ],
+    "valida": 2021,
+    "filas_entrena": 581610,
+    "filas_valida": 116322,
+    "universo_civ": 116322,
+    "factor_de_escala": 0.8769
+  },
+  "sobredispersion": {
+    "media_segmento_anio": 0.0873,
+    "varianza_segmento_anio": 0.2174,
+    "indice_de_dispersion": 2.49,
+    "alpha_nb2": 0.4624
+  },
+  "ajuste": {
+    "poisson": {
+      "log_verosimilitud": -126669.4,
+      "aic": 253394.9
+    },
+    "binomial_negativa": {
+      "log_verosimilitud": -123136.8,
+      "aic": 246329.6
+    }
+  },
+  "elasticidad_longitud": 0.3041,
+  "coeficientes": {
+    "const": {
+      "coef": -3.2038,
+      "razon_de_tasas": 0.0406,
+      "ee": 0.0581,
+      "p": 0.0
+    },
+    "hist_media_log": {
+      "coef": 1.3005,
+      "razon_de_tasas": 3.6711,
+      "ee": 0.0231,
+      "p": 0.0
+    },
+    "rezago1_log": {
+      "coef": 0.259,
+      "razon_de_tasas": 1.2957,
+      "ee": 0.0192,
+      "p": 0.0
+    },
+    "vecinos_hist_log": {
+      "coef": 1.157,
+      "razon_de_tasas": 3.1803,
+      "ee": 0.0439,
+      "p": 0.0
+    },
+    "vecinos_rezago1_log": {
+      "coef": -0.1162,
+      "razon_de_tasas": 0.8903,
+      "ee": 0.0384,
+      "p": 0.002485
+    },
+    "vecinos_n": {
+      "coef": 0.1197,
+      "razon_de_tasas": 1.1272,
+      "ee": 0.0044,
+      "p": 0.0
+    },
+    "log_km": {
+      "coef": -0.6959,
+      "razon_de_tasas": 0.4986,
+      "ee": 0.0072,
+      "p": 0.0
+    },
+    "carriles": {
+      "coef": 0.1896,
+      "razon_de_tasas": 1.2087,
+      "ee": 0.0078,
+      "p": 0.0
+    },
+    "vel_reg": {
+      "coef": -0.0114,
+      "razon_de_tasas": 0.9887,
+      "ee": 0.0015,
+      "p": 0.0
+    },
+    "vel_faltante": {
+      "coef": -0.0465,
+      "razon_de_tasas": 0.9546,
+      "ee": 0.0243,
+      "p": 0.055564
+    },
+    "tendencia": {
+      "coef": 0.0416,
+      "razon_de_tasas": 1.0425,
+      "ee": 0.0051,
+      "p": 0.0
+    },
+    "pandemia": {
+      "coef": -0.3977,
+      "razon_de_tasas": 0.6718,
+      "ee": 0.0184,
+      "p": 0.0
+    },
+    "post_kilometros_demarcados": {
+      "coef": -0.051,
+      "razon_de_tasas": 0.9503,
+      "ee": 0.0777,
+      "p": 0.511188
+    },
+    "post_paso_peatonal": {
+      "coef": -0.0543,
+      "razon_de_tasas": 0.9472,
+      "ee": 0.0885,
+      "p": 0.539726
+    },
+    "post_senalizacion": {
+      "coef": -0.0537,
+      "razon_de_tasas": 0.9477,
+      "ee": 0.0575,
+      "p": 0.349878
+    },
+    "post_trafico_calmado": {
+      "coef": -0.0216,
+      "razon_de_tasas": 0.9786,
+      "ee": 0.1114,
+      "p": 0.846335
+    },
+    "post_zona_escolar": {
+      "coef": -0.1523,
+      "razon_de_tasas": 0.8588,
+      "ee": 0.1149,
+      "p": 0.185162
+    },
+    "tratado_kilometros_demarcados": {
+      "coef": -0.0221,
+      "razon_de_tasas": 0.9781,
+      "ee": 0.0692,
+      "p": 0.749063
+    },
+    "tratado_paso_peatonal": {
+      "coef": -0.0935,
+      "razon_de_tasas": 0.9107,
+      "ee": 0.0786,
+      "p": 0.234292
+    },
+    "tratado_senalizacion": {
+      "coef": 0.1717,
+      "razon_de_tasas": 1.1873,
+      "ee": 0.0516,
+      "p": 0.000879
+    },
+    "tratado_trafico_calmado": {
+      "coef": 0.1472,
+      "razon_de_tasas": 1.1586,
+      "ee": 0.0984,
+      "p": 0.134775
+    },
+    "tratado_zona_escolar": {
+      "coef": 0.2143,
+      "razon_de_tasas": 1.239,
+      "ee": 0.1013,
+      "p": 0.034327
+    },
+    "clase_1": {
+      "coef": 1.4952,
+      "razon_de_tasas": 4.4603,
+      "ee": 0.0291,
+      "p": 0.0
+    },
+    "clase_2": {
+      "coef": 1.1044,
+      "razon_de_tasas": 3.0173,
+      "ee": 0.0256,
+      "p": 0.0
+    },
+    "clase_4": {
+      "coef": -0.8282,
+      "razon_de_tasas": 0.4368,
+      "ee": 0.0586,
+      "p": 0.0
+    },
+    "clase_5": {
+      "coef": -1.0737,
+      "razon_de_tasas": 0.3417,
+      "ee": 0.0797,
+      "p": 0.0
+    },
+    "clase_6": {
+      "coef": -0.5179,
+      "razon_de_tasas": 0.5958,
+      "ee": 0.0659,
+      "p": 0.0
+    },
+    "clase_7": {
+      "coef": -1.9196,
+      "razon_de_tasas": 0.1467,
+      "ee": 0.5012,
+      "p": 0.000128
+    }
+  },
+  "calibracion_2021": {
+    "binomial_negativa": {
+      "suma_predicha": 12250.7,
+      "suma_observada": 10717,
+      "razon_suma": 1.143,
+      "maximo_predicho": 76.13,
+      "maximo_observado": 17,
+      "por_decil": {
+        "0": {
+          "predicho_medio": 0.0091,
+          "observado_medio": 0.0115,
+          "segmentos": 11633
+        },
+        "1": {
+          "predicho_medio": 0.0166,
+          "observado_medio": 0.0135,
+          "segmentos": 11632
+        },
+        "2": {
+          "predicho_medio": 0.0213,
+          "observado_medio": 0.0154,
+          "segmentos": 11632
+        },
+        "3": {
+          "predicho_medio": 0.0248,
+          "observado_medio": 0.0193,
+          "segmentos": 11632
+        },
+        "4": {
+          "predicho_medio": 0.0285,
+          "observado_medio": 0.029,
+          "segmentos": 11632
+        },
+        "5": {
+          "predicho_medio": 0.0332,
+          "observado_medio": 0.0426,
+          "segmentos": 11632
+        },
+        "6": {
+          "predicho_medio": 0.0414,
+          "observado_medio": 0.0709,
+          "segmentos": 11632
+        },
+        "7": {
+          "predicho_medio": 0.0658,
+          "observado_medio": 0.0863,
+          "segmentos": 11632
+        },
+        "8": {
+          "predicho_medio": 0.1088,
+          "observado_medio": 0.1118,
+          "segmentos": 11632
+        },
+        "9": {
+          "predicho_medio": 0.7038,
+          "observado_medio": 0.5209,
+          "segmentos": 11633
+        }
+      }
+    },
+    "binomial_negativa_eb": {
+      "suma_predicha": 12549.3,
+      "suma_observada": 10717,
+      "razon_suma": 1.171,
+      "maximo_predicho": 34.58,
+      "maximo_observado": 17,
+      "por_decil": {
+        "0": {
+          "predicho_medio": 0.0089,
+          "observado_medio": 0.0115,
+          "segmentos": 11633
+        },
+        "1": {
+          "predicho_medio": 0.0161,
+          "observado_medio": 0.0117,
+          "segmentos": 11632
+        },
+        "2": {
+          "predicho_medio": 0.0205,
+          "observado_medio": 0.0154,
+          "segmentos": 11632
+        },
+        "3": {
+          "predicho_medio": 0.0238,
+          "observado_medio": 0.0191,
+          "segmentos": 11632
+        },
+        "4": {
+          "predicho_medio": 0.0272,
+          "observado_medio": 0.0272,
+          "segmentos": 11632
+        },
+        "5": {
+          "predicho_medio": 0.0318,
+          "observado_medio": 0.0425,
+          "segmentos": 11632
+        },
+        "6": {
+          "predicho_medio": 0.0412,
+          "observado_medio": 0.0665,
+          "segmentos": 11632
+        },
+        "7": {
+          "predicho_medio": 0.0648,
+          "observado_medio": 0.0702,
+          "segmentos": 11632
+        },
+        "8": {
+          "predicho_medio": 0.1044,
+          "observado_medio": 0.1291,
+          "segmentos": 11632
+        },
+        "9": {
+          "predicho_medio": 0.74,
+          "observado_medio": 0.5281,
+          "segmentos": 11633
+        }
+      }
+    }
+  },
+  "evaluacion_2021": {
+    "linea_base_conteo_historico": {
+      "top_1_pct": {
+        "segmentos": 1163,
+        "capturados": 2217,
+        "de": 10717,
+        "pct": 20.7
+      },
+      "top_2_pct": {
+        "segmentos": 2326,
+        "capturados": 3181,
+        "de": 10717,
+        "pct": 29.7
+      },
+      "top_5_pct": {
+        "segmentos": 5816,
+        "capturados": 4769,
+        "de": 10717,
+        "pct": 44.5
+      },
+      "top_10_pct": {
+        "segmentos": 11632,
+        "capturados": 6002,
+        "de": 10717,
+        "pct": 56.0
+      },
+      "mae": 0.1336,
+      "rmse": 0.4544,
+      "spearman": 0.2917
+    },
+    "binomial_negativa": {
+      "top_1_pct": {
+        "segmentos": 1163,
+        "capturados": 2265,
+        "de": 10717,
+        "pct": 21.1
+      },
+      "top_2_pct": {
+        "segmentos": 2326,
+        "capturados": 3242,
+        "de": 10717,
+        "pct": 30.3
+      },
+      "top_5_pct": {
+        "segmentos": 5816,
+        "capturados": 4754,
+        "de": 10717,
+        "pct": 44.4
+      },
+      "top_10_pct": {
+        "segmentos": 11632,
+        "capturados": 6060,
+        "de": 10717,
+        "pct": 56.5
+      },
+      "mae": 0.1458,
+      "rmse": 0.6459,
+      "spearman": 0.2518
+    },
+    "binomial_negativa_eb": {
+      "top_1_pct": {
+        "segmentos": 1163,
+        "capturados": 2201,
+        "de": 10717,
+        "pct": 20.5
+      },
+      "top_2_pct": {
+        "segmentos": 2326,
+        "capturados": 3138,
+        "de": 10717,
+        "pct": 29.3
+      },
+      "top_5_pct": {
+        "segmentos": 5816,
+        "capturados": 4807,
+        "de": 10717,
+        "pct": 44.9
+      },
+      "top_10_pct": {
+        "segmentos": 11632,
+        "capturados": 6143,
+        "de": 10717,
+        "pct": 57.3
+      },
+      "mae": 0.1442,
+      "rmse": 0.5041,
+      "spearman": 0.2574
+    }
+  }
+}

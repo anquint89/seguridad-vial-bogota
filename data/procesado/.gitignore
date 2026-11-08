@@ -1,4 +1,6 @@
 /panel.parquet
+/prediccion_conteo.parquet
+/prediccion_clasificador.parquet
 /predicciones.parquet
 /tablero_segmentos.parquet
 /tablero_geometria.parquet
