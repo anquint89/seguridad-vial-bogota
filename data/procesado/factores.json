@@ -1,0 +1,113 @@
+{
+  "origen_del_factor": "supuesto declarado, no estimado",
+  "supuesto": 0.1,
+  "banda": [
+    0.05,
+    0.2
+  ],
+  "advertencia": "La reducción es un supuesto del usuario, no un efecto medido. Con estos datos el efecto de las intervenciones no está identificado: la misma diferencia en diferencias da reducciones o aumentos según se empareje o no por el nivel previo. Los costos unitarios también son supuestos.",
+  "evidencia_de_no_identificacion": [
+    {
+      "clave": "senalizacion",
+      "did_sin_emparejar": -0.031,
+      "did_emparejado": 0.691,
+      "segmentos_tratados": 6633,
+      "con_otra_categoria_pct": 62.9
+    },
+    {
+      "clave": "kilometros_demarcados",
+      "did_sin_emparejar": -0.199,
+      "did_emparejado": 0.536,
+      "segmentos_tratados": 3667,
+      "con_otra_categoria_pct": 88.5
+    },
+    {
+      "clave": "paso_peatonal",
+      "did_sin_emparejar": -0.177,
+      "did_emparejado": 0.444,
+      "segmentos_tratados": 3193,
+      "con_otra_categoria_pct": 93.0
+    },
+    {
+      "clave": "trafico_calmado",
+      "did_sin_emparejar": -0.327,
+      "did_emparejado": 0.583,
+      "segmentos_tratados": 1109,
+      "con_otra_categoria_pct": 86.5
+    },
+    {
+      "clave": "zona_escolar",
+      "did_sin_emparejar": -0.225,
+      "did_emparejado": 0.444,
+      "segmentos_tratados": 1133,
+      "con_otra_categoria_pct": 87.8
+    }
+  ],
+  "factores": [
+    {
+      "clave": "senalizacion",
+      "categoria": "Señalización",
+      "factor": -0.1,
+      "rango": [
+        -0.2,
+        -0.05
+      ],
+      "segmentos_tratados": 6633,
+      "con_otra_categoria_pct": 62.9,
+      "costo_unitario_millones": 2.1,
+      "unidad_costo": "segmento"
+    },
+    {
+      "clave": "kilometros_demarcados",
+      "categoria": "Kilómetros demarcados",
+      "factor": -0.1,
+      "rango": [
+        -0.2,
+        -0.05
+      ],
+      "segmentos_tratados": 3667,
+      "con_otra_categoria_pct": 88.5,
+      "costo_unitario_millones": 8.4,
+      "unidad_costo": "km"
+    },
+    {
+      "clave": "paso_peatonal",
+      "categoria": "Paso peatonal",
+      "factor": -0.1,
+      "rango": [
+        -0.2,
+        -0.05
+      ],
+      "segmentos_tratados": 3193,
+      "con_otra_categoria_pct": 93.0,
+      "costo_unitario_millones": 14.0,
+      "unidad_costo": "segmento"
+    },
+    {
+      "clave": "trafico_calmado",
+      "categoria": "Tráfico calmado",
+      "factor": -0.1,
+      "rango": [
+        -0.2,
+        -0.05
+      ],
+      "segmentos_tratados": 1109,
+      "con_otra_categoria_pct": 86.5,
+      "costo_unitario_millones": 31.5,
+      "unidad_costo": "segmento"
+    },
+    {
+      "clave": "zona_escolar",
+      "categoria": "Zona escolar",
+      "factor": -0.1,
+      "rango": [
+        -0.2,
+        -0.05
+      ],
+      "segmentos_tratados": 1133,
+      "con_otra_categoria_pct": 87.8,
+      "costo_unitario_millones": 22.0,
+      "unidad_costo": "segmento"
+    }
+  ]
+}

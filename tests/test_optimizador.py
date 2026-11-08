@@ -6,11 +6,11 @@ import pytest
 from src.tablero.optimizador import armar_paquete, opciones, resumen
 
 FACTORES = [
-    {"clave": "barata", "categoria": "Barata", "factor": -0.10, "ic90": [-0.2, 0.05],
+    {"clave": "barata", "categoria": "Barata", "factor": -0.10, "rango": [-0.2, 0.05],
      "costo_unitario_millones": 1.0, "unidad_costo": "segmento"},
-    {"clave": "cara", "categoria": "Cara", "factor": -0.50, "ic90": [-0.6, -0.4],
+    {"clave": "cara", "categoria": "Cara", "factor": -0.50, "rango": [-0.6, -0.4],
      "costo_unitario_millones": 10.0, "unidad_costo": "segmento"},
-    {"clave": "por_km", "categoria": "Por km", "factor": -0.20, "ic90": [-0.3, -0.1],
+    {"clave": "por_km", "categoria": "Por km", "factor": -0.20, "rango": [-0.3, -0.1],
      "costo_unitario_millones": 4.0, "unidad_costo": "km"},
 ]
 TODAS = {"barata", "cara"}

@@ -65,7 +65,7 @@ def tarjeta(titulo, subtitulo, *hijos, clase=""):
 
 def panel_whatif(factores: list[dict]):
     filas = [
-        html.Tr([html.Th("Categoría"), html.Th("Factor (IC 90 %)"), html.Th("Costo unitario"), html.Th("Aplicar")])
+        html.Tr([html.Th("Categoría"), html.Th("Costo unitario"), html.Th("Aplicar")])
     ]
     for f in factores:
         unidad = "M/km" if f["unidad_costo"] == "km" else "M/seg."
@@ -73,7 +73,6 @@ def panel_whatif(factores: list[dict]):
             html.Tr(
                 [
                     html.Td(f["categoria"]),
-                    html.Td(f"{num(f['factor'], 2)}  ({num(f['ic90'][0], 2)}; {num(f['ic90'][1], 2)})"),
                     html.Td(
                         [
                             dcc.Input(
@@ -94,7 +93,16 @@ def panel_whatif(factores: list[dict]):
                 ]
             )
         )
-    return html.Table(filas, className="whatif")
+    supuesto = html.Div(
+        [
+            html.Label("Reducción supuesta por intervención", htmlFor="supuesto"),
+            dcc.Input(id="supuesto", type="number", min=0, max=90, step=1, value=10,
+                      debounce=True, className="costo"),
+            html.Span("%", className="unidad"),
+        ],
+        className="supuesto",
+    )
+    return html.Div([supuesto, html.Table(filas, className="whatif")])
 
 
 def construir_layout():
@@ -165,8 +173,8 @@ def construir_layout():
 
     whatif = tarjeta(
         "C. What-if por categoría de intervención",
-        "Factores por diferencias en diferencias sobre las intervenciones de 2016. Edite los costos "
-        "o apague categorías y el paquete se recalcula.",
+        "La reducción es un supuesto que usted fija, no un efecto medido: con estos datos no está "
+        "identificado. Edite el supuesto o los costos y el paquete se recalcula.",
         panel_whatif(factores["factores"]),
         html.P(factores.get("advertencia", ""), className="nota"),
         clase="c",
@@ -255,13 +263,16 @@ def cargar(anio, localidad):
     Input("datos-ranking", "data"),
     Input({"tipo": "costo", "clave": ALL}, "value"),
     Input({"tipo": "aplicar", "clave": ALL}, "value"),
+    Input("supuesto", "value"),
     Input("presupuesto", "value"),
     State("factores", "data"),
 )
-def recalcular(ranking, costos, aplicar, presupuesto, factores):
+def recalcular(ranking, costos, aplicar, supuesto, presupuesto, factores):
     """What-if + mochila. No llama a la API."""
     if not ranking:
         return [], "", ""
+    s = max(0.0, min((supuesto or 0) / 100, 0.9))
+    factores = [dict(f, factor=-s, rango=[-1.5 * s, -0.5 * s]) for f in factores]
     claves = [f["clave"] for f in factores]
     costos_d = {k: (v if v is not None else 0) for k, v in zip(claves, costos)}
     activas = {k for k, v in zip(claves, aplicar) if v}
@@ -275,7 +286,8 @@ def recalcular(ranking, costos, aplicar, presupuesto, factores):
         ("Segmentos en el paquete", num(r["segmentos"], 0)),
         ("Inversión del paquete", millones(r["costo"], 0)),
         ("Siniestros graves evitados por año",
-         f"{num(r['evitados'], 1)}  (IC 90 %: {num(r['evitados_bajo'], 1)} – {num(r['evitados_alto'], 1)})"),
+         f"{num(r['evitados'], 1)}  (con la mitad y el doble del supuesto: "
+         f"{num(r['evitados_bajo'], 1)} – {num(r['evitados_alto'], 1)})"),
         ("Costo por siniestro grave evitado", millones(r["costo_por_evitado"])),
         ("Localidades alcanzadas", f"{r['localidades']} de {r['localidades_total']}"),
         ("Inversión en las 5 localidades de mayor riesgo", f"{num(r['participacion_top5'], 1)} %"),

@@ -1,20 +1,29 @@
-"""Factores de reduccion por categoria de intervencion (version provisional).
+"""Supuesto de reduccion por intervencion, y la evidencia de por que es un supuesto.
 
-Diferencia en diferencias en razon, por categoria:
+El tablero necesita un factor de reduccion para el panel what-if. Este modulo
+NO lo estima: lo declara, y deja medida la razon.
 
-    factor = (post_T / pre_T) / (post_C / pre_C) - 1
+POR QUE NO SE ESTIMA
+  Se calculo la diferencia en diferencias de dos maneras sobre los mismos datos:
 
-  T  = segmentos con esa categoria (pueden tener otras: se reporta el traslape)
-  C  = segmentos que nunca recibieron ninguna intervencion
-  pre  = 2015, el unico ano completo antes de las obras de 2016
-  post = promedio 2018-2021 (2016-2017 es la ventana de ejecucion y se excluye)
+    sin emparejar   compara tratados contra nunca intervenidos. Los tratados
+                    partian del doble de graves en 2015, asi que revierten a la
+                    media y salen reducciones aparentes.
+    emparejado      compara dentro de cada estrato de graves en 2015. Queda la
+                    seleccion por exposicion: la ciudad intervino vias mas
+                    largas, con mas carriles y de mayor trafico, asi que salen
+                    aumentos aparentes.
 
-El intervalo del 90 % sale de un bootstrap por segmentos. NO es un efecto
-causal cerrado (un solo periodo previo, tratamientos multiples): en el tablero
-entra como parametro del what-if, con su intervalo.
+  El mismo dato da reducciones del 18 al 33 % o aumentos del 44 al 69 % segun
+  una decision de modelado. Coincide con el modelo de panel, que controla
+  longitud, carriles, clase, tendencia y vecinos: ningun coeficiente post_ es
+  significativo. Con obras marcadas todas en 2016 y sin un periodo previo largo,
+  el efecto no esta identificado.
 
-Los costos unitarios son SUPUESTOS ilustrativos (millones COP por segmento;
-kilometros demarcados por km). El tablero deja editarlos.
+QUE HACE EL TABLERO
+  Usa un supuesto uniforme, igual para las cinco categorias, que el usuario
+  edita. Al no haber evidencia de que una categoria sea mas efectiva que otra,
+  el optimizador reparte por costo, que es lo unico que si esta medido.
 
     python -m src.modelos.factores
 """
@@ -30,7 +39,13 @@ import pandas as pd
 
 RAIZ = Path(__file__).resolve().parents[2]
 PRE, POST = [2015], [2018, 2019, 2020, 2021]
-REPETICIONES = 500
+ESTRATO_TOPE = 4
+MINIMO_POR_ESTRATO = 20
+
+# Supuesto por defecto del tablero: reduccion del 10 %, con una banda de la
+# mitad al doble. Es un supuesto declarado, no una estimacion.
+SUPUESTO = 0.10
+BANDA = (0.05, 0.20)
 
 CATEGORIAS = {  # clave del panel -> (nombre visible, costo unitario, unidad)
     "senalizacion": ("Señalización", 2.1, "segmento"),
@@ -41,64 +56,90 @@ CATEGORIAS = {  # clave del panel -> (nombre visible, costo unitario, unidad)
 }
 
 
-def razon_dd(pre_t, post_t, pre_c, post_c) -> float:
-    return (post_t / pre_t) / (post_c / pre_c) - 1
+def razon_dd(pre, post, t, c) -> float:
+    """DiD en razon, sin emparejar."""
+    return (post[t].sum() / pre[t].sum()) / (post[c].sum() / pre[c].sum()) - 1
 
 
-def estimar(panel: pd.DataFrame, semilla: int = 2026) -> list[dict]:
+def razon_dd_emparejada(post, estrato, t, c) -> float:
+    """Razon de medias dentro de cada estrato de graves previos, ponderada."""
+    num = den = 0.0
+    for e in np.unique(estrato[t]):
+        it, ic = t & (estrato == e), c & (estrato == e)
+        if it.sum() < MINIMO_POR_ESTRATO or ic.sum() < MINIMO_POR_ESTRATO or post[ic].mean() == 0:
+            continue
+        num += it.sum() * (post[it].mean() / post[ic].mean() - 1)
+        den += it.sum()
+    return float(num / den) if den else float("nan")
+
+
+def evidencia(panel: pd.DataFrame) -> list[dict]:
+    """Las dos estimaciones por categoria, para declarar la sensibilidad."""
     por_anio = panel.pivot(index="CIV", columns="anio", values="graves")
     pre = por_anio[PRE].sum(axis=1).to_numpy(float)
     post = por_anio[POST].mean(axis=1).to_numpy(float)
+    estrato = np.minimum(pre, ESTRATO_TOPE).astype(int)
     marcas = panel.drop_duplicates("CIV").set_index("CIV").loc[por_anio.index]
     columnas = [f"tratado_{c}" for c in CATEGORIAS]
     control = (marcas[columnas].sum(axis=1) == 0).to_numpy()
     otras = marcas[columnas].sum(axis=1)
 
-    rng = np.random.default_rng(semilla)
-    idx_c = np.flatnonzero(control)
-    resultado = []
-    for clave, (nombre, costo, unidad) in CATEGORIAS.items():
-        tratado = (marcas[f"tratado_{clave}"] == 1).to_numpy()
-        idx_t = np.flatnonzero(tratado)
-        punto = razon_dd(pre[idx_t].sum(), post[idx_t].sum(), pre[idx_c].sum(), post[idx_c].sum())
-        boot = []
-        for _ in range(REPETICIONES):
-            bt = rng.choice(idx_t, len(idx_t))
-            bc = rng.choice(idx_c, len(idx_c))
-            boot.append(razon_dd(pre[bt].sum(), post[bt].sum(), pre[bc].sum(), post[bc].sum()))
-        bajo, alto = np.percentile(boot, [5, 95])
-        resultado.append(
+    salida = []
+    for clave in CATEGORIAS:
+        t = (marcas[f"tratado_{clave}"] == 1).to_numpy()
+        salida.append(
             {
                 "clave": clave,
-                "categoria": nombre,
-                "factor": round(float(punto), 3),
-                "ic90": [round(float(bajo), 3), round(float(alto), 3)],
-                "segmentos_tratados": int(tratado.sum()),
-                "con_otra_categoria_pct": round(100 * float((otras[tratado] > 1).mean()), 1),
-                "costo_unitario_millones": costo,
-                "unidad_costo": unidad,
+                "did_sin_emparejar": round(razon_dd(pre, post, t, control), 3),
+                "did_emparejado": round(razon_dd_emparejada(post, estrato, t, control), 3),
+                "segmentos_tratados": int(t.sum()),
+                "con_otra_categoria_pct": round(100 * float((otras[t] > 1).mean()), 1),
             }
         )
-    return resultado
+    return salida
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--panel", type=Path, default=RAIZ / "data" / "procesado" / "panel.parquet")
     ap.add_argument("--salida", type=Path, default=RAIZ / "data" / "procesado" / "factores.json")
+    ap.add_argument("--supuesto", type=float, default=SUPUESTO,
+                    help="reduccion supuesta por intervencion, entre 0 y 1")
     a = ap.parse_args()
 
-    factores = estimar(pd.read_parquet(a.panel))
+    medido = {e["clave"]: e for e in evidencia(pd.read_parquet(a.panel))}
+    factores = []
+    for clave, (nombre, costo, unidad) in CATEGORIAS.items():
+        factores.append(
+            {
+                "clave": clave,
+                "categoria": nombre,
+                "factor": -a.supuesto,
+                "rango": [-BANDA[1], -BANDA[0]],
+                "segmentos_tratados": medido[clave]["segmentos_tratados"],
+                "con_otra_categoria_pct": medido[clave]["con_otra_categoria_pct"],
+                "costo_unitario_millones": costo,
+                "unidad_costo": unidad,
+            }
+        )
+
     ficha = {
-        "metodo": "DiD en razon, pre 2015 vs post 2018-2021, control = nunca intervenidos, "
-        f"IC 90 % por bootstrap de segmentos ({REPETICIONES} repeticiones)",
-        "advertencia": "Provisional y no causal: un solo periodo previo y tratamientos multiples. "
-        "Los costos unitarios son supuestos.",
+        "origen_del_factor": "supuesto declarado, no estimado",
+        "supuesto": a.supuesto,
+        "banda": list(BANDA),
+        "advertencia": "La reducción es un supuesto del usuario, no un efecto medido. Con estos "
+        "datos el efecto de las intervenciones no está identificado: la misma diferencia en "
+        "diferencias da reducciones o aumentos según se empareje o no por el nivel previo. Los "
+        "costos unitarios también son supuestos.",
+        "evidencia_de_no_identificacion": list(medido.values()),
         "factores": factores,
     }
     a.salida.parent.mkdir(parents=True, exist_ok=True)
     a.salida.write_text(json.dumps(ficha, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(json.dumps(ficha, indent=2, ensure_ascii=False))
+    print(f"escrito {a.salida} con un supuesto de {a.supuesto:.0%}")
+    for e in medido.values():
+        print(f"   {e['clave']:24s} DiD sin emparejar {e['did_sin_emparejar']:+.3f}"
+              f"   emparejado {e['did_emparejado']:+.3f}")
     return 0
 
 
