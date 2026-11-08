@@ -34,3 +34,14 @@ mlflow-skinny==3.18.0
 mlflow-tracing==3.18.0
 scikit-learn==1.9.1
 statsmodels==0.15.0
+
+# API que sirve las inferencias
+fastapi==0.115.6
+uvicorn==0.32.1
+httpx==0.28.1        # lo usa el TestClient de las pruebas de la API
+
+# Tablero
+dash==2.18.2
+plotly==5.24.1
+requests==2.32.3
+pyproj==3.7.0        # reproyecta la malla de EPSG:3116 a lat/lon para el mapa

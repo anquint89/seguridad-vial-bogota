@@ -80,3 +80,36 @@ stages:
       - data/procesado/prediccion_clasificador.parquet
       - reportes/modelos/clasificador.json:
           cache: false
+
+  # Predictor provisional (Empirical Bayes por grupos de referencia). Cuando el
+  # modelo de conteo de MLflow quede listo, su etapa escribe el mismo archivo con
+  # el mismo contrato y esta etapa se retira.
+  predicciones:
+    cmd: python -m src.modelos.provisional
+    deps:
+      - src/modelos/provisional.py
+      - data/procesado/panel.parquet
+    outs:
+      - data/procesado/predicciones.parquet
+      - data/procesado/predicciones_metricas.json:
+          cache: false
+
+  factores:
+    cmd: python -m src.modelos.factores
+    deps:
+      - src/modelos/factores.py
+      - data/procesado/panel.parquet
+    outs:
+      - data/procesado/factores.json:
+          cache: false
+
+  tablero_datos:
+    cmd: python -m src.tablero.datos
+    deps:
+      - src/tablero/datos.py
+      - data/raw
+      - data/procesado/panel.parquet
+      - data/procesado/predicciones.parquet
+    outs:
+      - data/procesado/tablero_segmentos.parquet
+      - data/procesado/tablero_geometria.parquet

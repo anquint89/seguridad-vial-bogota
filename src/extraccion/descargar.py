@@ -140,15 +140,19 @@ def descargar_capa(clave: str, salida: Path) -> Path:
 
 def main(argumentos: list[str] | None = None) -> int:
     analizador = argparse.ArgumentParser(description=__doc__)
+    # Sin `choices`: en algunas versiones de Python, nargs="*" con choices
+    # rechaza la lista vacia ("invalid choice: []"). Se valida a mano.
     analizador.add_argument(
         "capas",
         nargs="*",
-        choices=list(CAPAS),
         metavar="capa",
-        help="Capas a descargar. Sin argumentos se descargan las cuatro.",
+        help=f"Capas a descargar ({', '.join(CAPAS)}). Sin argumentos se descargan las cuatro.",
     )
     analizador.add_argument("--salida", type=Path, default=SALIDA_POR_DEFECTO)
     opciones = analizador.parse_args(argumentos)
+    invalidas = [c for c in opciones.capas if c not in CAPAS]
+    if invalidas:
+        analizador.error(f"capa desconocida: {', '.join(invalidas)}. Opciones: {', '.join(CAPAS)}")
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     for clave in opciones.capas or list(CAPAS):
