@@ -125,7 +125,9 @@ def bootstrap(datos: pd.DataFrame, corridas: list[str], replicas: int, semilla: 
     graves = datos.graves_2021.to_numpy()
     puntajes = {c: datos[c].to_numpy(float) for c in corridas}
     n = len(datos)
-    k = int(round(n * CORTE_PRINCIPAL))
+    # El corte nunca baja de un segmento: con pocas filas el 5 % redondea a
+    # cero y la captura quedaria dividiendo por cero.
+    k = max(1, int(round(n * CORTE_PRINCIPAL)))
 
     salida = {c: np.empty(replicas) for c in corridas}
     for b in range(replicas):
@@ -180,6 +182,45 @@ def seleccionar(puntuales: dict, muestras: dict, comparacion: dict, lider: str) 
     }
 
 
+def brecha_auc_captura(datos: pd.DataFrame, elegida: str) -> dict:
+    """De donde sale que el AUC suba mucho y la captura poco.
+
+    La linea base ordena por conteo historico, asi que da el mismo cero a todo
+    segmento sin graves previos y no puede ordenarlos entre si. Son la mayoria,
+    y ahi ocurre buena parte del dano del ano siguiente. El AUC premia poder
+    ordenarlos, pero un corte del 5 % no llega hasta ellos, porque lo llenan
+    los segmentos con historia, que las dos formas de ordenar comparten.
+    """
+    base = datos[LINEA_BASE].to_numpy(float)
+    modelo = datos[elegida].to_numpy(float)
+    graves = datos.graves_2021.to_numpy()
+    ocurre = (graves >= 1).astype(int)
+    n = len(datos)
+    # El corte nunca baja de un segmento: con pocas filas el 5 % redondea a
+    # cero y la captura quedaria dividiendo por cero.
+    k = max(1, int(round(n * CORTE_PRINCIPAL)))
+
+    sin_historia = base == 0
+    top_base = set(np.argpartition(-base, k)[:k])
+    top_modelo = set(np.argpartition(-modelo, k)[:k])
+
+    return {
+        "modelo_comparado": elegida,
+        "segmentos_sin_historia": int(sin_historia.sum()),
+        "segmentos_sin_historia_pct": round(100 * float(sin_historia.mean()), 1),
+        "graves_2021_sin_historia": int(graves[sin_historia].sum()),
+        "graves_2021_sin_historia_pct": round(
+            100 * float(graves[sin_historia].sum() / graves.sum()), 1
+        ),
+        "coincidencia_top_5_pct": round(100 * len(top_base & top_modelo) / k, 1),
+        "segmentos_compartidos": len(top_base & top_modelo),
+        "auc_linea_base": round(float(roc_auc_score(ocurre, base)), 4),
+        "auc_modelo": round(float(roc_auc_score(ocurre, modelo)), 4),
+        "captura_linea_base": round(captura_en(base, graves, k), 2),
+        "captura_modelo": round(captura_en(modelo, graves, k), 2),
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--puntajes", type=Path, default=PUNTAJES)
@@ -229,6 +270,11 @@ def main() -> int:
             "comparacion_con_lider": comparacion,
             "seleccion": seleccionar(puntuales, muestras, comparacion, lider),
         }
+
+    if "conteo" in ficha and LINEA_BASE in corridas:
+        ficha["brecha_auc_captura"] = brecha_auc_captura(
+            datos, ficha["conteo"]["seleccion"]["elegida"]
+        )
 
     a.salida.parent.mkdir(parents=True, exist_ok=True)
     a.salida.write_text(json.dumps(ficha, indent=2, ensure_ascii=False), encoding="utf-8")

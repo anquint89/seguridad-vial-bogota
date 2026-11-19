@@ -136,3 +136,32 @@ def test_las_metricas_puntuales_traen_captura_y_auc_para_toda_corrida():
         assert "auc_roc" in fila
         assert "captura_top_5_pct" in fila
         assert fila["tarea"] in ("conteo", "clasificacion")
+
+
+def test_la_brecha_cuenta_los_segmentos_que_la_linea_base_no_puede_ordenar():
+    """La linea base da el mismo cero a todo segmento sin graves previos. Esa
+    es la razon de que su AUC sea bajo aunque su captura sea parecida."""
+    datos = pd.DataFrame(
+        {
+            "CIV": range(10),
+            "graves_2021": [0, 0, 0, 0, 1, 0, 0, 2, 0, 1],
+            "linea_base_conteo_historico": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 5.0, 1.0, 0.0],
+            "lightgbm_poisson_h15_lr0.1_m100": [0.1, 0.2, 0.3, 0.4, 0.9, 0.5, 2.0, 4.0, 1.0, 0.8],
+        }
+    )
+    b = seleccion.brecha_auc_captura(datos, "lightgbm_poisson_h15_lr0.1_m100")
+    assert b["segmentos_sin_historia"] == 7  # los siete con cero historico
+    assert b["segmentos_sin_historia_pct"] == 70.0
+    # Dos de los cuatro graves de 2021 caen donde la linea base no ve nada.
+    assert b["graves_2021_sin_historia"] == 2
+    assert b["graves_2021_sin_historia_pct"] == 50.0
+
+
+def test_la_brecha_compara_el_mismo_corte_en_las_dos_metricas():
+    datos = _datos()
+    datos = datos.rename(columns={"lightgbm_poisson_h15_lr0.1_m100": "modelo"})
+    datos["modelo"] = datos["modelo"]
+    b = seleccion.brecha_auc_captura(datos, "modelo")
+    assert 0.0 <= b["coincidencia_top_5_pct"] <= 100.0
+    assert b["auc_modelo"] > b["auc_linea_base"]  # el modelo si ordena, el azar no
+    assert b["modelo_comparado"] == "modelo"

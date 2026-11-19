@@ -1402,5 +1402,18 @@
       "elegida": "lightgbm_binario_h15_lr0.1_m300",
       "por_que": "15 corridas son indistinguibles de catboost_d4_lr0.05 al 95 %. Entre ellas se toma la de menor complejidad, que es lightgbm_binario_h15_lr0.1_m300."
     }
+  },
+  "brecha_auc_captura": {
+    "modelo_comparado": "lightgbm_poisson_h15_lr0.1_m100",
+    "segmentos_sin_historia": 94176,
+    "segmentos_sin_historia_pct": 81.0,
+    "graves_2021_sin_historia": 3313,
+    "graves_2021_sin_historia_pct": 30.9,
+    "coincidencia_top_5_pct": 79.4,
+    "segmentos_compartidos": 4615,
+    "auc_linea_base": 0.7395,
+    "auc_modelo": 0.8282,
+    "captura_linea_base": 44.42,
+    "captura_modelo": 45.96
   }
 }
