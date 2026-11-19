@@ -1,0 +1,8 @@
+# El tablero no lee archivos de datos: todo lo pide a la API. Por eso no entran
+# pyarrow ni pyproj, que si usa el pipeline que arma las tablas.
+dash==2.18.2
+plotly==5.24.1
+pandas==2.2.3
+numpy==2.1.3
+requests==2.32.3
+gunicorn==26.2.0

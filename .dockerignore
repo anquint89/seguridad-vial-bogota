@@ -1,0 +1,29 @@
+# Lo que no entra al contexto de construccion. Sin esto, docker build manda al
+# demonio data/raw y mlruns enteros, que son cientos de MB.
+.git
+.github
+.dvc/cache
+.dvc/tmp
+.pytest_cache
+.ruff_cache
+__pycache__
+*.py[cod]
+notebooks
+reportes
+tests
+mlruns
+mlartifacts
+mlflow.db
+
+# Datos crudos y salidas intermedias del pipeline. Las imagenes solo necesitan
+# las cuatro salidas finales, que se copian una a una en el Dockerfile.
+data/raw
+data/procesado/panel.parquet
+data/procesado/vecindad.parquet
+data/procesado/predicciones.parquet
+data/procesado/prediccion_conteo.parquet
+data/procesado/prediccion_clasificador.parquet
+
+# Credenciales
+.env
+*.pem

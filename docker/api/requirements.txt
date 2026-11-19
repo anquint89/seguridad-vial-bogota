@@ -1,0 +1,8 @@
+# Solo lo que la API necesita en ejecucion. No entrena: lee las tablas que ya
+# produjo el pipeline, asi que no entran lightgbm, statsmodels, catboost ni
+# mlflow, que son los que inflan la imagen.
+pandas==2.2.3
+numpy==2.1.3
+pyarrow==18.0.0
+fastapi==0.115.6
+uvicorn==0.32.1
