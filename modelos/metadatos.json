@@ -1,0 +1,38 @@
+{
+  "empaquetado": "2026-11-18",
+  "experimento": "seguridad-vial-bogota-e3",
+  "tracking_uri": "sqlite:///mlflow.db",
+  "modelos": {
+    "conteo": {
+      "corrida": "lightgbm_poisson_h15_lr0.1_m100",
+      "archivo": "conteo.txt",
+      "arboles": 250,
+      "variables": 28,
+      "metricas_validacion": {
+        "captura_top_1_pct": 20.83,
+        "captura_top_2_pct": 30.19,
+        "captura_top_5_pct": 45.96,
+        "captura_top_10_pct": 58.81,
+        "auc_roc": 0.8282,
+        "tarea": "conteo",
+        "complejidad": 15
+      }
+    },
+    "clasificacion": {
+      "corrida": "lightgbm_binario_h15_lr0.1_m300",
+      "archivo": "clasificacion.txt",
+      "arboles": 250,
+      "variables": 28,
+      "metricas_validacion": {
+        "captura_top_1_pct": 20.81,
+        "captura_top_2_pct": 29.78,
+        "captura_top_5_pct": 45.85,
+        "captura_top_10_pct": 58.68,
+        "auc_roc": 0.8274,
+        "tarea": "clasificacion",
+        "complejidad": 15
+      }
+    }
+  },
+  "alpha_nb2": 0.3485
+}

@@ -1,14 +1,16 @@
 """API que sirve las inferencias al tablero.
 
-Lee las tablas que produce `python -m src.tablero.datos` y los factores de
-`python -m src.modelos.factores`. La carpeta se cambia con la variable de
+Las predicciones las calcula en cada peticion con el modelo empaquetado por
+`python -m src.modelos.empaquetar`, que lo saca de MLflow. De las tablas que
+produce `python -m src.tablero.datos` toma lo descriptivo, que no se predice,
+y de `python -m src.modelos.factores` los factores del what-if. La carpeta se cambia con la variable de
 entorno DATOS_DIR (en Docker apunta al volumen montado).
 
     uvicorn src.api.main:app --port 8000
     documentacion interactiva: http://localhost:8000/docs
 
 Endpoints (los de la maqueta, mas tres de apoyo):
-    GET /salud                      estado y modelo cargado
+    GET /salud                      estado, modelo cargado y modo de inferencia
     GET /localidades                lista para el filtro
     GET /ranking?anio&top&localidad top-N sin geometria (tabla B y optimizador D)
     GET /segmentos/top?anio&n&localidad&bbox   el mismo top-N como GeoJSON (mapa A)
@@ -18,6 +20,11 @@ Endpoints (los de la maqueta, mas tres de apoyo):
 """
 
 from __future__ import annotations
+
+# inferencia trae lightgbm, y lightgbm tiene que cargar ANTES que pandas: si
+# pyarrow registra primero su runtime de OpenMP, la DLL nativa revienta con una
+# violacion de acceso al predecir.
+from src.api import inferencia  # noqa: I001
 
 import json
 import os
@@ -58,13 +65,30 @@ def registros(df: pd.DataFrame) -> list[dict]:
     return json.loads(df.to_json(orient="records", force_ascii=False))
 
 
+PREDICHAS = ["esperado", "esperado_eb", "prob_grave"]
+
+
 def filtrar(anio: int, localidad: str) -> pd.DataFrame:
+    """Atributos del segmento desde la tabla, predicciones desde el modelo.
+
+    La tabla aporta lo descriptivo, que no se predice: via, localidad,
+    longitud, carriles. Las tres columnas predichas se calculan en esta
+    peticion con el modelo empaquetado, y el ranking se rehace con ellas.
+    """
     seg = tablas()["segmentos"]
     sel = seg[seg.anio_ref == anio]
     if sel.empty:
         raise HTTPException(404, f"No hay predicciones para el año {anio}")
     if localidad.upper() != TODAS:
         sel = sel[sel.localidad == localidad.upper()]
+
+    if inferencia.disponible():
+        vivo = inferencia.predecir(anio, sel.CIV.tolist())
+        if not vivo.empty:
+            sel = sel.drop(columns=PREDICHAS).merge(vivo, on="CIV", how="inner")
+            sel = sel.sort_values("esperado_eb", ascending=False)
+            sel["rango"] = range(1, len(sel) + 1)
+            return sel
     return sel.sort_values("rango")
 
 
@@ -76,6 +100,7 @@ def salud() -> dict:
         "modelo": seg.modelo.iloc[0],
         "anios": sorted(int(a) for a in seg.anio_ref.unique()),
         "segmentos": int(seg.CIV.nunique()),
+        **inferencia.ficha(),
     }
 
 
@@ -128,6 +153,10 @@ def segmento(civ: int, anio: int = 2021) -> dict:
     fila = seg[(seg.CIV == civ) & (seg.anio_ref == anio)]
     if fila.empty:
         raise HTTPException(404, f"CIV {civ} no encontrado para {anio}")
+    if inferencia.disponible():
+        vivo = inferencia.predecir(anio, [civ])
+        if not vivo.empty:
+            fila = fila.drop(columns=PREDICHAS).merge(vivo, on="CIV", how="inner")
     detalle = registros(fila)[0]
     detalle["trazos"] = json.loads(tablas()["geometria"].get(civ, "[]"))
     return detalle

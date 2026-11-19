@@ -1,8 +1,9 @@
-# Solo lo que la API necesita en ejecucion. No entrena: lee las tablas que ya
-# produjo el pipeline, asi que no entran lightgbm, statsmodels, catboost ni
-# mlflow, que son los que inflan la imagen.
+# Lo que la API necesita en ejecucion. Entra lightgbm porque la API infiere
+# en cada peticion con el modelo empaquetado. No entran mlflow, statsmodels ni
+# catboost, que solo hacen falta para entrenar y son los que inflan la imagen.
 pandas==2.2.3
 numpy==2.1.3
 pyarrow==18.0.0
 fastapi==0.115.6
 uvicorn==0.32.1
+lightgbm==4.7.0
