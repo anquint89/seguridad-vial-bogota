@@ -6,8 +6,8 @@
 2. armar_paquete: mochila de eleccion multiple (una intervencion por segmento)
    resuelta con el voraz clasico:
      a. por segmento se dejan solo las opciones eficientes (frontera convexa
-        de costo vs reduccion, partiendo de "no intervenir");
-     b. cada paso de la frontera es un incremento (mas costo, mas reduccion);
+        de costo vs reduccion, partiendo de "no intervenir")
+     b. cada paso de la frontera es un incremento (mas costo, mas reduccion)
      c. se ordenan todos los incrementos por reduccion/costo y se toman
         mientras quepan. Asi, si sobra plata, un segmento pasa de una obra
         barata a una mas efectiva en vez de quedarse con la primera.

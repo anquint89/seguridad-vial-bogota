@@ -4,26 +4,19 @@ El tablero necesita un factor de reduccion para el panel what-if. Este modulo
 NO lo estima: lo declara, y deja medida la razon.
 
 POR QUE NO SE ESTIMA
-  Se calculo la diferencia en diferencias de dos maneras sobre los mismos datos:
+  La diferencia en diferencias da signos opuestos segun como se calcule. Sin
+  emparejar, los tratados partian del doble de graves en 2015 y revierten a la
+  media, asi que salen reducciones del 18 al 33 %. Emparejando por graves de
+  2015 queda la seleccion por exposicion, porque la ciudad intervino vias mas
+  largas y con mas carriles, y salen aumentos del 44 al 69 %.
 
-    sin emparejar   compara tratados contra nunca intervenidos. Los tratados
-                    partian del doble de graves en 2015, asi que revierten a la
-                    media y salen reducciones aparentes.
-    emparejado      compara dentro de cada estrato de graves en 2015. Queda la
-                    seleccion por exposicion: la ciudad intervino vias mas
-                    largas, con mas carriles y de mayor trafico, asi que salen
-                    aumentos aparentes.
-
-  El mismo dato da reducciones del 18 al 33 % o aumentos del 44 al 69 % segun
-  una decision de modelado. Coincide con el modelo de panel, que controla
-  longitud, carriles, clase, tendencia y vecinos: ningun coeficiente post_ es
-  significativo. Con obras marcadas todas en 2016 y sin un periodo previo largo,
-  el efecto no esta identificado.
+  El modelo de panel dice lo mismo: ningun coeficiente post_ es significativo.
+  Con las obras marcadas todas en 2016, el efecto no esta identificado.
 
 QUE HACE EL TABLERO
-  Usa un supuesto uniforme, igual para las cinco categorias, que el usuario
-  edita. Al no haber evidencia de que una categoria sea mas efectiva que otra,
-  el optimizador reparte por costo, que es lo unico que si esta medido.
+  Un supuesto uniforme para las cinco categorias, que el usuario edita. Sin
+  evidencia de que una sea mas efectiva, el optimizador reparte por costo, que
+  es lo unico medido.
 
     python -m src.modelos.factores
 """

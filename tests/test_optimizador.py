@@ -37,7 +37,7 @@ def test_con_poca_plata_va_la_opcion_barata(ranking):
 
 
 def test_con_mas_plata_mejora_al_segmento_de_mayor_riesgo(ranking):
-    # 1 + 1 + 1 = 3; mejorar el CIV 1 a "Cara" cuesta 9 mas y evita 4 mas
+    # 1 + 1 + 1 = 3. Mejorar el CIV 1 a "Cara" cuesta 9 mas y evita 4 mas
     t = paquete(ranking, TODAS, 12.0)
     assert t.intervencion.tolist() == ["Cara", "Barata", "Barata"]
     assert t[t.en_paquete].costo.sum() <= 12.0
@@ -56,7 +56,7 @@ def test_apagar_una_categoria(ranking):
 
 def test_costo_editado_y_costo_por_km(ranking):
     t = paquete(ranking, {"por_km"}, 100.0, {"por_km": 2.0})
-    assert t.costo.tolist() == pytest.approx([2.0, 1.0, 4.0])  # 2 M/km x 1; 0,5; 2 km
+    assert t.costo.tolist() == pytest.approx([2.0, 1.0, 4.0])  # 2 M/km por 1, por 0,5 y por 2 km
 
 
 def test_sin_categorias_activas_no_hay_paquete(ranking):
