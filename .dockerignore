@@ -1,0 +1,11 @@
+.git
+.venv
+.dvc
+data
+mlruns
+reportes
+notebooks
+tests
+modelo-riesgo
+__pycache__
+*.pyc

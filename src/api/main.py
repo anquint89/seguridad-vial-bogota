@@ -18,17 +18,21 @@ Endpoints (los de la maqueta, mas tres de apoyo):
 """
 
 from __future__ import annotations
-
+import lightgbm
 import json
 import os
 from functools import lru_cache
 from pathlib import Path
-
+import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
+from modelo_riesgo import __version__ as model_version
+from modelo_riesgo.predict import make_prediction
+from pydantic import BaseModel
 
 RAIZ = Path(__file__).resolve().parents[2]
 TODAS = "TODAS"
+NOMBRE_MODELO = "lightgbm_poisson_h31_lr0.1"
 
 app = FastAPI(
     title="Seguridad vial Bogotá · API de priorización",
@@ -41,15 +45,52 @@ def carpeta() -> Path:
     return Path(os.environ.get("DATOS_DIR", RAIZ / "data" / "procesado"))
 
 
+def captura_top5(pred: pd.Series, real: pd.Series) -> float:
+    """% de los graves reales que caen en el 5 % de segmentos con mayor predicción."""
+    k = int(round(len(pred) * 0.05))
+    top = pred.sort_values(ascending=False).head(k).index
+    return round(100 * real.loc[top].sum() / real.sum(), 1)
+
+
+def predecir_con_modelo(seg: pd.DataFrame, d: Path) -> pd.DataFrame:
+    """Reemplaza las columnas de predicción por las del modelo empaquetado (solo 2021)."""
+    feats = pd.read_parquet(d / "caracteristicas_2021.parquet")
+    res = make_prediction(input_data=feats)
+    if res["errors"] is not None:
+        raise RuntimeError(f"El modelo rechazó las características: {res['errors']}")
+    mu = pd.Series(res["predictions"], index=feats.CIV.to_numpy())
+
+    seg = seg[seg.anio_ref == 2021].copy()
+    seg["esperado"] = seg.CIV.map(mu)
+    seg["esperado_eb"] = seg["esperado"]  # sin Empirical Bayes: el modelo ya usa la historia
+    seg["prob_grave"] = 1 - np.exp(-seg["esperado"])  # aproximación de Poisson
+    seg["modelo"] = f"{NOMBRE_MODELO} v{res['version']}"
+    seg["rango"] = seg.esperado_eb.rank(ascending=False, method="first").astype(int)
+    return seg.sort_values("rango")
+
+
+def metricas_del_modelo(seg: pd.DataFrame) -> dict:
+    """Captura del top 5 % en 2021, contra la línea base del método vigente."""
+    base = seg.set_index("CIV")
+    return {
+        "modelo": seg.modelo.iloc[0],
+        "captura_top5_2021": {
+            "esperado_eb": captura_top5(base.esperado_eb, base.observado),
+            "linea_base_historico": captura_top5(base.graves_previos.astype(float), base.observado),
+        },
+    }
+
+
 @lru_cache(maxsize=1)
 def tablas() -> dict:
-    """Se cargan una vez por proceso: unos 30 MB en memoria."""
+    """Se cargan una vez por proceso. Las predicciones salen del modelo empaquetado."""
     d = carpeta()
+    seg = predecir_con_modelo(pd.read_parquet(d / "tablero_segmentos.parquet"), d)
     return {
-        "segmentos": pd.read_parquet(d / "tablero_segmentos.parquet"),
+        "segmentos": seg,
         "geometria": pd.read_parquet(d / "tablero_geometria.parquet").set_index("CIV").trazos,
         "factores": json.loads((d / "factores.json").read_text(encoding="utf-8")),
-        "metricas": json.loads((d / "predicciones_metricas.json").read_text(encoding="utf-8")),
+        "metricas": metricas_del_modelo(seg),
     }
 
 
@@ -141,3 +182,22 @@ def factores() -> dict:
 @app.get("/metricas")
 def metricas() -> dict:
     return tablas()["metricas"]
+
+
+
+class EntradaPrediccion(BaseModel):
+    inputs: list[dict]
+
+
+@app.get("/api/v1/health")
+def health() -> dict:
+    return {"name": app.title, "api_version": app.version, "model_version": model_version}
+
+
+@app.post("/api/v1/predict")
+def predict(entrada: EntradaPrediccion) -> dict:
+    """Predice con el modelo empaquetado a partir de filas de características."""
+    resultado = make_prediction(input_data=pd.DataFrame(entrada.inputs))
+    if resultado["errors"] is not None:
+        raise HTTPException(status_code=400, detail=json.loads(resultado["errors"]))
+    return resultado

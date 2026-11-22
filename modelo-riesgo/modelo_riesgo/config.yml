@@ -1,0 +1,50 @@
+package_name: modelo-riesgo
+pipeline_save_file: modelo-riesgo-output
+test_data_file: muestra_2021.csv
+modelo: lightgbm_poisson_h31_lr0.1
+target: graves
+offset: log_km
+anio_entrenamiento:
+- 2016
+- 2020
+anio_validacion: 2021
+num_boost_round: 200
+parametros:
+  min_data_in_leaf: 200
+  feature_fraction: 0.8
+  bagging_fraction: 0.8
+  bagging_freq: 1
+  verbose: -1
+  seed: 7
+  num_leaves: 31
+  learning_rate: 0.1
+  objective: poisson
+features:
+- const
+- hist_media_log
+- rezago1_log
+- vecinos_hist_log
+- vecinos_rezago1_log
+- vecinos_n
+- log_km
+- carriles
+- vel_reg
+- vel_faltante
+- tendencia
+- pandemia
+- post_kilometros_demarcados
+- post_paso_peatonal
+- post_senalizacion
+- post_trafico_calmado
+- post_zona_escolar
+- tratado_kilometros_demarcados
+- tratado_paso_peatonal
+- tratado_senalizacion
+- tratado_trafico_calmado
+- tratado_zona_escolar
+- clase_1
+- clase_2
+- clase_4
+- clase_5
+- clase_6
+- clase_7

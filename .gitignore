@@ -29,3 +29,7 @@ desktop.ini
 mlruns/
 mlartifacts/
 mlflow.db
+# construccion rueda docker
+modelo-riesgo/build/
+modelo-riesgo/dist/
+modelo-riesgo/*.egg-info/
