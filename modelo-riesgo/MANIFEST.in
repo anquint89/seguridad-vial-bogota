@@ -1,0 +1,4 @@
+include modelo_riesgo/VERSION
+include modelo_riesgo/config.yml
+recursive-include modelo_riesgo/datasets *
+recursive-include modelo_riesgo/trained *
