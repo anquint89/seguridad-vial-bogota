@@ -18,7 +18,12 @@ Endpoints (los de la maqueta, mas tres de apoyo):
 """
 
 from __future__ import annotations
-import lightgbm
+
+# Este import va primero a proposito y no sobra aunque no se use aqui: lightgbm
+# tiene que cargar ANTES que pyarrow, o su DLL nativa revienta con una violacion
+# de acceso al predecir. Borrarlo deja la API sin inferencia.
+import lightgbm  # noqa: F401,I001
+
 import json
 import os
 from functools import lru_cache
