@@ -1,1 +1,2 @@
-uvicorn src.api.main:app --host 0.0.0.0 --port $PORT
+#!/usr/bin/env bash
+exec uvicorn src.api.main:app --host 0.0.0.0 --port "$PORT"

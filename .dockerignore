@@ -1,11 +1,31 @@
 .git
+.github
 .venv
 .dvc
-data
+.pytest_cache
 mlruns
-reportes
+mlartifacts
+mlflow.db
 notebooks
+reportes
 tests
-modelo-riesgo
 __pycache__
 *.pyc
+
+# El paquete se instala desde la rueda de model-pkg, no desde el fuente.
+modelo-riesgo
+
+# Datos. Las imagenes solo necesitan las cuatro salidas que el Dockerfile de la
+# API copia una a una. El resto son cientos de MB de contexto de construccion.
+data/raw
+data/procesado/panel.parquet
+data/procesado/vecindad.parquet
+data/procesado/predicciones.parquet
+data/procesado/prediccion_conteo.parquet
+data/procesado/prediccion_clasificador.parquet
+data/procesado/puntajes_validacion.parquet
+data/procesado/caracteristicas_inferencia.parquet
+
+# Credenciales
+.env
+*.pem
