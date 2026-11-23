@@ -196,7 +196,7 @@ def construir_layout():
     columnas = [
         ("rango", "#", "numeric"), ("CIV", "CIV", "numeric"), ("via", "Vía", "text"),
         ("localidad", "Localidad", "text"), ("observado", "Graves año ref.", "numeric"),
-        ("esperado_eb", "Riesgo_esperado", "numeric"), ("prob_grave", "P(≥1 grave)", "numeric"),
+        ("esperado_eb", "Riesgo esperado", "numeric"), ("prob_grave", "P(≥1 grave)", "numeric"),
         ("long_m", "Longitud (m)", "numeric"), ("intervencion", "Intervención recomendada", "text"),
         ("reduccion", "Reducción", "numeric"), ("costo", "Costo (M)", "numeric"),
         ("en_paquete", "En paquete", "text"),
@@ -404,7 +404,7 @@ def detalle(civ, tabla):
         ("Localidad", fila["localidad"].title()),
         ("Ranking", f"#{num(fila['rango'], 0)}"),
         ("Observado en el año", num(fila["observado"], 0)),
-        ("Esperado (EB)", f"{num(fila['esperado_eb'])} graves/año"),
+        ("Riesgo esperado", f"{num(fila['esperado_eb'])} graves/año"),
         ("P(≥1 grave)", f"{num(100 * fila['prob_grave'], 1)} %"),
         ("Graves años previos", num(fila["graves_previos"], 0)),
         ("Exposición", f"{num(fila['long_m'], 0)} m, clase {fila['clase_via']}, {fila['carriles']} carriles"),
