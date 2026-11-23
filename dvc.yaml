@@ -113,3 +113,19 @@ stages:
     outs:
       - data/procesado/tablero_segmentos.parquet
       - data/procesado/tablero_geometria.parquet
+
+  empaquetar:
+    cmd: python -m src.modelos.empaquetar
+    deps:
+      - src/modelos/empaquetar.py
+      - src/modelos/caracteristicas.py
+      - data/procesado/panel.parquet
+      - data/procesado/vecindad.parquet
+    outs:
+      - data/procesado/caracteristicas_2021.parquet
+      - modelo-riesgo/modelo_riesgo/trained/modelo-riesgo-output0.0.1.txt:
+          cache: false
+      - modelo-riesgo/modelo_riesgo/config.yml:
+          cache: false
+      - modelo-riesgo/modelo_riesgo/datasets/muestra_2021.csv:
+          cache: false

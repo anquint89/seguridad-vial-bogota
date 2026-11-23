@@ -1,1 +1,5 @@
 *.sh text eol=lf
+
+# El modelo serializado se copia tal cual a la rueda. Si git le cambia los
+# saltos de linea, los bytes del .whl dejan de coincidir con los del repositorio.
+modelo-riesgo/modelo_riesgo/trained/*.txt -text

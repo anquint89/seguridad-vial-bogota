@@ -4,7 +4,6 @@
 """
 import lightgbm as lgb  # antes que pandas (nota de experimentos.py)
 
-import json
 from pathlib import Path
 import yaml
 import numpy as np
@@ -31,7 +30,7 @@ def main() -> int:
     ds = lgb.Dataset(contiguo(X[entrena]), label=contiguo(y[entrena]),
                      init_score=contiguo(X.log_km[entrena]), feature_name=list(X.columns))
     arbol = lgb.train(PARAMETROS, ds, num_boost_round=RONDAS)
-    
+
     (PAQUETE / "trained").mkdir(parents=True, exist_ok=True)
     (PAQUETE / "datasets").mkdir(parents=True, exist_ok=True)
     arbol.save_model(str(PAQUETE / "trained" / f"modelo-riesgo-output{VERSION}.txt"))

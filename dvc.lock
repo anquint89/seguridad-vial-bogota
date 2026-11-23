@@ -130,3 +130,39 @@ stages:
       hash: md5
       md5: d46826adb115661089e1748994ef1819
       size: 3083095
+  empaquetar:
+    cmd: python -m src.modelos.empaquetar
+    deps:
+    - path: data/procesado/panel.parquet
+      hash: md5
+      md5: ae23358687210b1f0b095351c6be730f
+      size: 10715284
+    - path: data/procesado/vecindad.parquet
+      hash: md5
+      md5: d46826adb115661089e1748994ef1819
+      size: 3083095
+    - path: src/modelos/caracteristicas.py
+      hash: md5
+      md5: d12cae499f33b2b15992791f68136db9
+      size: 5511
+    - path: src/modelos/empaquetar.py
+      hash: md5
+      md5: 2d73b0c9d435837bec1114b3155634ad
+      size: 2711
+    outs:
+    - path: data/procesado/caracteristicas_2021.parquet
+      hash: md5
+      md5: a1d7dbcb8ed6e07f2035c5d642fb7865
+      size: 2300110
+    - path: modelo-riesgo/modelo_riesgo/config.yml
+      hash: md5
+      md5: eaa8de20be97c305932d24e163f07aa1
+      size: 950
+    - path: modelo-riesgo/modelo_riesgo/datasets/muestra_2021.csv
+      hash: md5
+      md5: 70c206c3c7db339d814c82d94c53ec74
+      size: 30574
+    - path: modelo-riesgo/modelo_riesgo/trained/modelo-riesgo-output0.0.1.txt
+      hash: md5
+      md5: ac0f86d38306e169b9ec4740300cf5bc
+      size: 713372
