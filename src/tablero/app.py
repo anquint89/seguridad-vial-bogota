@@ -159,7 +159,7 @@ def construir_layout():
 
     mapa = tarjeta(
         "A. Mapa de la malla coloreado por riesgo esperado",
-        f"Siniestros graves esperados por segmento y por año, corregidos por Empirical Bayes. "
+        f"Siniestros graves esperados por segmento y por año, estimados con el modelo LightGBM Poisson. "
         f"Se dibujan los {num(TOP_N, 0)} segmentos de mayor riesgo; haga clic en uno para ver su detalle.",
         html.Div(
             [
@@ -196,7 +196,7 @@ def construir_layout():
     columnas = [
         ("rango", "#", "numeric"), ("CIV", "CIV", "numeric"), ("via", "Vía", "text"),
         ("localidad", "Localidad", "text"), ("observado", "Graves año ref.", "numeric"),
-        ("esperado_eb", "Esperado EB", "numeric"), ("prob_grave", "P(≥1 grave)", "numeric"),
+        ("esperado_eb", "Riesgo_esperado", "numeric"), ("prob_grave", "P(≥1 grave)", "numeric"),
         ("long_m", "Longitud (m)", "numeric"), ("intervencion", "Intervención recomendada", "text"),
         ("reduccion", "Reducción", "numeric"), ("costo", "Costo (M)", "numeric"),
         ("en_paquete", "En paquete", "text"),
