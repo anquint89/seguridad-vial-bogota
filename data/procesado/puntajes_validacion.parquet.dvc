@@ -1,0 +1,5 @@
+outs:
+- md5: 428ae1d77577af7b9cee4891059345bd
+  size: 53258262
+  hash: md5
+  path: puntajes_validacion.parquet

@@ -2,6 +2,16 @@
 # bash no los interpreta con CRLF.
 *.sh text eol=lf
 
+# DVC hashea el contenido de los archivos, no su significado. Con el autocrlf
+# de Windows un clon recibe CRLF y los hashes dejan de coincidir con los del
+# dvc.lock, asi que `dvc status` sale sucio recien clonado el repositorio sin
+# que nadie haya tocado nada. Se fija LF en todo lo que el pipeline declara
+# como dependencia o como salida.
+*.py text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
 # El modelo serializado se copia tal cual a la rueda. Si git le cambia los
 # saltos de linea, los bytes del .whl dejan de coincidir con los del repositorio.
 modelo-riesgo/modelo_riesgo/trained/*.txt -text
