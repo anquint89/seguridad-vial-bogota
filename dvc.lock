@@ -155,8 +155,8 @@ stages:
       size: 6496
     - path: src/modelos/predecir.py
       hash: md5
-      md5: 5d119364f5785d5ff724b742a21923ac
-      size: 8945
+      md5: 0bffe86c1abd5c0d1083c782c31cf843
+      size: 8938
     outs:
     - path: data/procesado/caracteristicas_inferencia.parquet
       hash: md5
@@ -224,8 +224,8 @@ stages:
       size: 3863
     - path: src/modelos/predecir.py
       hash: md5
-      md5: 5d119364f5785d5ff724b742a21923ac
-      size: 8945
+      md5: 0bffe86c1abd5c0d1083c782c31cf843
+      size: 8938
     outs:
     - path: data/procesado/predicciones.parquet
       hash: md5
@@ -257,8 +257,8 @@ stages:
       size: 42515
     - path: src/tablero/datos.py
       hash: md5
-      md5: 3f6c815d16b84b4c8379c894f41c8543
-      size: 6087
+      md5: 374bfad88e1b53e54341df4b238806ed
+      size: 6083
     outs:
     - path: data/procesado/tablero_geometria.parquet
       hash: md5
