@@ -42,8 +42,8 @@ stages:
     deps:
     - path: data/raw
       hash: md5
-      md5: 118248196ec796b7464de7648ea086e4.dir
-      size: 32640278
+      md5: bd01b47f65bb5e567c4d80a7bb3f1f8f.dir
+      size: 32012630
       nfiles: 13
     - path: src/preparacion/exposicion.py
       hash: md5
@@ -56,8 +56,8 @@ stages:
     outs:
     - path: data/procesado/panel.parquet
       hash: md5
-      md5: 44ce52923f0d2cf0cf3ca5b238dc7112
-      size: 10717726
+      md5: ae23358687210b1f0b095351c6be730f
+      size: 10715284
   modelo_conteo:
     cmd: python -m src.modelos.conteo
     deps:
@@ -103,8 +103,8 @@ stages:
       size: 5511
     - path: src/modelos/clasificador.py
       hash: md5
-      md5: b8192bd424f5229d6e17c3087b0ce92f
-      size: 8685
+      md5: 778abf47bc09cf9fece7c6d50b9c74e1
+      size: 8666
     outs:
     - path: data/procesado/prediccion_clasificador.parquet
       hash: md5
@@ -130,3 +130,157 @@ stages:
       hash: md5
       md5: d46826adb115661089e1748994ef1819
       size: 3083095
+  empaquetar:
+    cmd: python -m src.modelos.empaquetar
+    deps:
+    - path: data/procesado/panel.parquet
+      hash: md5
+      md5: ae23358687210b1f0b095351c6be730f
+      size: 10715284
+    - path: data/procesado/vecindad.parquet
+      hash: md5
+      md5: d46826adb115661089e1748994ef1819
+      size: 3083095
+    - path: reportes/modelos/seleccion.json
+      hash: md5
+      md5: cc86cb588625383c5b100a0342bd3bf5
+      size: 42515
+    - path: src/modelos/caracteristicas.py
+      hash: md5
+      md5: d12cae499f33b2b15992791f68136db9
+      size: 5511
+    - path: src/modelos/empaquetar.py
+      hash: md5
+      md5: 29d5707a9e00d1e3557b90e6131cd288
+      size: 6496
+    - path: src/modelos/predecir.py
+      hash: md5
+      md5: 0bffe86c1abd5c0d1083c782c31cf843
+      size: 8938
+    outs:
+    - path: data/procesado/caracteristicas_inferencia.parquet
+      hash: md5
+      md5: 98537926dacc82ca2fe32c7b87e52968
+      size: 4437544
+    - path: modelo-riesgo/modelo_riesgo/config.yml
+      hash: md5
+      md5: 40145d760412a78f8f84663af6aaf60a
+      size: 1898
+    - path: modelo-riesgo/modelo_riesgo/datasets/muestra_2021.csv
+      hash: md5
+      md5: 43fac5b5847bb1ad7caceb6cdfe75c93
+      size: 32601
+    - path: 
+        modelo-riesgo/modelo_riesgo/trained/modelo-riesgo-clasificacion0.0.2.txt
+      hash: md5
+      md5: 222f2163be72e260a7c38075b7a69dbb
+      size: 450970
+    - path: modelo-riesgo/modelo_riesgo/trained/modelo-riesgo-conteo0.0.2.txt
+      hash: md5
+      md5: d8ee8726be74b73afde785f4f1ec4e58
+      size: 452407
+  seleccion:
+    cmd: python -m src.modelos.seleccion
+    deps:
+    - path: data/procesado/puntajes_validacion.parquet
+      hash: md5
+      md5: 428ae1d77577af7b9cee4891059345bd
+      size: 53258262
+    - path: src/modelos/metricas.py
+      hash: md5
+      md5: 2377bfb3d56c3728dc3947c52dc48b5c
+      size: 3863
+    - path: src/modelos/seleccion.py
+      hash: md5
+      md5: 9753202e0508e9679b28a15fa726df2c
+      size: 12200
+    outs:
+    - path: reportes/modelos/seleccion.json
+      hash: md5
+      md5: cc86cb588625383c5b100a0342bd3bf5
+      size: 42515
+  predicciones:
+    cmd: python -m src.modelos.predecir
+    deps:
+    - path: data/procesado/panel.parquet
+      hash: md5
+      md5: ae23358687210b1f0b095351c6be730f
+      size: 10715284
+    - path: data/procesado/vecindad.parquet
+      hash: md5
+      md5: d46826adb115661089e1748994ef1819
+      size: 3083095
+    - path: reportes/modelos/seleccion.json
+      hash: md5
+      md5: cc86cb588625383c5b100a0342bd3bf5
+      size: 42515
+    - path: src/modelos/caracteristicas.py
+      hash: md5
+      md5: d12cae499f33b2b15992791f68136db9
+      size: 5511
+    - path: src/modelos/metricas.py
+      hash: md5
+      md5: 2377bfb3d56c3728dc3947c52dc48b5c
+      size: 3863
+    - path: src/modelos/predecir.py
+      hash: md5
+      md5: 0bffe86c1abd5c0d1083c782c31cf843
+      size: 8938
+    outs:
+    - path: data/procesado/predicciones.parquet
+      hash: md5
+      md5: c70b121b89f6b2423bf7bdcca8150de0
+      size: 6210088
+    - path: data/procesado/predicciones_metricas.json
+      hash: md5
+      md5: 8625fe3b0146009dbd1d60075b35daac
+      size: 525
+  tablero_datos:
+    cmd: python -m src.tablero.datos
+    deps:
+    - path: data/procesado/panel.parquet
+      hash: md5
+      md5: ae23358687210b1f0b095351c6be730f
+      size: 10715284
+    - path: data/procesado/predicciones.parquet
+      hash: md5
+      md5: c70b121b89f6b2423bf7bdcca8150de0
+      size: 6210088
+    - path: data/raw
+      hash: md5
+      md5: bd01b47f65bb5e567c4d80a7bb3f1f8f.dir
+      size: 32012630
+      nfiles: 13
+    - path: reportes/modelos/seleccion.json
+      hash: md5
+      md5: cc86cb588625383c5b100a0342bd3bf5
+      size: 42515
+    - path: src/tablero/datos.py
+      hash: md5
+      md5: 374bfad88e1b53e54341df4b238806ed
+      size: 6083
+    outs:
+    - path: data/procesado/tablero_geometria.parquet
+      hash: md5
+      md5: f1a2460082f46a96d436532aeccf52e7
+      size: 4281548
+    - path: data/procesado/tablero_segmentos.parquet
+      hash: md5
+      md5: 5a233bdd7dfda69454c132c8b099f9e7
+      size: 8376767
+  factores:
+    cmd: python -m src.modelos.factores
+    deps:
+    - path: data/procesado/panel.parquet
+      hash: md5
+      md5: ae23358687210b1f0b095351c6be730f
+      size: 10715284
+    - path: src/modelos/factores.py
+      hash: md5
+      md5: 287d99d7af9fcd8b9d2ceb3cb5ead701
+      size: 5858
+    outs:
+    - path: data/procesado/factores.json
+      hash: md5
+      md5: cf991614a52644b2a9e562b4bd2b3684
+      size: 3029

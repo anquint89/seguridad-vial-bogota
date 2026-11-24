@@ -1,6 +1,6 @@
 """Pruebas de la API. Requieren las tablas del tablero:
 
-    python -m src.modelos.provisional
+    python -m src.modelos.predecir
     python -m src.modelos.factores
     python -m src.tablero.datos
 """
@@ -31,7 +31,7 @@ def test_ranking_ordenado_y_del_tamano_pedido(cliente):
     filas = cliente.get("/ranking", params={"top": 50}).json()
     assert len(filas) == 50
     assert [f["rango"] for f in filas] == sorted(f["rango"] for f in filas)
-    assert filas[0]["esperado_eb"] >= filas[-1]["esperado_eb"]
+    assert filas[0]["esperado"] >= filas[-1]["esperado"]
 
 
 def test_ranking_filtra_por_localidad(cliente):

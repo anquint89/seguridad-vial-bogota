@@ -2,7 +2,7 @@
 
 Las cifras del reporte salen de reportes/modelos/*.json. Aqui se recalculan
 desde data/procesado/*.parquet para que un cambio en los modelos no pase
-inadvertido. Necesita los datos de DVC; si no estan, las pruebas se omiten.
+inadvertido. Necesita los datos de DVC. Si no estan, las pruebas se omiten.
 """
 
 import json
@@ -22,7 +22,7 @@ CORTES = (1, 2, 5, 10)
 
 pytestmark = pytest.mark.skipif(
     not all(p.exists() for p in (PRED_CONTEO, PRED_CLASES, JSON_CONTEO, JSON_CLASES)),
-    reason="faltan las predicciones o los JSON; corre el pipeline o dvc pull",
+    reason="faltan las predicciones o los JSON, corre el pipeline o dvc pull",
 )
 
 

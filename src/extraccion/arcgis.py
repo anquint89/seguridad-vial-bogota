@@ -21,7 +21,7 @@ from typing import Any, Iterator
 BASE = "https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services"
 PAGINA = 2000
 REINTENTOS = 4
-ESPERA_BASE = 3  # segundos; se duplica en cada reintento
+ESPERA_BASE = 3  # segundos, se duplica en cada reintento
 
 log = logging.getLogger(__name__)
 
@@ -95,7 +95,7 @@ def paginar(
 ) -> Iterator[dict]:
     """Recorre la capa completa y entrega los registros uno a uno.
 
-    con_geometria=True trae la geometria; para los cruces por CIV no hace falta
+    con_geometria=True trae la geometria. Para los cruces por CIV no hace falta
     y la descarga pesa un orden de magnitud menos.
     """
     url = f"{BASE}/{servicio}/FeatureServer/{capa}/query"

@@ -81,14 +81,28 @@ stages:
       - reportes/modelos/clasificador.json:
           cache: false
 
-  # Predictor provisional (Empirical Bayes por grupos de referencia). Cuando el
-  # modelo de conteo de MLflow quede listo, su etapa escribe el mismo archivo con
-  # el mismo contrato y esta etapa se retira.
-  predicciones:
-    cmd: python -m src.modelos.provisional
+  # De aqui en adelante manda MLflow. seleccion elige una corrida por tarea con
+  # bootstrap pareado, predicciones las aplica sobre los dos anios del tablero y
+  # empaquetar las deja dentro de la rueda que instala la imagen de la API.
+  seleccion:
+    cmd: python -m src.modelos.seleccion
     deps:
-      - src/modelos/provisional.py
+      - src/modelos/seleccion.py
+      - src/modelos/metricas.py
+      - data/procesado/puntajes_validacion.parquet
+    outs:
+      - reportes/modelos/seleccion.json:
+          cache: false
+
+  predicciones:
+    cmd: python -m src.modelos.predecir
+    deps:
+      - src/modelos/predecir.py
+      - src/modelos/caracteristicas.py
+      - src/modelos/metricas.py
+      - reportes/modelos/seleccion.json
       - data/procesado/panel.parquet
+      - data/procesado/vecindad.parquet
     outs:
       - data/procesado/predicciones.parquet
       - data/procesado/predicciones_metricas.json:
@@ -110,6 +124,27 @@ stages:
       - data/raw
       - data/procesado/panel.parquet
       - data/procesado/predicciones.parquet
+      - reportes/modelos/seleccion.json
     outs:
       - data/procesado/tablero_segmentos.parquet
       - data/procesado/tablero_geometria.parquet
+
+  empaquetar:
+    cmd: python -m src.modelos.empaquetar
+    deps:
+      - src/modelos/empaquetar.py
+      - src/modelos/caracteristicas.py
+      - src/modelos/predecir.py
+      - reportes/modelos/seleccion.json
+      - data/procesado/panel.parquet
+      - data/procesado/vecindad.parquet
+    outs:
+      - data/procesado/caracteristicas_inferencia.parquet
+      - modelo-riesgo/modelo_riesgo/trained/modelo-riesgo-conteo0.0.2.txt:
+          cache: false
+      - modelo-riesgo/modelo_riesgo/trained/modelo-riesgo-clasificacion0.0.2.txt:
+          cache: false
+      - modelo-riesgo/modelo_riesgo/config.yml:
+          cache: false
+      - modelo-riesgo/modelo_riesgo/datasets/muestra_2021.csv:
+          cache: false

@@ -1,0 +1,40 @@
+# Levanta la API y el tablero juntos en una red interna.
+#
+#   docker compose up --build
+#   tablero  http://localhost:8050
+#   API      http://localhost:8000/docs
+#
+# El tablero resuelve el nombre del servicio api dentro de la red, por eso no
+# necesita saber la IP del contenedor. Espera a que /salud responda para que la
+# primera carga de la pagina no caiga en la pantalla de error.
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    image: svb-api:0.2.0
+    container_name: svb-api
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/salud')"]
+      interval: 10s
+      timeout: 10s
+      retries: 6
+      start_period: 40s
+    restart: unless-stopped
+
+  tablero:
+    build:
+      context: .
+      dockerfile: docker/tablero/Dockerfile
+    image: svb-tablero:0.2.0
+    container_name: svb-tablero
+    ports:
+      - "8050:8050"
+    environment:
+      API_URL: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

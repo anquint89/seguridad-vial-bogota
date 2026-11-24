@@ -5,36 +5,23 @@ SALE  : una corrida de MLflow por modelo, con sus parametros, sus metricas y
         el modelo serializado.
 
 QUE REGISTRA
-  Dos tareas sobre la MISMA matriz de caracteristicas y la MISMA particion,
-  de modo que las corridas son comparables entre si:
+  Las dos tareas sobre la misma matriz y la misma particion, para que las
+  corridas sean comparables. Conteo: Poisson, binomial negativa, con y sin
+  Empirical Bayes, y LightGBM. Clasificacion: logistica, LightGBM y CatBoost.
+  Todas miden ademas la captura, y la linea base del metodo vigente entra como
+  una corrida mas para leerla en la misma tabla.
 
-    conteo        cuantos graves se esperan     Poisson, binomial negativa,
-                                                 binomial negativa + Empirical
-                                                 Bayes, LightGBM Poisson
-    clasificacion si ocurre al menos uno        logistica, LightGBM, CatBoost
+  El puntaje de validacion de cada corrida se vuelca a un parquet, que es lo
+  que luego compara seleccion.py sin reentrenar.
 
-  Toda corrida mide ademas la metrica de negocio -- que fraccion de los graves
-  de 2021 cae en los primeros k segmentos del ranking -- contra la misma linea
-  base del metodo vigente, que entra como una corrida mas para poder leerla en
-  la misma tabla de MLflow.
-
-DONDE REGISTRA
-  Sin argumentos escribe en ./mlruns y se mira con `mlflow ui`. Con
-  --tracking-uri http://<ip>:5000 registra contra el servidor de la EC2.
+OJO: lightgbm se importa ANTES que pandas. Si pyarrow carga primero su runtime
+de OpenMP, la DLL nativa de lightgbm se cae con una violacion de acceso.
 
     python -m src.modelos.experimentos
-    python -m src.modelos.experimentos --tracking-uri http://54.0.0.1:5000
+    python -m src.modelos.experimentos --tracking-uri http://<ip>:5000
 
-EXPORTAR LAS CIFRAS
-  Las metricas de la rejilla solo viven en MLflow, y el servidor de la EC2 se
-  apaga al cerrar la entrega. Con --exportar se vuelcan a
-  reportes/modelos/experimentos.json, que es de donde el reporte las cita.
-
-    python -m src.modelos.experimentos --exportar --tracking-uri sqlite:///mlflow.db
-
-NOTA DE ENTORNO
-  lightgbm se importa ANTES que pandas. Si pyarrow carga primero su runtime de
-  OpenMP, la DLL nativa de lightgbm se cae con una violacion de acceso.
+  Con --exportar no entrena: vuelca las corridas ya registradas a
+  reportes/modelos/experimentos.json, de donde el reporte cita las cifras.
 """
 
 from __future__ import annotations
@@ -66,6 +53,7 @@ from src.modelos.conteo import empirical_bayes, estimar_alpha
 
 RAIZ = Path(__file__).resolve().parents[2]
 EXPORTACION = RAIZ / "reportes" / "modelos" / "experimentos.json"
+PUNTAJES_VALIDACION = RAIZ / "data" / "procesado" / "puntajes_validacion.parquet"
 
 EXPERIMENTO = "seguridad-vial-bogota"
 PERCENTILES = (0.01, 0.02, 0.05, 0.10)
@@ -74,19 +62,45 @@ PERCENTILES = (0.01, 0.02, 0.05, 0.10)
 # conteo, el AUC en la clasificacion.
 METRICA_PRINCIPAL = {"conteo": "captura_top_5_pct", "clasificacion": "auc_roc"}
 
-REJILLA_LGB = (
-    {"num_leaves": 31, "learning_rate": 0.05, "num_boost_round": 400},
-    {"num_leaves": 63, "learning_rate": 0.05, "num_boost_round": 400},
-    {"num_leaves": 31, "learning_rate": 0.10, "num_boost_round": 200},
+# Rondas por tasa de aprendizaje: cuanto mas baja la tasa, mas arboles hacen
+# falta para llegar al mismo sitio. No se usa parada temprana a proposito,
+# porque el unico conjunto disponible para vigilarla seria 2021, que es el de
+# validacion, y mirarlo durante el entrenamiento lo invalidaria.
+RONDAS_POR_TASA = {0.03: 700, 0.05: 500, 0.10: 250}
+
+REJILLA_LGB = tuple(
+    {
+        "num_leaves": hojas,
+        "learning_rate": tasa,
+        "min_data_in_leaf": minimo,
+        "num_boost_round": RONDAS_POR_TASA[tasa],
+    }
+    for hojas in (15, 31, 63, 127)
+    for tasa in (0.03, 0.05, 0.10)
+    for minimo in (100, 300)
 )
+
+REJILLA_CATBOOST = tuple(
+    {"depth": prof, "learning_rate": tasa, "iterations": iters}
+    for prof in (4, 6, 8)
+    for tasa, iters in ((0.05, 500), (0.10, 250))
+)
+
+# min_data_in_leaf NO va aqui: lo recorre la rejilla. Si estuviera en los dos
+# sitios, el diccionario de parametros que se registra en MLflow lo tomaria de
+# aqui y quedaria anotado 200 en todas las corridas, cualquiera que fuese el
+# valor con el que se entreno de verdad.
 LGB_COMUN = {
-    "min_data_in_leaf": 200,
     "feature_fraction": 0.8,
     "bagging_fraction": 0.8,
     "bagging_freq": 1,
     "verbose": -1,
     "seed": 7,
 }
+
+# Puntaje de validacion de cada corrida, para poder comparar los modelos entre
+# si despues sin reentrenarlos. Lo vuelca main() y lo consume seleccion.py.
+PUNTAJES: dict[str, pd.Series] = {}
 
 
 def captura_por_corte(ranking: pd.Series, graves: pd.Series, universo: int) -> dict:
@@ -130,7 +144,13 @@ def registrar_lightgbm(arbol):
     return lambda nombre: mlflow.lightgbm.log_model(arbol, name=nombre)
 
 
-def _corrida(nombre: str, tarea: str, parametros: dict, metricas: dict, registrar=None):
+def _corrida(nombre: str, tarea: str, parametros: dict, metricas: dict, registrar=None,
+             puntaje: pd.Series | None = None):
+    """Registra una corrida. `puntaje` es el orden que el modelo induce sobre
+    los segmentos de validacion: se guarda aparte para poder comparar modelos
+    con bootstrap sin volver a entrenarlos."""
+    if puntaje is not None:
+        PUNTAJES[nombre] = puntaje.astype(float)
     with mlflow.start_run(run_name=nombre):
         mlflow.set_tags({"tarea": tarea, "proyecto": "seguridad-vial-bogota"})
         mlflow.log_params(
@@ -167,6 +187,7 @@ def experimentos_de_conteo(p, X, y, offset, entrena, valida, universo, graves):
             "mae": round(float((historico / anios - graves).abs().mean()), 4),
             "rmse": round(float(np.sqrt(((historico / anios - graves) ** 2).mean())), 4),
         },
+        puntaje=historico,
     )
 
     # --- Poisson y binomial negativa --------------------------------------
@@ -187,6 +208,7 @@ def experimentos_de_conteo(p, X, y, offset, entrena, valida, universo, graves):
             "log_verosimilitud": round(float(poisson.llf), 1),
         },
         registrar_statsmodels(poisson),
+        puntaje=pd.Series(mu_poisson[valida].to_numpy(), index=graves.index),
     )
 
     nb = sm.GLM(
@@ -217,6 +239,7 @@ def experimentos_de_conteo(p, X, y, offset, entrena, valida, universo, graves):
             "elasticidad_longitud": round(1.0 + float(nb.params["log_km"]), 4),
         },
         registrar_statsmodels(nb),
+        puntaje=mu_valida,
     )
 
     # --- Empirical Bayes como posproceso ----------------------------------
@@ -232,6 +255,7 @@ def experimentos_de_conteo(p, X, y, offset, entrena, valida, universo, graves):
             **captura_por_corte(eb, graves, universo),
             "razon_suma_predicha": round(float(eb.sum() / graves.sum()), 3),
         },
+        puntaje=eb,
     )
 
     # --- LightGBM con objetivo Poisson ------------------------------------
@@ -246,20 +270,22 @@ def experimentos_de_conteo(p, X, y, offset, entrena, valida, universo, graves):
             feature_name=list(X.columns),
         )
         arbol = lgb.train(par, ds, num_boost_round=rondas)
-        # predict ya aplica la exponencial; el desplazamiento se multiplica.
+        # predict ya aplica la exponencial. El desplazamiento se multiplica aparte.
         pr = pd.Series(
             arbol.predict(_contiguo(X[valida])) * np.exp(offset[valida].to_numpy()),
             index=graves.index,
         )
         _corrida(
-            f"lightgbm_poisson_h{config['num_leaves']}_lr{config['learning_rate']}",
+            f"lightgbm_poisson_h{config['num_leaves']}_lr{config['learning_rate']}"
+            f"_m{config['min_data_in_leaf']}",
             "conteo",
-            {"familia": "LightGBM", "objetivo": "poisson", **config, **LGB_COMUN},
+            {"familia": "LightGBM", "objetivo": "poisson", **LGB_COMUN, **config},
             {
                 **captura_por_corte(pr, graves, universo),
                 "razon_suma_predicha": round(float(pr.sum() / graves.sum()), 3),
             },
             registrar_lightgbm(arbol),
+            puntaje=pr,
         )
 
 
@@ -282,9 +308,10 @@ def experimentos_de_clasificacion(p, X, y_conteo, entrena, valida, universo, gra
         "regresion_logistica",
         "clasificacion",
         {"familia": "Binomial", "enlace": "logit"},
-        {**metricas(np.asarray(logit.predict(X[valida]), dtype=float)),
+        {**metricas(prob_logit := np.asarray(logit.predict(X[valida]), dtype=float)),
          "aic": round(float(logit.aic), 1)},
         registrar_statsmodels(logit),
+        puntaje=pd.Series(prob_logit, index=graves.index),
     )
 
     for config in REJILLA_LGB:
@@ -294,12 +321,15 @@ def experimentos_de_clasificacion(p, X, y_conteo, entrena, valida, universo, gra
         ds = lgb.Dataset(_contiguo(X[entrena]), label=_contiguo(y[entrena]),
                          feature_name=list(X.columns))
         arbol = lgb.train(par, ds, num_boost_round=rondas)
+        prob = arbol.predict(_contiguo(X[valida]))
         _corrida(
-            f"lightgbm_binario_h{config['num_leaves']}_lr{config['learning_rate']}",
+            f"lightgbm_binario_h{config['num_leaves']}_lr{config['learning_rate']}"
+            f"_m{config['min_data_in_leaf']}",
             "clasificacion",
-            {"familia": "LightGBM", "objetivo": "binary", **config, **LGB_COMUN},
-            metricas(arbol.predict(_contiguo(X[valida]))),
+            {"familia": "LightGBM", "objetivo": "binary", **LGB_COMUN, **config},
+            metricas(prob),
             registrar_lightgbm(arbol),
+            puntaje=pd.Series(prob, index=graves.index),
         )
 
     try:
@@ -307,25 +337,25 @@ def experimentos_de_clasificacion(p, X, y_conteo, entrena, valida, universo, gra
     except ImportError:
         print("  catboost no instalado, se omite esa familia")
         return
-    # allow_writing_files: sin esto CatBoost deja un catboost_info/ de logs
-    # en la raiz del repositorio cada vez que entrena.
-    gato = CatBoostClassifier(
-        iterations=400,
-        learning_rate=0.05,
-        depth=6,
-        verbose=0,
-        random_seed=7,
-        allow_writing_files=False,
-    )
-    gato.fit(X[entrena].to_numpy(np.float64), y[entrena].to_numpy(np.float64))
-    prob = gato.predict_proba(X[valida].to_numpy(np.float64))[:, 1]
-    _corrida(
-        "catboost",
-        "clasificacion",
-        {"familia": "CatBoost", "iterations": 400, "learning_rate": 0.05, "depth": 6},
-        metricas(prob),
-        lambda nombre: mlflow.catboost.log_model(gato, name=nombre),
-    )
+    Xe = X[entrena].to_numpy(np.float64)
+    ye = y[entrena].to_numpy(np.float64)
+    Xv = X[valida].to_numpy(np.float64)
+    for config in REJILLA_CATBOOST:
+        # allow_writing_files: sin esto CatBoost deja un catboost_info/ de logs
+        # en la raiz del repositorio cada vez que entrena.
+        gato = CatBoostClassifier(
+            verbose=0, random_seed=7, allow_writing_files=False, **config
+        )
+        gato.fit(Xe, ye)
+        prob = gato.predict_proba(Xv)[:, 1]
+        _corrida(
+            f"catboost_d{config['depth']}_lr{config['learning_rate']}",
+            "clasificacion",
+            {"familia": "CatBoost", **config},
+            metricas(prob),
+            lambda nombre, m=gato: mlflow.catboost.log_model(m, name=nombre),
+            puntaje=pd.Series(prob, index=graves.index),
+        )
 
 
 def exportar(experimento: str, destino: Path) -> int:
@@ -388,6 +418,8 @@ def main() -> int:
     ap.add_argument("--exportar", action="store_true",
                     help="no entrena: vuelca las corridas ya registradas a un JSON")
     ap.add_argument("--salida", type=Path, default=EXPORTACION)
+    ap.add_argument("--puntajes", type=Path, default=PUNTAJES_VALIDACION,
+                    help="donde volcar el puntaje de validacion de cada corrida")
     a = ap.parse_args()
 
     if a.tracking_uri:
@@ -407,7 +439,17 @@ def main() -> int:
 
     experimentos_de_conteo(p, X, y, offset, entrena, valida, universo, graves)
     experimentos_de_clasificacion(p, X, y, entrena, valida, universo, graves)
+
+    # Los puntajes de validacion, para que seleccion.py compare los modelos con
+    # bootstrap sin tener que reentrenar la rejilla entera.
+    tabla = pd.DataFrame(PUNTAJES)
+    tabla.insert(0, "graves_2021", graves.astype(int))
+    tabla.index.name = "CIV"
+    a.puntajes.parent.mkdir(parents=True, exist_ok=True)
+    tabla.reset_index().to_parquet(a.puntajes, index=False)
+
     print(f"\nlisto. {len(X.columns)} variables, {int(entrena.sum()):,} filas de entrenamiento.")
+    print(f"{len(PUNTAJES)} corridas con puntaje volcadas a {a.puntajes}")
     return 0
 
 

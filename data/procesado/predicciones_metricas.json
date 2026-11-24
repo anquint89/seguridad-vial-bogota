@@ -1,11 +1,21 @@
 {
-  "modelo": "eb_grupos_referencia_v1",
-  "phi_2021": 0.552,
+  "modelo_conteo": "lightgbm_poisson_h15_lr0.1_m100",
+  "modelo_clasificacion": "lightgbm_binario_h15_lr0.1_m300",
+  "origen": "MLflow",
+  "alpha_nb2": 0.3485,
   "captura_top5_2021": {
-    "esperado": 37.1,
-    "esperado_eb": 45.0,
-    "linea_base_historico": 44.5
+    "esperado": 45.96,
+    "esperado_eb": 45.2,
+    "prob_grave": 45.85,
+    "linea_base_historico": 44.44
   },
-  "mae_2021": 0.1285,
-  "phi_2022": 0.574
+  "mae_2021": 0.1269,
+  "razon_suma_2021": 0.827,
+  "empates_linea_base_en_el_corte": {
+    "valor_de_corte": 3.0,
+    "empatados": 1881,
+    "cupo": 1711
+  },
+  "universo_civ": 116322,
+  "corte_pct": 5.0
 }

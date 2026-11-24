@@ -79,6 +79,80 @@ dvc repro           # rehace solo las etapas desactualizadas
 dvc dag             # muestra el grafo de dependencias
 ```
 
+Las tres ultimas etapas son la cadena del modelo que se sirve. `seleccion`
+elige una corrida por tarea sobre las 59 de MLflow, con bootstrap pareado.
+`predicciones` las aplica a los dos anios que muestra el tablero. `empaquetar`
+deja los dos modelos dentro de `modelo-riesgo/modelo_riesgo/`, que es de donde
+sale la rueda que instala la imagen de la API.
+
+En Windows, si `dvc repro` aborta con `WinError 3`, es la longitud de la ruta
+de la cache: la ruta del repositorio mas dos hashes de 64 caracteres pasa del
+limite de 260. Se arregla apuntando la cache a una ruta corta, solo en la
+configuracion local, que no se versiona:
+
+```bash
+dvc cache dir --local C:/dvc-cache
+dvc commit
+```
+
+## Despliegue en contenedores
+
+Dos imagenes, una por servicio, orquestadas con `docker compose`. La API lleva
+dentro el modelo empaquetado y sus entradas, asi que el contenedor es
+autosuficiente y no necesita volumen montado.
+
+```bash
+docker compose up --build
+```
+
+| Servicio | Puerto | Donde se mira |
+|---|---|---|
+| API | 8000 | http://localhost:8000/docs |
+| Tablero | 8050 | http://localhost:8050 |
+
+El tablero resuelve `http://api:8000` dentro de la red interna de compose y
+espera a que `/salud` responda antes de arrancar. Para levantar un servicio
+suelto hay que pasarle las variables a mano:
+
+```bash
+docker build -f docker/api/Dockerfile -t svb-api:0.2.0 .
+docker run --rm -p 8000:8000 svb-api:0.2.0
+
+docker build -f docker/tablero/Dockerfile -t svb-tablero:0.2.0 .
+docker run --rm -p 8050:8050 -e API_URL=http://host.docker.internal:8000 svb-tablero:0.2.0
+```
+
+Antes de construir hay que tener las salidas del pipeline en `data/procesado`,
+porque el Dockerfile de la API las copia a la imagen. Con `dvc pull` y
+`dvc repro` basta.
+
+## El paquete del modelo
+
+`modelo-riesgo` es una distribucion instalable que lleva dentro los dos modelos
+elegidos, su `config.yml` con la corrida de MLflow de la que salio cada uno, y
+una muestra de prueba. La imagen de la API la instala desde
+`model-pkg/modelo_riesgo-0.0.2-py3-none-any.whl`, por eso la rueda esta
+versionada en el repositorio.
+
+```bash
+pip install model-pkg/modelo_riesgo-0.0.2-py3-none-any.whl
+```
+
+```python
+from modelo_riesgo.predict import make_prediction
+make_prediction(input_data=filas)   # esperado, esperado_eb y prob_grave
+```
+
+Se regenera despues de cualquier cambio en los modelos:
+
+```bash
+dvc repro empaquetar                       # refresca los artefactos del paquete
+cd modelo-riesgo && pip wheel --no-deps -w dist .
+```
+
+y el `.whl` resultante se copia a `model-pkg/`, subiendo antes el numero de
+`modelo_riesgo/VERSION`.
+
 ## Como quedo inicializado el repositorio
 
 Secuencia que se ejecuto una vez, al comienzo de la semana 3. Cada bloque
@@ -139,13 +213,21 @@ dvc push -r respaldo
 seguridad-vial-bogota/
   dvc.yaml                  definicion del pipeline
   dvc.lock                  hash de cada entrada y cada salida
+  docker-compose.yml        levanta la API y el tablero juntos
   requirements.txt
   src/
     extraccion/             cliente REST y descarga de las cuatro capas
     exploracion/            perfilamiento y figuras del reporte
-    tablero/                maqueta del tablero
+    preparacion/            panel segmento-anio y proxy de exposicion
+    modelos/                conteo, clasificacion, rejilla en MLflow y empaquetado
+    api/                    FastAPI que infiere con el modelo empaquetado
+    tablero/                aplicacion Dash y sus tablas
+  modelo-riesgo/            fuente del paquete instalable del modelo
+  model-pkg/                la rueda que instala la imagen de la API
+  docker/                   Dockerfile y arranque de cada servicio
   data/raw/                 punteros .dvc y fichas de trazabilidad
-  reportes/                 perfilamiento.json, figuras y generadores de los documentos
+  reportes/                 JSON de los modelos, figuras y generadores de los documentos
+  tests/                    pruebas del pipeline, de los modelos y de la API
 ```
 
 ## Estado
@@ -154,6 +236,9 @@ Entrega 1 (25 de octubre de 2026): las cuatro capas extraidas, versionadas en
 DVC y perfiladas; pipeline y remoto en funcionamiento; linea base del metodo
 vigente replicada; maqueta del tablero cerrada.
 
-El repositorio contiene solo el codigo que ya corre. Los modulos de preparacion,
-modelacion, analisis causal y optimizacion, la API y el tablero quedan fuera del
-alcance de esta entrega y se desarrollan mas adelante.
+Entrega 2 (8 de noviembre de 2026): panel segmento-anio, modelos de conteo y de
+clasificacion, rejilla de experimentos registrada en MLflow, API y tablero.
+
+Entrega 3 (24 de noviembre de 2026): el modelo elegido empaquetado como
+distribucion instalable, la API infiriendo con el en cada peticion, y los dos
+servicios desplegados en contenedores Docker.
