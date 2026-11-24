@@ -1,24 +1,52 @@
 package_name: modelo-riesgo
-pipeline_save_file: modelo-riesgo-output
-test_data_file: muestra_2021.csv
-modelo: lightgbm_poisson_h31_lr0.1
+version: 0.0.2
+empaquetado: '2026-11-23'
+experimento: seguridad-vial-bogota-e3
+tracking_uri: sqlite:///mlflow.db
+criterio: Se toma la corrida lider por la metrica principal. Por bootstrap pareado
+  se calcula el intervalo del 95 % de la diferencia con cada rival. Las que contienen
+  el cero son indistinguibles de la lider, y entre esas se elige la de menor complejidad.
+modelos:
+  conteo:
+    archivo: modelo-riesgo-conteo0.0.2.txt
+    corrida: lightgbm_poisson_h15_lr0.1_m100
+    arboles: 250
+    variables: 28
+    metricas_validacion:
+      captura_top_1_pct: 20.83
+      captura_top_2_pct: 30.19
+      captura_top_5_pct: 45.96
+      captura_top_10_pct: 58.81
+      auc_roc: 0.8282
+      tarea: conteo
+      complejidad: 15
+  clasificacion:
+    archivo: modelo-riesgo-clasificacion0.0.2.txt
+    corrida: lightgbm_binario_h15_lr0.1_m300
+    arboles: 250
+    variables: 28
+    metricas_validacion:
+      captura_top_1_pct: 20.81
+      captura_top_2_pct: 29.78
+      captura_top_5_pct: 45.85
+      captura_top_10_pct: 58.68
+      auc_roc: 0.8274
+      tarea: clasificacion
+      complejidad: 15
+alpha_nb2: 0.3485
 target: graves
-offset: log_km
+offset: log_long_km
+test_data_file: muestra_2021.csv
 anio_entrenamiento:
 - 2016
 - 2020
 anio_validacion: 2021
-num_boost_round: 200
-parametros:
-  min_data_in_leaf: 200
-  feature_fraction: 0.8
-  bagging_fraction: 0.8
-  bagging_freq: 1
-  verbose: -1
-  seed: 7
-  num_leaves: 31
-  learning_rate: 0.1
-  objective: poisson
+anio_pronostico: 2022
+no_son_variables:
+- CIV
+- anio_ref
+- log_long_km
+- factor_eb
 features:
 - const
 - hist_media_log

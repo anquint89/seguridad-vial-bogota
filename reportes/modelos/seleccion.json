@@ -1,0 +1,1419 @@
+{
+  "criterio": {
+    "metrica_principal": "captura_top_5_pct",
+    "anio_de_validacion": 2021,
+    "replicas_bootstrap": 500,
+    "semilla": 11,
+    "regla": "Se toma la corrida lider por la metrica principal. Por bootstrap pareado se calcula el intervalo del 95 % de la diferencia con cada rival. Las que contienen el cero son indistinguibles de la lider, y entre esas se elige la de menor complejidad."
+  },
+  "universo_civ": 116322,
+  "graves_2021": 10717,
+  "corridas_evaluadas": 59,
+  "metricas": {
+    "linea_base_conteo_historico": {
+      "captura_top_1_pct": 20.64,
+      "captura_top_2_pct": 29.72,
+      "captura_top_5_pct": 44.44,
+      "captura_top_10_pct": 56.03,
+      "auc_roc": 0.7395,
+      "tarea": "conteo",
+      "complejidad": 0
+    },
+    "poisson_glm": {
+      "captura_top_1_pct": 21.21,
+      "captura_top_2_pct": 30.15,
+      "captura_top_5_pct": 44.08,
+      "captura_top_10_pct": 56.04,
+      "auc_roc": 0.7999,
+      "tarea": "conteo",
+      "complejidad": 0
+    },
+    "binomial_negativa_glm": {
+      "captura_top_1_pct": 21.13,
+      "captura_top_2_pct": 30.25,
+      "captura_top_5_pct": 44.36,
+      "captura_top_10_pct": 56.55,
+      "auc_roc": 0.8032,
+      "tarea": "conteo",
+      "complejidad": 0
+    },
+    "binomial_negativa_eb": {
+      "captura_top_1_pct": 20.54,
+      "captura_top_2_pct": 29.28,
+      "captura_top_5_pct": 44.85,
+      "captura_top_10_pct": 57.32,
+      "auc_roc": 0.8101,
+      "tarea": "conteo",
+      "complejidad": 0
+    },
+    "lightgbm_poisson_h15_lr0.03_m100": {
+      "captura_top_1_pct": 20.85,
+      "captura_top_2_pct": 30.44,
+      "captura_top_5_pct": 45.72,
+      "captura_top_10_pct": 58.9,
+      "auc_roc": 0.828,
+      "tarea": "conteo",
+      "complejidad": 15
+    },
+    "lightgbm_poisson_h15_lr0.03_m300": {
+      "captura_top_1_pct": 20.85,
+      "captura_top_2_pct": 30.29,
+      "captura_top_5_pct": 45.79,
+      "captura_top_10_pct": 58.99,
+      "auc_roc": 0.828,
+      "tarea": "conteo",
+      "complejidad": 15
+    },
+    "lightgbm_poisson_h15_lr0.05_m100": {
+      "captura_top_1_pct": 20.85,
+      "captura_top_2_pct": 30.61,
+      "captura_top_5_pct": 45.72,
+      "captura_top_10_pct": 58.83,
+      "auc_roc": 0.8285,
+      "tarea": "conteo",
+      "complejidad": 15
+    },
+    "lightgbm_poisson_h15_lr0.05_m300": {
+      "captura_top_1_pct": 20.85,
+      "captura_top_2_pct": 30.25,
+      "captura_top_5_pct": 45.86,
+      "captura_top_10_pct": 58.76,
+      "auc_roc": 0.8282,
+      "tarea": "conteo",
+      "complejidad": 15
+    },
+    "lightgbm_poisson_h15_lr0.1_m100": {
+      "captura_top_1_pct": 20.83,
+      "captura_top_2_pct": 30.19,
+      "captura_top_5_pct": 45.96,
+      "captura_top_10_pct": 58.81,
+      "auc_roc": 0.8282,
+      "tarea": "conteo",
+      "complejidad": 15
+    },
+    "lightgbm_poisson_h15_lr0.1_m300": {
+      "captura_top_1_pct": 20.7,
+      "captura_top_2_pct": 29.95,
+      "captura_top_5_pct": 45.93,
+      "captura_top_10_pct": 58.65,
+      "auc_roc": 0.828,
+      "tarea": "conteo",
+      "complejidad": 15
+    },
+    "lightgbm_poisson_h31_lr0.03_m100": {
+      "captura_top_1_pct": 20.89,
+      "captura_top_2_pct": 30.29,
+      "captura_top_5_pct": 45.63,
+      "captura_top_10_pct": 58.84,
+      "auc_roc": 0.8286,
+      "tarea": "conteo",
+      "complejidad": 31
+    },
+    "lightgbm_poisson_h31_lr0.03_m300": {
+      "captura_top_1_pct": 20.88,
+      "captura_top_2_pct": 30.18,
+      "captura_top_5_pct": 45.72,
+      "captura_top_10_pct": 58.91,
+      "auc_roc": 0.8284,
+      "tarea": "conteo",
+      "complejidad": 31
+    },
+    "lightgbm_poisson_h31_lr0.05_m100": {
+      "captura_top_1_pct": 20.74,
+      "captura_top_2_pct": 30.21,
+      "captura_top_5_pct": 45.49,
+      "captura_top_10_pct": 58.76,
+      "auc_roc": 0.828,
+      "tarea": "conteo",
+      "complejidad": 31
+    },
+    "lightgbm_poisson_h31_lr0.05_m300": {
+      "captura_top_1_pct": 20.9,
+      "captura_top_2_pct": 30.02,
+      "captura_top_5_pct": 45.77,
+      "captura_top_10_pct": 58.77,
+      "auc_roc": 0.8282,
+      "tarea": "conteo",
+      "complejidad": 31
+    },
+    "lightgbm_poisson_h31_lr0.1_m100": {
+      "captura_top_1_pct": 20.64,
+      "captura_top_2_pct": 30.06,
+      "captura_top_5_pct": 45.74,
+      "captura_top_10_pct": 58.84,
+      "auc_roc": 0.8281,
+      "tarea": "conteo",
+      "complejidad": 31
+    },
+    "lightgbm_poisson_h31_lr0.1_m300": {
+      "captura_top_1_pct": 20.68,
+      "captura_top_2_pct": 30.16,
+      "captura_top_5_pct": 45.53,
+      "captura_top_10_pct": 58.97,
+      "auc_roc": 0.828,
+      "tarea": "conteo",
+      "complejidad": 31
+    },
+    "lightgbm_poisson_h63_lr0.03_m100": {
+      "captura_top_1_pct": 20.85,
+      "captura_top_2_pct": 30.06,
+      "captura_top_5_pct": 45.73,
+      "captura_top_10_pct": 58.97,
+      "auc_roc": 0.828,
+      "tarea": "conteo",
+      "complejidad": 63
+    },
+    "lightgbm_poisson_h63_lr0.03_m300": {
+      "captura_top_1_pct": 20.89,
+      "captura_top_2_pct": 30.04,
+      "captura_top_5_pct": 45.64,
+      "captura_top_10_pct": 58.83,
+      "auc_roc": 0.8278,
+      "tarea": "conteo",
+      "complejidad": 63
+    },
+    "lightgbm_poisson_h63_lr0.05_m100": {
+      "captura_top_1_pct": 20.91,
+      "captura_top_2_pct": 29.9,
+      "captura_top_5_pct": 45.53,
+      "captura_top_10_pct": 58.84,
+      "auc_roc": 0.8278,
+      "tarea": "conteo",
+      "complejidad": 63
+    },
+    "lightgbm_poisson_h63_lr0.05_m300": {
+      "captura_top_1_pct": 20.92,
+      "captura_top_2_pct": 29.81,
+      "captura_top_5_pct": 45.6,
+      "captura_top_10_pct": 58.91,
+      "auc_roc": 0.8275,
+      "tarea": "conteo",
+      "complejidad": 63
+    },
+    "lightgbm_poisson_h63_lr0.1_m100": {
+      "captura_top_1_pct": 20.61,
+      "captura_top_2_pct": 29.86,
+      "captura_top_5_pct": 45.54,
+      "captura_top_10_pct": 58.68,
+      "auc_roc": 0.8272,
+      "tarea": "conteo",
+      "complejidad": 63
+    },
+    "lightgbm_poisson_h63_lr0.1_m300": {
+      "captura_top_1_pct": 20.83,
+      "captura_top_2_pct": 29.86,
+      "captura_top_5_pct": 45.75,
+      "captura_top_10_pct": 58.94,
+      "auc_roc": 0.8275,
+      "tarea": "conteo",
+      "complejidad": 63
+    },
+    "lightgbm_poisson_h127_lr0.03_m100": {
+      "captura_top_1_pct": 20.78,
+      "captura_top_2_pct": 30.12,
+      "captura_top_5_pct": 45.75,
+      "captura_top_10_pct": 58.79,
+      "auc_roc": 0.8271,
+      "tarea": "conteo",
+      "complejidad": 127
+    },
+    "lightgbm_poisson_h127_lr0.03_m300": {
+      "captura_top_1_pct": 20.84,
+      "captura_top_2_pct": 30.03,
+      "captura_top_5_pct": 45.61,
+      "captura_top_10_pct": 58.77,
+      "auc_roc": 0.8268,
+      "tarea": "conteo",
+      "complejidad": 127
+    },
+    "lightgbm_poisson_h127_lr0.05_m100": {
+      "captura_top_1_pct": 20.8,
+      "captura_top_2_pct": 30.07,
+      "captura_top_5_pct": 45.82,
+      "captura_top_10_pct": 58.97,
+      "auc_roc": 0.827,
+      "tarea": "conteo",
+      "complejidad": 127
+    },
+    "lightgbm_poisson_h127_lr0.05_m300": {
+      "captura_top_1_pct": 20.71,
+      "captura_top_2_pct": 29.98,
+      "captura_top_5_pct": 45.82,
+      "captura_top_10_pct": 58.84,
+      "auc_roc": 0.8265,
+      "tarea": "conteo",
+      "complejidad": 127
+    },
+    "lightgbm_poisson_h127_lr0.1_m100": {
+      "captura_top_1_pct": 20.59,
+      "captura_top_2_pct": 30.08,
+      "captura_top_5_pct": 45.78,
+      "captura_top_10_pct": 58.57,
+      "auc_roc": 0.8262,
+      "tarea": "conteo",
+      "complejidad": 127
+    },
+    "lightgbm_poisson_h127_lr0.1_m300": {
+      "captura_top_1_pct": 20.8,
+      "captura_top_2_pct": 29.68,
+      "captura_top_5_pct": 45.74,
+      "captura_top_10_pct": 58.84,
+      "auc_roc": 0.8263,
+      "tarea": "conteo",
+      "complejidad": 127
+    },
+    "regresion_logistica": {
+      "captura_top_1_pct": 21.15,
+      "captura_top_2_pct": 30.39,
+      "captura_top_5_pct": 44.84,
+      "captura_top_10_pct": 57.21,
+      "auc_roc": 0.8097,
+      "tarea": "clasificacion",
+      "complejidad": 0
+    },
+    "lightgbm_binario_h15_lr0.03_m100": {
+      "captura_top_1_pct": 20.54,
+      "captura_top_2_pct": 30.05,
+      "captura_top_5_pct": 45.82,
+      "captura_top_10_pct": 58.85,
+      "auc_roc": 0.8278,
+      "tarea": "clasificacion",
+      "complejidad": 15
+    },
+    "lightgbm_binario_h15_lr0.03_m300": {
+      "captura_top_1_pct": 20.75,
+      "captura_top_2_pct": 29.99,
+      "captura_top_5_pct": 45.83,
+      "captura_top_10_pct": 58.76,
+      "auc_roc": 0.8278,
+      "tarea": "clasificacion",
+      "complejidad": 15
+    },
+    "lightgbm_binario_h15_lr0.05_m100": {
+      "captura_top_1_pct": 20.65,
+      "captura_top_2_pct": 30.02,
+      "captura_top_5_pct": 45.59,
+      "captura_top_10_pct": 58.72,
+      "auc_roc": 0.8276,
+      "tarea": "clasificacion",
+      "complejidad": 15
+    },
+    "lightgbm_binario_h15_lr0.05_m300": {
+      "captura_top_1_pct": 20.77,
+      "captura_top_2_pct": 29.93,
+      "captura_top_5_pct": 45.71,
+      "captura_top_10_pct": 58.63,
+      "auc_roc": 0.8274,
+      "tarea": "clasificacion",
+      "complejidad": 15
+    },
+    "lightgbm_binario_h15_lr0.1_m100": {
+      "captura_top_1_pct": 20.72,
+      "captura_top_2_pct": 29.93,
+      "captura_top_5_pct": 45.74,
+      "captura_top_10_pct": 58.66,
+      "auc_roc": 0.8277,
+      "tarea": "clasificacion",
+      "complejidad": 15
+    },
+    "lightgbm_binario_h15_lr0.1_m300": {
+      "captura_top_1_pct": 20.81,
+      "captura_top_2_pct": 29.78,
+      "captura_top_5_pct": 45.85,
+      "captura_top_10_pct": 58.68,
+      "auc_roc": 0.8274,
+      "tarea": "clasificacion",
+      "complejidad": 15
+    },
+    "lightgbm_binario_h31_lr0.03_m100": {
+      "captura_top_1_pct": 20.71,
+      "captura_top_2_pct": 30.05,
+      "captura_top_5_pct": 45.69,
+      "captura_top_10_pct": 58.8,
+      "auc_roc": 0.8275,
+      "tarea": "clasificacion",
+      "complejidad": 31
+    },
+    "lightgbm_binario_h31_lr0.03_m300": {
+      "captura_top_1_pct": 20.71,
+      "captura_top_2_pct": 29.93,
+      "captura_top_5_pct": 45.65,
+      "captura_top_10_pct": 58.66,
+      "auc_roc": 0.8272,
+      "tarea": "clasificacion",
+      "complejidad": 31
+    },
+    "lightgbm_binario_h31_lr0.05_m100": {
+      "captura_top_1_pct": 20.54,
+      "captura_top_2_pct": 30.15,
+      "captura_top_5_pct": 45.42,
+      "captura_top_10_pct": 58.92,
+      "auc_roc": 0.8273,
+      "tarea": "clasificacion",
+      "complejidad": 31
+    },
+    "lightgbm_binario_h31_lr0.05_m300": {
+      "captura_top_1_pct": 20.56,
+      "captura_top_2_pct": 30.01,
+      "captura_top_5_pct": 45.67,
+      "captura_top_10_pct": 58.87,
+      "auc_roc": 0.827,
+      "tarea": "clasificacion",
+      "complejidad": 31
+    },
+    "lightgbm_binario_h31_lr0.1_m100": {
+      "captura_top_1_pct": 20.7,
+      "captura_top_2_pct": 29.9,
+      "captura_top_5_pct": 45.29,
+      "captura_top_10_pct": 58.69,
+      "auc_roc": 0.8273,
+      "tarea": "clasificacion",
+      "complejidad": 31
+    },
+    "lightgbm_binario_h31_lr0.1_m300": {
+      "captura_top_1_pct": 20.64,
+      "captura_top_2_pct": 29.83,
+      "captura_top_5_pct": 45.4,
+      "captura_top_10_pct": 58.51,
+      "auc_roc": 0.827,
+      "tarea": "clasificacion",
+      "complejidad": 31
+    },
+    "lightgbm_binario_h63_lr0.03_m100": {
+      "captura_top_1_pct": 20.57,
+      "captura_top_2_pct": 29.99,
+      "captura_top_5_pct": 45.58,
+      "captura_top_10_pct": 58.85,
+      "auc_roc": 0.8265,
+      "tarea": "clasificacion",
+      "complejidad": 63
+    },
+    "lightgbm_binario_h63_lr0.03_m300": {
+      "captura_top_1_pct": 20.71,
+      "captura_top_2_pct": 29.91,
+      "captura_top_5_pct": 45.45,
+      "captura_top_10_pct": 58.64,
+      "auc_roc": 0.8262,
+      "tarea": "clasificacion",
+      "complejidad": 63
+    },
+    "lightgbm_binario_h63_lr0.05_m100": {
+      "captura_top_1_pct": 20.45,
+      "captura_top_2_pct": 30.06,
+      "captura_top_5_pct": 45.3,
+      "captura_top_10_pct": 58.59,
+      "auc_roc": 0.826,
+      "tarea": "clasificacion",
+      "complejidad": 63
+    },
+    "lightgbm_binario_h63_lr0.05_m300": {
+      "captura_top_1_pct": 20.26,
+      "captura_top_2_pct": 29.81,
+      "captura_top_5_pct": 45.64,
+      "captura_top_10_pct": 58.39,
+      "auc_roc": 0.8258,
+      "tarea": "clasificacion",
+      "complejidad": 63
+    },
+    "lightgbm_binario_h63_lr0.1_m100": {
+      "captura_top_1_pct": 20.19,
+      "captura_top_2_pct": 29.36,
+      "captura_top_5_pct": 45.3,
+      "captura_top_10_pct": 58.31,
+      "auc_roc": 0.8251,
+      "tarea": "clasificacion",
+      "complejidad": 63
+    },
+    "lightgbm_binario_h63_lr0.1_m300": {
+      "captura_top_1_pct": 20.54,
+      "captura_top_2_pct": 29.63,
+      "captura_top_5_pct": 45.17,
+      "captura_top_10_pct": 58.27,
+      "auc_roc": 0.825,
+      "tarea": "clasificacion",
+      "complejidad": 63
+    },
+    "lightgbm_binario_h127_lr0.03_m100": {
+      "captura_top_1_pct": 20.34,
+      "captura_top_2_pct": 29.6,
+      "captura_top_5_pct": 45.28,
+      "captura_top_10_pct": 58.42,
+      "auc_roc": 0.8242,
+      "tarea": "clasificacion",
+      "complejidad": 127
+    },
+    "lightgbm_binario_h127_lr0.03_m300": {
+      "captura_top_1_pct": 20.47,
+      "captura_top_2_pct": 29.83,
+      "captura_top_5_pct": 45.46,
+      "captura_top_10_pct": 58.42,
+      "auc_roc": 0.824,
+      "tarea": "clasificacion",
+      "complejidad": 127
+    },
+    "lightgbm_binario_h127_lr0.05_m100": {
+      "captura_top_1_pct": 20.28,
+      "captura_top_2_pct": 29.5,
+      "captura_top_5_pct": 45.06,
+      "captura_top_10_pct": 57.73,
+      "auc_roc": 0.8227,
+      "tarea": "clasificacion",
+      "complejidad": 127
+    },
+    "lightgbm_binario_h127_lr0.05_m300": {
+      "captura_top_1_pct": 20.46,
+      "captura_top_2_pct": 29.78,
+      "captura_top_5_pct": 45.22,
+      "captura_top_10_pct": 58.08,
+      "auc_roc": 0.8229,
+      "tarea": "clasificacion",
+      "complejidad": 127
+    },
+    "lightgbm_binario_h127_lr0.1_m100": {
+      "captura_top_1_pct": 20.34,
+      "captura_top_2_pct": 29.28,
+      "captura_top_5_pct": 44.46,
+      "captura_top_10_pct": 57.5,
+      "auc_roc": 0.8217,
+      "tarea": "clasificacion",
+      "complejidad": 127
+    },
+    "lightgbm_binario_h127_lr0.1_m300": {
+      "captura_top_1_pct": 20.33,
+      "captura_top_2_pct": 29.65,
+      "captura_top_5_pct": 44.95,
+      "captura_top_10_pct": 58.05,
+      "auc_roc": 0.822,
+      "tarea": "clasificacion",
+      "complejidad": 127
+    },
+    "catboost_d4_lr0.05": {
+      "captura_top_1_pct": 21.04,
+      "captura_top_2_pct": 30.23,
+      "captura_top_5_pct": 46.05,
+      "captura_top_10_pct": 59.06,
+      "auc_roc": 0.827,
+      "tarea": "clasificacion",
+      "complejidad": 16
+    },
+    "catboost_d4_lr0.1": {
+      "captura_top_1_pct": 20.95,
+      "captura_top_2_pct": 30.21,
+      "captura_top_5_pct": 46.01,
+      "captura_top_10_pct": 58.95,
+      "auc_roc": 0.8269,
+      "tarea": "clasificacion",
+      "complejidad": 16
+    },
+    "catboost_d6_lr0.05": {
+      "captura_top_1_pct": 20.58,
+      "captura_top_2_pct": 30.06,
+      "captura_top_5_pct": 45.64,
+      "captura_top_10_pct": 58.91,
+      "auc_roc": 0.827,
+      "tarea": "clasificacion",
+      "complejidad": 64
+    },
+    "catboost_d6_lr0.1": {
+      "captura_top_1_pct": 20.72,
+      "captura_top_2_pct": 30.06,
+      "captura_top_5_pct": 46.0,
+      "captura_top_10_pct": 59.07,
+      "auc_roc": 0.8275,
+      "tarea": "clasificacion",
+      "complejidad": 64
+    },
+    "catboost_d8_lr0.05": {
+      "captura_top_1_pct": 20.66,
+      "captura_top_2_pct": 30.32,
+      "captura_top_5_pct": 45.82,
+      "captura_top_10_pct": 58.91,
+      "auc_roc": 0.8272,
+      "tarea": "clasificacion",
+      "complejidad": 256
+    },
+    "catboost_d8_lr0.1": {
+      "captura_top_1_pct": 20.82,
+      "captura_top_2_pct": 30.13,
+      "captura_top_5_pct": 45.71,
+      "captura_top_10_pct": 58.93,
+      "auc_roc": 0.827,
+      "tarea": "clasificacion",
+      "complejidad": 256
+    }
+  },
+  "conteo": {
+    "finalistas": {
+      "binomial_negativa_eb": {
+        "media": 44.928,
+        "ic95_bajo": 43.405,
+        "ic95_alto": 46.336
+      },
+      "lightgbm_poisson_h15_lr0.03_m100": {
+        "media": 45.782,
+        "ic95_bajo": 44.287,
+        "ic95_alto": 47.24
+      },
+      "lightgbm_poisson_h15_lr0.03_m300": {
+        "media": 45.796,
+        "ic95_bajo": 44.312,
+        "ic95_alto": 47.261
+      },
+      "lightgbm_poisson_h15_lr0.05_m100": {
+        "media": 45.779,
+        "ic95_bajo": 44.28,
+        "ic95_alto": 47.211
+      },
+      "lightgbm_poisson_h15_lr0.05_m300": {
+        "media": 45.87,
+        "ic95_bajo": 44.404,
+        "ic95_alto": 47.265
+      },
+      "lightgbm_poisson_h15_lr0.1_m100": {
+        "media": 45.999,
+        "ic95_bajo": 44.486,
+        "ic95_alto": 47.434
+      },
+      "lightgbm_poisson_h15_lr0.1_m300": {
+        "media": 45.947,
+        "ic95_bajo": 44.509,
+        "ic95_alto": 47.444
+      },
+      "lightgbm_poisson_h31_lr0.03_m100": {
+        "media": 45.698,
+        "ic95_bajo": 44.202,
+        "ic95_alto": 47.187
+      },
+      "lightgbm_poisson_h31_lr0.03_m300": {
+        "media": 45.765,
+        "ic95_bajo": 44.295,
+        "ic95_alto": 47.257
+      },
+      "lightgbm_poisson_h31_lr0.05_m100": {
+        "media": 45.547,
+        "ic95_bajo": 43.979,
+        "ic95_alto": 47.024
+      },
+      "lightgbm_poisson_h31_lr0.05_m300": {
+        "media": 45.819,
+        "ic95_bajo": 44.359,
+        "ic95_alto": 47.235
+      },
+      "lightgbm_poisson_h31_lr0.1_m100": {
+        "media": 45.807,
+        "ic95_bajo": 44.255,
+        "ic95_alto": 47.381
+      },
+      "lightgbm_poisson_h31_lr0.1_m300": {
+        "media": 45.574,
+        "ic95_bajo": 44.042,
+        "ic95_alto": 47.047
+      },
+      "lightgbm_poisson_h63_lr0.03_m100": {
+        "media": 45.792,
+        "ic95_bajo": 44.228,
+        "ic95_alto": 47.333
+      },
+      "lightgbm_poisson_h63_lr0.03_m300": {
+        "media": 45.687,
+        "ic95_bajo": 44.157,
+        "ic95_alto": 47.189
+      },
+      "lightgbm_poisson_h63_lr0.05_m100": {
+        "media": 45.578,
+        "ic95_bajo": 44.015,
+        "ic95_alto": 46.943
+      },
+      "lightgbm_poisson_h63_lr0.05_m300": {
+        "media": 45.651,
+        "ic95_bajo": 44.141,
+        "ic95_alto": 47.12
+      },
+      "lightgbm_poisson_h63_lr0.1_m100": {
+        "media": 45.587,
+        "ic95_bajo": 44.054,
+        "ic95_alto": 47.053
+      },
+      "lightgbm_poisson_h63_lr0.1_m300": {
+        "media": 45.765,
+        "ic95_bajo": 44.315,
+        "ic95_alto": 47.236
+      },
+      "lightgbm_poisson_h127_lr0.03_m100": {
+        "media": 45.814,
+        "ic95_bajo": 44.314,
+        "ic95_alto": 47.345
+      },
+      "lightgbm_poisson_h127_lr0.03_m300": {
+        "media": 45.649,
+        "ic95_bajo": 44.142,
+        "ic95_alto": 47.202
+      },
+      "lightgbm_poisson_h127_lr0.05_m100": {
+        "media": 45.851,
+        "ic95_bajo": 44.314,
+        "ic95_alto": 47.351
+      },
+      "lightgbm_poisson_h127_lr0.05_m300": {
+        "media": 45.85,
+        "ic95_bajo": 44.311,
+        "ic95_alto": 47.331
+      },
+      "lightgbm_poisson_h127_lr0.1_m100": {
+        "media": 45.829,
+        "ic95_bajo": 44.313,
+        "ic95_alto": 47.328
+      },
+      "lightgbm_poisson_h127_lr0.1_m300": {
+        "media": 45.741,
+        "ic95_bajo": 44.281,
+        "ic95_alto": 47.16
+      },
+      "linea_base_conteo_historico": {
+        "media": 44.483,
+        "ic95_bajo": 43.057,
+        "ic95_alto": 45.724
+      }
+    },
+    "comparacion_con_lider": {
+      "binomial_negativa_eb": {
+        "diferencia_con_lider": {
+          "media": 1.071,
+          "ic95_bajo": 0.552,
+          "ic95_alto": 1.63
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.0
+      },
+      "lightgbm_poisson_h15_lr0.03_m100": {
+        "diferencia_con_lider": {
+          "media": 0.217,
+          "ic95_bajo": -0.057,
+          "ic95_alto": 0.515
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.078
+      },
+      "lightgbm_poisson_h15_lr0.03_m300": {
+        "diferencia_con_lider": {
+          "media": 0.202,
+          "ic95_bajo": -0.103,
+          "ic95_alto": 0.552
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.096
+      },
+      "lightgbm_poisson_h15_lr0.05_m100": {
+        "diferencia_con_lider": {
+          "media": 0.22,
+          "ic95_bajo": -0.083,
+          "ic95_alto": 0.521
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.068
+      },
+      "lightgbm_poisson_h15_lr0.05_m300": {
+        "diferencia_con_lider": {
+          "media": 0.129,
+          "ic95_bajo": -0.17,
+          "ic95_alto": 0.45
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.226
+      },
+      "lightgbm_poisson_h15_lr0.1_m100": {
+        "diferencia_con_lider": {
+          "media": 0.0,
+          "ic95_bajo": 0.0,
+          "ic95_alto": 0.0
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.0
+      },
+      "lightgbm_poisson_h15_lr0.1_m300": {
+        "diferencia_con_lider": {
+          "media": 0.052,
+          "ic95_bajo": -0.235,
+          "ic95_alto": 0.362
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.358
+      },
+      "lightgbm_poisson_h31_lr0.03_m100": {
+        "diferencia_con_lider": {
+          "media": 0.301,
+          "ic95_bajo": -0.019,
+          "ic95_alto": 0.622
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.028
+      },
+      "lightgbm_poisson_h31_lr0.03_m300": {
+        "diferencia_con_lider": {
+          "media": 0.234,
+          "ic95_bajo": -0.08,
+          "ic95_alto": 0.573
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.09
+      },
+      "lightgbm_poisson_h31_lr0.05_m100": {
+        "diferencia_con_lider": {
+          "media": 0.452,
+          "ic95_bajo": 0.136,
+          "ic95_alto": 0.864
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.002
+      },
+      "lightgbm_poisson_h31_lr0.05_m300": {
+        "diferencia_con_lider": {
+          "media": 0.18,
+          "ic95_bajo": -0.169,
+          "ic95_alto": 0.536
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.17
+      },
+      "lightgbm_poisson_h31_lr0.1_m100": {
+        "diferencia_con_lider": {
+          "media": 0.192,
+          "ic95_bajo": -0.114,
+          "ic95_alto": 0.522
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.116
+      },
+      "lightgbm_poisson_h31_lr0.1_m300": {
+        "diferencia_con_lider": {
+          "media": 0.425,
+          "ic95_bajo": 0.047,
+          "ic95_alto": 0.83
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.014
+      },
+      "lightgbm_poisson_h63_lr0.03_m100": {
+        "diferencia_con_lider": {
+          "media": 0.207,
+          "ic95_bajo": -0.184,
+          "ic95_alto": 0.61
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.152
+      },
+      "lightgbm_poisson_h63_lr0.03_m300": {
+        "diferencia_con_lider": {
+          "media": 0.312,
+          "ic95_bajo": -0.043,
+          "ic95_alto": 0.708
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.058
+      },
+      "lightgbm_poisson_h63_lr0.05_m100": {
+        "diferencia_con_lider": {
+          "media": 0.421,
+          "ic95_bajo": 0.0,
+          "ic95_alto": 0.931
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.024
+      },
+      "lightgbm_poisson_h63_lr0.05_m300": {
+        "diferencia_con_lider": {
+          "media": 0.348,
+          "ic95_bajo": -0.056,
+          "ic95_alto": 0.779
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.048
+      },
+      "lightgbm_poisson_h63_lr0.1_m100": {
+        "diferencia_con_lider": {
+          "media": 0.412,
+          "ic95_bajo": -0.046,
+          "ic95_alto": 0.848
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.048
+      },
+      "lightgbm_poisson_h63_lr0.1_m300": {
+        "diferencia_con_lider": {
+          "media": 0.234,
+          "ic95_bajo": -0.166,
+          "ic95_alto": 0.591
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.122
+      },
+      "lightgbm_poisson_h127_lr0.03_m100": {
+        "diferencia_con_lider": {
+          "media": 0.184,
+          "ic95_bajo": -0.251,
+          "ic95_alto": 0.637
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.208
+      },
+      "lightgbm_poisson_h127_lr0.03_m300": {
+        "diferencia_con_lider": {
+          "media": 0.35,
+          "ic95_bajo": -0.042,
+          "ic95_alto": 0.794
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.04
+      },
+      "lightgbm_poisson_h127_lr0.05_m100": {
+        "diferencia_con_lider": {
+          "media": 0.148,
+          "ic95_bajo": -0.304,
+          "ic95_alto": 0.603
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.272
+      },
+      "lightgbm_poisson_h127_lr0.05_m300": {
+        "diferencia_con_lider": {
+          "media": 0.149,
+          "ic95_bajo": -0.298,
+          "ic95_alto": 0.636
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.256
+      },
+      "lightgbm_poisson_h127_lr0.1_m100": {
+        "diferencia_con_lider": {
+          "media": 0.17,
+          "ic95_bajo": -0.317,
+          "ic95_alto": 0.62
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.242
+      },
+      "lightgbm_poisson_h127_lr0.1_m300": {
+        "diferencia_con_lider": {
+          "media": 0.257,
+          "ic95_bajo": -0.228,
+          "ic95_alto": 0.701
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.148
+      },
+      "linea_base_conteo_historico": {
+        "diferencia_con_lider": {
+          "media": 1.516,
+          "ic95_bajo": 0.838,
+          "ic95_alto": 2.23
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.0
+      }
+    },
+    "seleccion": {
+      "lider_por_metrica": "lightgbm_poisson_h15_lr0.1_m100",
+      "indistinguibles_de_la_lider": [
+        "lightgbm_poisson_h127_lr0.03_m100",
+        "lightgbm_poisson_h127_lr0.03_m300",
+        "lightgbm_poisson_h127_lr0.05_m100",
+        "lightgbm_poisson_h127_lr0.05_m300",
+        "lightgbm_poisson_h127_lr0.1_m100",
+        "lightgbm_poisson_h127_lr0.1_m300",
+        "lightgbm_poisson_h15_lr0.03_m100",
+        "lightgbm_poisson_h15_lr0.03_m300",
+        "lightgbm_poisson_h15_lr0.05_m100",
+        "lightgbm_poisson_h15_lr0.05_m300",
+        "lightgbm_poisson_h15_lr0.1_m100",
+        "lightgbm_poisson_h15_lr0.1_m300",
+        "lightgbm_poisson_h31_lr0.03_m100",
+        "lightgbm_poisson_h31_lr0.03_m300",
+        "lightgbm_poisson_h31_lr0.05_m300",
+        "lightgbm_poisson_h31_lr0.1_m100",
+        "lightgbm_poisson_h63_lr0.03_m100",
+        "lightgbm_poisson_h63_lr0.03_m300",
+        "lightgbm_poisson_h63_lr0.05_m100",
+        "lightgbm_poisson_h63_lr0.05_m300",
+        "lightgbm_poisson_h63_lr0.1_m100",
+        "lightgbm_poisson_h63_lr0.1_m300"
+      ],
+      "elegida": "lightgbm_poisson_h15_lr0.1_m100",
+      "por_que": "22 corridas son indistinguibles de lightgbm_poisson_h15_lr0.1_m100 al 95 %. Entre ellas se toma la de menor complejidad, que es lightgbm_poisson_h15_lr0.1_m100."
+    }
+  },
+  "clasificacion": {
+    "finalistas": {
+      "regresion_logistica": {
+        "media": 44.94,
+        "ic95_bajo": 43.401,
+        "ic95_alto": 46.446
+      },
+      "lightgbm_binario_h15_lr0.03_m100": {
+        "media": 45.875,
+        "ic95_bajo": 44.374,
+        "ic95_alto": 47.343
+      },
+      "lightgbm_binario_h15_lr0.03_m300": {
+        "media": 45.871,
+        "ic95_bajo": 44.373,
+        "ic95_alto": 47.291
+      },
+      "lightgbm_binario_h15_lr0.05_m100": {
+        "media": 45.635,
+        "ic95_bajo": 44.1,
+        "ic95_alto": 47.154
+      },
+      "lightgbm_binario_h15_lr0.05_m300": {
+        "media": 45.795,
+        "ic95_bajo": 44.286,
+        "ic95_alto": 47.233
+      },
+      "lightgbm_binario_h15_lr0.1_m100": {
+        "media": 45.809,
+        "ic95_bajo": 44.303,
+        "ic95_alto": 47.198
+      },
+      "lightgbm_binario_h15_lr0.1_m300": {
+        "media": 45.889,
+        "ic95_bajo": 44.377,
+        "ic95_alto": 47.312
+      },
+      "lightgbm_binario_h31_lr0.03_m100": {
+        "media": 45.686,
+        "ic95_bajo": 44.165,
+        "ic95_alto": 47.141
+      },
+      "lightgbm_binario_h31_lr0.03_m300": {
+        "media": 45.709,
+        "ic95_bajo": 44.155,
+        "ic95_alto": 47.146
+      },
+      "lightgbm_binario_h31_lr0.05_m100": {
+        "media": 45.495,
+        "ic95_bajo": 43.969,
+        "ic95_alto": 46.941
+      },
+      "lightgbm_binario_h31_lr0.05_m300": {
+        "media": 45.706,
+        "ic95_bajo": 44.239,
+        "ic95_alto": 47.105
+      },
+      "lightgbm_binario_h31_lr0.1_m100": {
+        "media": 45.323,
+        "ic95_bajo": 43.822,
+        "ic95_alto": 46.838
+      },
+      "lightgbm_binario_h31_lr0.1_m300": {
+        "media": 45.485,
+        "ic95_bajo": 43.973,
+        "ic95_alto": 46.967
+      },
+      "lightgbm_binario_h63_lr0.03_m100": {
+        "media": 45.617,
+        "ic95_bajo": 44.08,
+        "ic95_alto": 47.036
+      },
+      "lightgbm_binario_h63_lr0.03_m300": {
+        "media": 45.516,
+        "ic95_bajo": 44.005,
+        "ic95_alto": 46.984
+      },
+      "lightgbm_binario_h63_lr0.05_m100": {
+        "media": 45.29,
+        "ic95_bajo": 43.774,
+        "ic95_alto": 46.754
+      },
+      "lightgbm_binario_h63_lr0.05_m300": {
+        "media": 45.68,
+        "ic95_bajo": 44.174,
+        "ic95_alto": 47.143
+      },
+      "lightgbm_binario_h63_lr0.1_m100": {
+        "media": 45.313,
+        "ic95_bajo": 43.701,
+        "ic95_alto": 46.76
+      },
+      "lightgbm_binario_h63_lr0.1_m300": {
+        "media": 45.187,
+        "ic95_bajo": 43.666,
+        "ic95_alto": 46.723
+      },
+      "lightgbm_binario_h127_lr0.03_m100": {
+        "media": 45.295,
+        "ic95_bajo": 43.777,
+        "ic95_alto": 46.768
+      },
+      "lightgbm_binario_h127_lr0.03_m300": {
+        "media": 45.482,
+        "ic95_bajo": 43.9,
+        "ic95_alto": 46.963
+      },
+      "lightgbm_binario_h127_lr0.05_m100": {
+        "media": 45.086,
+        "ic95_bajo": 43.626,
+        "ic95_alto": 46.539
+      },
+      "lightgbm_binario_h127_lr0.05_m300": {
+        "media": 45.216,
+        "ic95_bajo": 43.682,
+        "ic95_alto": 46.731
+      },
+      "lightgbm_binario_h127_lr0.1_m300": {
+        "media": 44.922,
+        "ic95_bajo": 43.379,
+        "ic95_alto": 46.342
+      },
+      "catboost_d4_lr0.05": {
+        "media": 46.08,
+        "ic95_bajo": 44.579,
+        "ic95_alto": 47.487
+      },
+      "catboost_d4_lr0.1": {
+        "media": 46.047,
+        "ic95_bajo": 44.53,
+        "ic95_alto": 47.454
+      },
+      "catboost_d6_lr0.05": {
+        "media": 45.729,
+        "ic95_bajo": 44.201,
+        "ic95_alto": 47.156
+      },
+      "catboost_d6_lr0.1": {
+        "media": 46.093,
+        "ic95_bajo": 44.628,
+        "ic95_alto": 47.447
+      },
+      "catboost_d8_lr0.05": {
+        "media": 45.762,
+        "ic95_bajo": 44.348,
+        "ic95_alto": 47.245
+      },
+      "catboost_d8_lr0.1": {
+        "media": 45.735,
+        "ic95_bajo": 44.229,
+        "ic95_alto": 47.177
+      },
+      "linea_base_conteo_historico": {
+        "media": 44.483,
+        "ic95_bajo": 43.057,
+        "ic95_alto": 45.724
+      }
+    },
+    "comparacion_con_lider": {
+      "regresion_logistica": {
+        "diferencia_con_lider": {
+          "media": 1.14,
+          "ic95_bajo": 0.583,
+          "ic95_alto": 1.726
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.0
+      },
+      "lightgbm_binario_h15_lr0.03_m100": {
+        "diferencia_con_lider": {
+          "media": 0.204,
+          "ic95_bajo": -0.116,
+          "ic95_alto": 0.527
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.104
+      },
+      "lightgbm_binario_h15_lr0.03_m300": {
+        "diferencia_con_lider": {
+          "media": 0.209,
+          "ic95_bajo": -0.149,
+          "ic95_alto": 0.639
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.128
+      },
+      "lightgbm_binario_h15_lr0.05_m100": {
+        "diferencia_con_lider": {
+          "media": 0.444,
+          "ic95_bajo": 0.102,
+          "ic95_alto": 0.843
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.004
+      },
+      "lightgbm_binario_h15_lr0.05_m300": {
+        "diferencia_con_lider": {
+          "media": 0.284,
+          "ic95_bajo": -0.052,
+          "ic95_alto": 0.642
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.052
+      },
+      "lightgbm_binario_h15_lr0.1_m100": {
+        "diferencia_con_lider": {
+          "media": 0.27,
+          "ic95_bajo": -0.134,
+          "ic95_alto": 0.74
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.094
+      },
+      "lightgbm_binario_h15_lr0.1_m300": {
+        "diferencia_con_lider": {
+          "media": 0.191,
+          "ic95_bajo": -0.172,
+          "ic95_alto": 0.547
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.136
+      },
+      "lightgbm_binario_h31_lr0.03_m100": {
+        "diferencia_con_lider": {
+          "media": 0.393,
+          "ic95_bajo": 0.009,
+          "ic95_alto": 0.813
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.022
+      },
+      "lightgbm_binario_h31_lr0.03_m300": {
+        "diferencia_con_lider": {
+          "media": 0.371,
+          "ic95_bajo": -0.07,
+          "ic95_alto": 0.831
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.056
+      },
+      "lightgbm_binario_h31_lr0.05_m100": {
+        "diferencia_con_lider": {
+          "media": 0.584,
+          "ic95_bajo": 0.055,
+          "ic95_alto": 1.112
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.016
+      },
+      "lightgbm_binario_h31_lr0.05_m300": {
+        "diferencia_con_lider": {
+          "media": 0.374,
+          "ic95_bajo": -0.086,
+          "ic95_alto": 0.83
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.042
+      },
+      "lightgbm_binario_h31_lr0.1_m100": {
+        "diferencia_con_lider": {
+          "media": 0.757,
+          "ic95_bajo": 0.281,
+          "ic95_alto": 1.267
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.002
+      },
+      "lightgbm_binario_h31_lr0.1_m300": {
+        "diferencia_con_lider": {
+          "media": 0.595,
+          "ic95_bajo": 0.157,
+          "ic95_alto": 1.036
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.006
+      },
+      "lightgbm_binario_h63_lr0.03_m100": {
+        "diferencia_con_lider": {
+          "media": 0.462,
+          "ic95_bajo": -0.042,
+          "ic95_alto": 0.98
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.03
+      },
+      "lightgbm_binario_h63_lr0.03_m300": {
+        "diferencia_con_lider": {
+          "media": 0.563,
+          "ic95_bajo": 0.079,
+          "ic95_alto": 1.074
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.012
+      },
+      "lightgbm_binario_h63_lr0.05_m100": {
+        "diferencia_con_lider": {
+          "media": 0.79,
+          "ic95_bajo": 0.267,
+          "ic95_alto": 1.309
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.002
+      },
+      "lightgbm_binario_h63_lr0.05_m300": {
+        "diferencia_con_lider": {
+          "media": 0.399,
+          "ic95_bajo": -0.12,
+          "ic95_alto": 0.905
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.068
+      },
+      "lightgbm_binario_h63_lr0.1_m100": {
+        "diferencia_con_lider": {
+          "media": 0.766,
+          "ic95_bajo": 0.195,
+          "ic95_alto": 1.313
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.006
+      },
+      "lightgbm_binario_h63_lr0.1_m300": {
+        "diferencia_con_lider": {
+          "media": 0.893,
+          "ic95_bajo": 0.291,
+          "ic95_alto": 1.517
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.0
+      },
+      "lightgbm_binario_h127_lr0.03_m100": {
+        "diferencia_con_lider": {
+          "media": 0.785,
+          "ic95_bajo": 0.191,
+          "ic95_alto": 1.317
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.004
+      },
+      "lightgbm_binario_h127_lr0.03_m300": {
+        "diferencia_con_lider": {
+          "media": 0.597,
+          "ic95_bajo": 0.032,
+          "ic95_alto": 1.186
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.016
+      },
+      "lightgbm_binario_h127_lr0.05_m100": {
+        "diferencia_con_lider": {
+          "media": 0.994,
+          "ic95_bajo": 0.421,
+          "ic95_alto": 1.527
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.0
+      },
+      "lightgbm_binario_h127_lr0.05_m300": {
+        "diferencia_con_lider": {
+          "media": 0.863,
+          "ic95_bajo": 0.267,
+          "ic95_alto": 1.427
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.002
+      },
+      "lightgbm_binario_h127_lr0.1_m300": {
+        "diferencia_con_lider": {
+          "media": 1.158,
+          "ic95_bajo": 0.546,
+          "ic95_alto": 1.854
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.002
+      },
+      "catboost_d4_lr0.05": {
+        "diferencia_con_lider": {
+          "media": 0.0,
+          "ic95_bajo": 0.0,
+          "ic95_alto": 0.0
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.0
+      },
+      "catboost_d4_lr0.1": {
+        "diferencia_con_lider": {
+          "media": 0.033,
+          "ic95_bajo": -0.279,
+          "ic95_alto": 0.36
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.41
+      },
+      "catboost_d6_lr0.05": {
+        "diferencia_con_lider": {
+          "media": 0.351,
+          "ic95_bajo": -0.047,
+          "ic95_alto": 0.759
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.04
+      },
+      "catboost_d6_lr0.1": {
+        "diferencia_con_lider": {
+          "media": -0.013,
+          "ic95_bajo": -0.359,
+          "ic95_alto": 0.361
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.512
+      },
+      "catboost_d8_lr0.05": {
+        "diferencia_con_lider": {
+          "media": 0.318,
+          "ic95_bajo": -0.093,
+          "ic95_alto": 0.741
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.054
+      },
+      "catboost_d8_lr0.1": {
+        "diferencia_con_lider": {
+          "media": 0.345,
+          "ic95_bajo": -0.024,
+          "ic95_alto": 0.739
+        },
+        "indistinguible": true,
+        "replicas_en_que_gana_al_lider": 0.032
+      },
+      "linea_base_conteo_historico": {
+        "diferencia_con_lider": {
+          "media": 1.597,
+          "ic95_bajo": 0.888,
+          "ic95_alto": 2.302
+        },
+        "indistinguible": false,
+        "replicas_en_que_gana_al_lider": 0.0
+      }
+    },
+    "seleccion": {
+      "lider_por_metrica": "catboost_d4_lr0.05",
+      "indistinguibles_de_la_lider": [
+        "catboost_d4_lr0.05",
+        "catboost_d4_lr0.1",
+        "catboost_d6_lr0.05",
+        "catboost_d6_lr0.1",
+        "catboost_d8_lr0.05",
+        "catboost_d8_lr0.1",
+        "lightgbm_binario_h15_lr0.03_m100",
+        "lightgbm_binario_h15_lr0.03_m300",
+        "lightgbm_binario_h15_lr0.05_m300",
+        "lightgbm_binario_h15_lr0.1_m100",
+        "lightgbm_binario_h15_lr0.1_m300",
+        "lightgbm_binario_h31_lr0.03_m300",
+        "lightgbm_binario_h31_lr0.05_m300",
+        "lightgbm_binario_h63_lr0.03_m100",
+        "lightgbm_binario_h63_lr0.05_m300"
+      ],
+      "elegida": "lightgbm_binario_h15_lr0.1_m300",
+      "por_que": "15 corridas son indistinguibles de catboost_d4_lr0.05 al 95 %. Entre ellas se toma la de menor complejidad, que es lightgbm_binario_h15_lr0.1_m300."
+    }
+  },
+  "brecha_auc_captura": {
+    "modelo_comparado": "lightgbm_poisson_h15_lr0.1_m100",
+    "segmentos_sin_historia": 94176,
+    "segmentos_sin_historia_pct": 81.0,
+    "graves_2021_sin_historia": 3313,
+    "graves_2021_sin_historia_pct": 30.9,
+    "coincidencia_top_5_pct": 79.4,
+    "segmentos_compartidos": 4615,
+    "auc_linea_base": 0.7395,
+    "auc_modelo": 0.8282,
+    "captura_linea_base": 44.44,
+    "captura_modelo": 45.96
+  }
+}

@@ -1,4 +1,4 @@
-./model-pkg/modelo_riesgo-0.0.1-py3-none-any.whl
+./model-pkg/modelo_riesgo-0.0.2-py3-none-any.whl
 fastapi==0.115.6
 uvicorn==0.32.1
 pyarrow==18.0.0

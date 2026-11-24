@@ -1,13 +1,13 @@
 """What-if y paquete de inversion. Funciones puras: no tocan la API ni Dash.
 
 1. opciones: para cada segmento y cada categoria activa calcula
-       reduccion = esperado_eb x |factor|          (graves evitados por ano)
+       reduccion = esperado x |factor|             (graves evitados por ano)
        costo     = costo unitario (x km si la unidad es km)
 2. armar_paquete: mochila de eleccion multiple (una intervencion por segmento)
    resuelta con el voraz clasico:
      a. por segmento se dejan solo las opciones eficientes (frontera convexa
-        de costo vs reduccion, partiendo de "no intervenir");
-     b. cada paso de la frontera es un incremento (mas costo, mas reduccion);
+        de costo vs reduccion, partiendo de "no intervenir")
+     b. cada paso de la frontera es un incremento (mas costo, mas reduccion)
      c. se ordenan todos los incrementos por reduccion/costo y se toman
         mientras quepan. Asi, si sobra plata, un segmento pasa de una obra
         barata a una mas efectiva en vez de quedarse con la primera.
@@ -29,7 +29,7 @@ def opciones(
     ranking: pd.DataFrame, factores: list[dict], activas: set[str], costos: dict[str, float]
 ) -> pd.DataFrame:
     """Tabla larga: una fila por segmento x categoria activa que reduce."""
-    eb = ranking.esperado_eb.to_numpy(float)
+    eb = ranking.esperado.to_numpy(float)
     km = np.maximum(ranking.long_m.to_numpy(float) / 1000, 0.05)  # piso de 50 m
     partes = []
     for f in factores:
@@ -131,7 +131,7 @@ def resumen(tabla: pd.DataFrame) -> dict:
     paq = tabla[tabla.en_paquete]
     costo = float(paq.costo.sum())
     evitados = float(paq.reduccion.sum())
-    riesgo_loc = tabla.groupby("localidad").esperado_eb.sum().sort_values(ascending=False)
+    riesgo_loc = tabla.groupby("localidad").esperado.sum().sort_values(ascending=False)
     top5 = set(riesgo_loc.head(5).index)
     return {
         "segmentos": int(len(paq)),

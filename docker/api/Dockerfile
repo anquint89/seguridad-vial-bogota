@@ -17,11 +17,13 @@ COPY src/__init__.py ./src/__init__.py
 COPY src/api ./src/api
 
 # Entradas de la API. Van dentro de la imagen para que el contenedor sea
-# autosuficiente: en ECS no hay volumen que montar. Son unos 15 MB.
-COPY data/procesado/caracteristicas_2021.parquet \
+# autosuficiente: en ECS no hay volumen que montar. Son unos 17 MB. Los
+# modelos no estan aqui: los trae la rueda de modelo-riesgo.
+COPY data/procesado/caracteristicas_inferencia.parquet \
      data/procesado/tablero_segmentos.parquet \
      data/procesado/tablero_geometria.parquet \
      data/procesado/factores.json \
+     data/procesado/predicciones_metricas.json \
      ./datos/
 
 COPY docker/api/run.sh ./run.sh

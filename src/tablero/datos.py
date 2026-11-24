@@ -1,7 +1,7 @@
 """Prepara las tablas que sirve la API y consume el tablero.
 
 ENTRA : data/raw (malla, siniestros), data/procesado/panel.parquet,
-        data/procesado/predicciones.parquet (contrato en src/modelos/provisional.py)
+        data/procesado/predicciones.parquet (lo escribe src/modelos/predecir.py)
 SALE  : data/procesado/tablero_segmentos.parquet  una fila por CIV x anio_ref
         data/procesado/tablero_geometria.parquet  una fila por CIV, lon/lat
 
@@ -116,7 +116,7 @@ def construir(raw: Path, procesado: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
         bloque["graves_previos"] = por_anio[list(ventana)].sum(axis=1)
         bloque["observado"] = por_anio[anio_ref] if anio_ref in por_anio else np.nan
         bloque["anio_ref"] = anio_ref
-        bloque["rango"] = bloque.esperado_eb.rank(ascending=False, method="first").astype(int)
+        bloque["rango"] = bloque.esperado.rank(ascending=False, method="first").astype(int)
         filas.append(bloque.reset_index())
     segmentos = pd.concat(filas, ignore_index=True).sort_values(["anio_ref", "rango"])
     return segmentos, geometria_lonlat(malla)

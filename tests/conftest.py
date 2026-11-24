@@ -1,9 +1,9 @@
 """Datos de juguete compartidos por las pruebas de los modelos."""
 
 # lightgbm tiene que cargar ANTES que pyarrow, o su DLL nativa revienta con una
-# violacion de acceso al predecir. La API ya fuerza el orden en src/api/main.py,
-# pero pytest importa este archivo antes que cualquier modulo de prueba, asi que
-# es el unico sitio donde el orden se puede garantizar para la suite entera.
+# violacion de acceso al predecir. pytest importa este archivo antes que
+# cualquier modulo de prueba, asi que es el unico sitio donde el orden se puede
+# garantizar para toda la suite.
 import lightgbm  # noqa: F401,I001
 
 import numpy as np

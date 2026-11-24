@@ -4,4 +4,5 @@
 /predicciones.parquet
 /tablero_segmentos.parquet
 /tablero_geometria.parquet
-/caracteristicas_2021.parquet
+/puntajes_validacion.parquet
+/caracteristicas_inferencia.parquet

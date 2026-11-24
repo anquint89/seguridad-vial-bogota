@@ -4,26 +4,18 @@ ENTRA : data/procesado/panel.parquet
 SALE  : reportes/modelos/clasificador.json
         data/procesado/prediccion_clasificador.parquet
 
-POR QUE UN SEGUNDO MODELO
-  El de conteo responde "cuantos graves se esperan". Este responde "cual es la
-  probabilidad de que ocurra al menos uno". Para priorizar con presupuesto
-  limitado la segunda pregunta es la que importa en los tramos de riesgo bajo,
-  donde el conteo esperado es una fraccion y no se puede leer como decision.
+El de conteo responde cuantos graves se esperan. Este responde con que
+probabilidad ocurre al menos uno, que es lo que se puede leer como decision en
+los tramos de riesgo bajo, donde el conteo esperado es una fraccion.
 
-QUE COMPARA
-  Regresion logistica, que da razones de momios interpretables, contra
-  LightGBM, que captura no linealidades e interacciones. Las dos sobre la
-  matriz de caracteristicas.py, la misma que usa el modelo de conteo, para que
-  la comparacion sea de forma funcional y no de informacion disponible.
+Compara regresion logistica, que da razones de momios interpretables, contra
+LightGBM, que captura no linealidades. Las dos sobre la matriz de
+caracteristicas.py, la misma del modelo de conteo, para que la comparacion sea
+de forma funcional y no de informacion disponible. De ahi salen tambien la
+ventana, 2016-2020 contra 2021, y la historia de los vecinos.
 
-VENTANA Y VARIABLES
-  Las define caracteristicas.py: entrena 2016-2020, valida 2021, e incluye la
-  historia de los segmentos vecinos.
-
-NOTA DE ENTORNO
-  lightgbm se importa ANTES que pandas. Si pyarrow carga primero su runtime de
-  OpenMP, la DLL nativa de lightgbm se cae con una violacion de acceso al
-  construir el Dataset.
+OJO: lightgbm se importa ANTES que pandas. Si pyarrow carga primero su runtime
+de OpenMP, la DLL nativa de lightgbm se cae al construir el Dataset.
 
     python -m src.modelos.clasificador
 """

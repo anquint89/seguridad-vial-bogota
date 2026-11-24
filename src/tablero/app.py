@@ -1,4 +1,4 @@
-"""Tablero de priorizacion (Dash). Consume la API; no lee archivos de datos.
+"""Tablero de priorizacion (Dash). Consume la API y no lee archivos de datos.
 
     1) API:     uvicorn src.api.main:app --port 8000
     2) Tablero: python -m src.tablero.app          -> http://localhost:8050
@@ -8,7 +8,7 @@ La URL de la API se cambia con la variable de entorno API_URL.
 Reparto de la maqueta:
   A. Mapa       <- GET /segmentos/top  (GeoJSON del top-N)
   B. Ranking    <- GET /ranking        (se baja una vez por ano/localidad)
-  C. What-if    <- GET /factores       (una vez); recalculo local
+  C. What-if    <- GET /factores       (una vez), recalculo local
   D. Paquete    <- calculo local: mochila voraz sobre el ranking ya descargado
 """
 
@@ -48,7 +48,7 @@ def api(ruta: str, **params):
 def num(valor, dec=2):
     """Formato colombiano: 1.234,56"""
     if valor is None or pd.isna(valor):
-        return "—"
+        return "-"
     return f"{valor:,.{dec}f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
@@ -121,7 +121,7 @@ def construir_layout():
     captura = metricas.get("captura_top5_2021", {})
     modelo_txt = (
         f"Modelo: {salud['modelo']} · captura del top 5 % en 2021: "
-        f"{num(captura.get('esperado_eb'), 1)} % (línea base {num(captura.get('linea_base_historico'), 1)} %)"
+        f"{num(captura.get('esperado'), 1)} % (línea base {num(captura.get('linea_base_historico'), 1)} %)"
     )
 
     barra = html.Header(
@@ -159,8 +159,9 @@ def construir_layout():
 
     mapa = tarjeta(
         "A. Mapa de la malla coloreado por riesgo esperado",
-        f"Siniestros graves esperados por segmento y por año, estimados con el modelo LightGBM Poisson. "
-        f"Se dibujan los {num(TOP_N, 0)} segmentos de mayor riesgo; haga clic en uno para ver su detalle.",
+        f"Siniestros graves esperados por segmento y por año, estimados con el modelo LightGBM "
+        f"Poisson elegido. "
+        f"Se dibujan los {num(TOP_N, 0)} segmentos de mayor riesgo. Haga clic en uno para ver su detalle.",
         html.Div(
             [
                 dcc.Loading(dcc.Graph(id="mapa", config={"displaylogo": False, "scrollZoom": True})),
@@ -196,7 +197,7 @@ def construir_layout():
     columnas = [
         ("rango", "#", "numeric"), ("CIV", "CIV", "numeric"), ("via", "Vía", "text"),
         ("localidad", "Localidad", "text"), ("observado", "Graves año ref.", "numeric"),
-        ("esperado_eb", "Riesgo esperado", "numeric"), ("prob_grave", "P(≥1 grave)", "numeric"),
+        ("esperado", "Riesgo esperado", "numeric"), ("prob_grave", "P(≥1 grave)", "numeric"),
         ("long_m", "Longitud (m)", "numeric"), ("intervencion", "Intervención recomendada", "text"),
         ("reduccion", "Reducción", "numeric"), ("costo", "Costo (M)", "numeric"),
         ("en_paquete", "En paquete", "text"),
@@ -280,7 +281,7 @@ def recalcular(ranking, costos, aplicar, supuesto, presupuesto, factores):
     tabla = armar_paquete(base, opciones(base, factores, activas, costos_d), presupuesto)
     r = resumen(tabla)
     tabla["en_paquete"] = tabla.en_paquete.map({True: "sí", False: "no"})
-    mezcla = ", ".join(f"{k}: {num(v, 0)}" for k, v in r["por_intervencion"].items()) or "—"
+    mezcla = ", ".join(f"{k}: {num(v, 0)}" for k, v in r["por_intervencion"].items()) or "-"
 
     filas = [
         ("Segmentos en el paquete", num(r["segmentos"], 0)),
@@ -294,7 +295,7 @@ def recalcular(ranking, costos, aplicar, supuesto, presupuesto, factores):
         ("Mezcla de intervenciones", mezcla),
     ]
     kpis = html.Table([html.Tr([html.Td(a), html.Td(b, className="valor")]) for a, b in filas])
-    for col, dec in (("esperado_eb", 2), ("prob_grave", 3), ("reduccion", 2), ("costo", 1)):
+    for col, dec in (("esperado", 2), ("prob_grave", 3), ("reduccion", 2), ("costo", 1)):
         tabla[col] = tabla[col].round(dec)
     tabla["id"] = tabla.CIV
     return tabla.to_dict("records"), kpis, f"$ {num(presupuesto, 0)} millones COP"
@@ -327,7 +328,7 @@ def dibujar_mapa(geo, civ_sel):
     sel = ([], [])
     for feat in (geo or {}).get("features", []):
         p = feat["properties"]
-        i = next(j for j in range(len(ETIQUETAS)) if p["esperado_eb"] < CORTES[j + 1])
+        i = next(j for j in range(len(ETIQUETAS)) if p["esperado"] < CORTES[j + 1])
         lon, lat, cd = grupos[i]
         for trazo in feat["geometry"]["coordinates"]:
             for x, y in trazo:
@@ -363,7 +364,7 @@ def dibujar_mapa(geo, civ_sel):
         margin={"l": 0, "r": 0, "t": 0, "b": 0}, height=480,
         legend={"title": {"text": "Graves esperados/año"}, "x": 0.01, "y": 0.99,
                 "bgcolor": "rgba(255,255,255,0.85)"},
-        # El encuadre se recalcula al cambiar filtros o seleccion; entre tanto se
+        # El encuadre se recalcula al cambiar filtros o seleccion. Entre tanto se
         # conserva el zoom que haya puesto el usuario.
         uirevision=f"{centro}-{civ_sel}",
     )
@@ -404,12 +405,12 @@ def detalle(civ, tabla):
         ("Localidad", fila["localidad"].title()),
         ("Ranking", f"#{num(fila['rango'], 0)}"),
         ("Observado en el año", num(fila["observado"], 0)),
-        ("Riesgo esperado", f"{num(fila['esperado_eb'])} graves/año"),
+        ("Riesgo esperado", f"{num(fila['esperado'])} graves/año"),
         ("P(≥1 grave)", f"{num(100 * fila['prob_grave'], 1)} %"),
         ("Graves años previos", num(fila["graves_previos"], 0)),
         ("Exposición", f"{num(fila['long_m'], 0)} m, clase {fila['clase_via']}, {fila['carriles']} carriles"),
         ("Intervenido en 2016", "sí" if fila["intervenido_2016"] else "no"),
-        ("Recomendado", fila["intervencion"] or "—"),
+        ("Recomendado", fila["intervencion"] or "-"),
         ("Reducción esperada", f"{num(fila['reduccion'])} graves/año"),
         ("Costo", millones(fila["costo"])),
         ("En el paquete", fila["en_paquete"]),

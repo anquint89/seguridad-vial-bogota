@@ -79,9 +79,21 @@ dvc repro           # rehace solo las etapas desactualizadas
 dvc dag             # muestra el grafo de dependencias
 ```
 
-La etapa `empaquetar` entrena el modelo que sirve la API y deja sus artefactos
-en `modelo-riesgo/modelo_riesgo/`, mas `data/procesado/caracteristicas_2021.parquet`,
-que son las entradas con las que la API infiere.
+Las tres ultimas etapas son la cadena del modelo que se sirve. `seleccion`
+elige una corrida por tarea sobre las 59 de MLflow, con bootstrap pareado.
+`predicciones` las aplica a los dos anios que muestra el tablero. `empaquetar`
+deja los dos modelos dentro de `modelo-riesgo/modelo_riesgo/`, que es de donde
+sale la rueda que instala la imagen de la API.
+
+En Windows, si `dvc repro` aborta con `WinError 3`, es la longitud de la ruta
+de la cache: la ruta del repositorio mas dos hashes de 64 caracteres pasa del
+limite de 260. Se arregla apuntando la cache a una ruta corta, solo en la
+configuracion local, que no se versiona:
+
+```bash
+dvc cache dir --local C:/dvc-cache
+dvc commit
+```
 
 ## Despliegue en contenedores
 
@@ -114,18 +126,32 @@ Antes de construir hay que tener las salidas del pipeline en `data/procesado`,
 porque el Dockerfile de la API las copia a la imagen. Con `dvc pull` y
 `dvc repro` basta.
 
-## Reconstruir la rueda del modelo
+## El paquete del modelo
 
-`model-pkg/modelo_riesgo-0.0.1-py3-none-any.whl` esta versionado porque la
-imagen de la API lo instala desde ahi. Se regenera despues de cualquier cambio
-en el modelo:
+`modelo-riesgo` es una distribucion instalable que lleva dentro los dos modelos
+elegidos, su `config.yml` con la corrida de MLflow de la que salio cada uno, y
+una muestra de prueba. La imagen de la API la instala desde
+`model-pkg/modelo_riesgo-0.0.2-py3-none-any.whl`, por eso la rueda esta
+versionada en el repositorio.
 
 ```bash
-dvc repro empaquetar                 # reentrena y refresca los artefactos
-cd modelo-riesgo && python -m build  # deja el .whl en modelo-riesgo/dist/
+pip install model-pkg/modelo_riesgo-0.0.2-py3-none-any.whl
 ```
 
-y el `.whl` resultante se copia a `model-pkg/`.
+```python
+from modelo_riesgo.predict import make_prediction
+make_prediction(input_data=filas)   # esperado, esperado_eb y prob_grave
+```
+
+Se regenera despues de cualquier cambio en los modelos:
+
+```bash
+dvc repro empaquetar                       # refresca los artefactos del paquete
+cd modelo-riesgo && pip wheel --no-deps -w dist .
+```
+
+y el `.whl` resultante se copia a `model-pkg/`, subiendo antes el numero de
+`modelo_riesgo/VERSION`.
 
 ## Como quedo inicializado el repositorio
 

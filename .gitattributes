@@ -1,3 +1,5 @@
+# Los scripts que corren dentro de las imagenes van con fin de linea LF:
+# bash no los interpreta con CRLF.
 *.sh text eol=lf
 
 # El modelo serializado se copia tal cual a la rueda. Si git le cambia los
