@@ -5,13 +5,13 @@ stages:
     deps:
     - path: data/raw
       hash: md5
-      md5: bd01b47f65bb5e567c4d80a7bb3f1f8f.dir
-      size: 32012630
+      md5: b81b6c54282bd01ccbfc7457773c1828.dir
+      size: 32012521
       nfiles: 13
     - path: src/exploracion/perfilamiento.py
       hash: md5
-      md5: cdcf116cfc824c5e87f034538d0e4dac
-      size: 13616
+      md5: 891a32a4fd90371c94c2fc7775fa5522
+      size: 13316
     outs:
     - path: reportes/figuras/concentracion.png
       hash: md5
@@ -23,15 +23,15 @@ stages:
       size: 60414
     - path: reportes/perfilamiento.json
       hash: md5
-      md5: 074cb51ff82e9f8fb2aa2425e0b219b8
-      size: 5245
+      md5: afc43472c69788300a17492748f944f0
+      size: 5032
   maqueta:
     cmd: python -m src.tablero.maqueta
     deps:
     - path: src/tablero/maqueta.py
       hash: md5
-      md5: 97df229ed6e5efaa5c63d77143a75f24
-      size: 9903
+      md5: 682dfd0ed7c491fdc9a84fb7c0549c77
+      size: 9684
     outs:
     - path: reportes/figuras/maqueta_tablero.png
       hash: md5
@@ -42,17 +42,17 @@ stages:
     deps:
     - path: data/raw
       hash: md5
-      md5: bd01b47f65bb5e567c4d80a7bb3f1f8f.dir
-      size: 32012630
+      md5: b81b6c54282bd01ccbfc7457773c1828.dir
+      size: 32012521
       nfiles: 13
     - path: src/preparacion/exposicion.py
       hash: md5
-      md5: f4266d3cce865965af6cdc53d929019d
-      size: 1319
+      md5: 14339ea0453ed839888383e4bea0a910
+      size: 1292
     - path: src/preparacion/panel.py
       hash: md5
-      md5: 08bf802417017b658c57415c41c63503
-      size: 4727
+      md5: f4b39b8194b649d1bc35cb814aeec014
+      size: 4620
     outs:
     - path: data/procesado/panel.parquet
       hash: md5
@@ -84,8 +84,8 @@ stages:
       size: 3127506
     - path: reportes/modelos/conteo.json
       hash: md5
-      md5: fcb5349b2cb702273398d874688671a5
-      size: 9329
+      md5: 3763fc31bc38dbdb671f2be09d232af1
+      size: 8921
   modelo_clasificador:
     cmd: python -m src.modelos.clasificador
     deps:
@@ -103,8 +103,8 @@ stages:
       size: 5511
     - path: src/modelos/clasificador.py
       hash: md5
-      md5: 778abf47bc09cf9fece7c6d50b9c74e1
-      size: 8666
+      md5: f8e112826eaa4233f4a6d7e2050c002f
+      size: 8438
     outs:
     - path: data/procesado/prediccion_clasificador.parquet
       hash: md5
@@ -112,8 +112,8 @@ stages:
       size: 2573523
     - path: reportes/modelos/clasificador.json
       hash: md5
-      md5: 2c1a9f52417a4cc787241902a7bc8c1b
-      size: 9426
+      md5: 47e853da1afffcb3808e7b1c8466feb6
+      size: 9019
   vecindad:
     cmd: python -m src.modelos.vecindad
     deps:
@@ -143,8 +143,8 @@ stages:
       size: 3083095
     - path: reportes/modelos/seleccion.json
       hash: md5
-      md5: cc86cb588625383c5b100a0342bd3bf5
-      size: 42515
+      md5: ab25028d822f312c7c143c6af90bd2ee
+      size: 41097
     - path: src/modelos/caracteristicas.py
       hash: md5
       md5: d12cae499f33b2b15992791f68136db9
@@ -155,8 +155,8 @@ stages:
       size: 6496
     - path: src/modelos/predecir.py
       hash: md5
-      md5: 0bffe86c1abd5c0d1083c782c31cf843
-      size: 8938
+      md5: b094b4a06b2d60250343ffed56627ed9
+      size: 8726
     outs:
     - path: data/procesado/caracteristicas_inferencia.parquet
       hash: md5
@@ -164,8 +164,8 @@ stages:
       size: 4437544
     - path: modelo-riesgo/modelo_riesgo/config.yml
       hash: md5
-      md5: 40145d760412a78f8f84663af6aaf60a
-      size: 1898
+      md5: 41bdfc197b6b296e937501bd9e3efff2
+      size: 1820
     - path: modelo-riesgo/modelo_riesgo/datasets/muestra_2021.csv
       hash: md5
       md5: 43fac5b5847bb1ad7caceb6cdfe75c93
@@ -192,13 +192,13 @@ stages:
       size: 3863
     - path: src/modelos/seleccion.py
       hash: md5
-      md5: 9753202e0508e9679b28a15fa726df2c
-      size: 12200
+      md5: b04edd12e1b548c25d3d3b9395d5f3b0
+      size: 11903
     outs:
     - path: reportes/modelos/seleccion.json
       hash: md5
-      md5: cc86cb588625383c5b100a0342bd3bf5
-      size: 42515
+      md5: ab25028d822f312c7c143c6af90bd2ee
+      size: 41097
   predicciones:
     cmd: python -m src.modelos.predecir
     deps:
@@ -212,8 +212,8 @@ stages:
       size: 3083095
     - path: reportes/modelos/seleccion.json
       hash: md5
-      md5: cc86cb588625383c5b100a0342bd3bf5
-      size: 42515
+      md5: ab25028d822f312c7c143c6af90bd2ee
+      size: 41097
     - path: src/modelos/caracteristicas.py
       hash: md5
       md5: d12cae499f33b2b15992791f68136db9
@@ -224,8 +224,8 @@ stages:
       size: 3863
     - path: src/modelos/predecir.py
       hash: md5
-      md5: 0bffe86c1abd5c0d1083c782c31cf843
-      size: 8938
+      md5: b094b4a06b2d60250343ffed56627ed9
+      size: 8726
     outs:
     - path: data/procesado/predicciones.parquet
       hash: md5
@@ -233,8 +233,8 @@ stages:
       size: 6210088
     - path: data/procesado/predicciones_metricas.json
       hash: md5
-      md5: 8625fe3b0146009dbd1d60075b35daac
-      size: 525
+      md5: 843a111992d8209ba6c51da9bf21cd30
+      size: 505
   tablero_datos:
     cmd: python -m src.tablero.datos
     deps:
@@ -248,17 +248,17 @@ stages:
       size: 6210088
     - path: data/raw
       hash: md5
-      md5: bd01b47f65bb5e567c4d80a7bb3f1f8f.dir
-      size: 32012630
+      md5: b81b6c54282bd01ccbfc7457773c1828.dir
+      size: 32012521
       nfiles: 13
     - path: reportes/modelos/seleccion.json
       hash: md5
-      md5: cc86cb588625383c5b100a0342bd3bf5
-      size: 42515
+      md5: ab25028d822f312c7c143c6af90bd2ee
+      size: 41097
     - path: src/tablero/datos.py
       hash: md5
-      md5: 374bfad88e1b53e54341df4b238806ed
-      size: 6083
+      md5: 71e7ea0ec10b02e8f5672797b203c8dd
+      size: 5943
     outs:
     - path: data/procesado/tablero_geometria.parquet
       hash: md5
@@ -277,10 +277,10 @@ stages:
       size: 10715284
     - path: src/modelos/factores.py
       hash: md5
-      md5: 287d99d7af9fcd8b9d2ceb3cb5ead701
-      size: 5858
+      md5: 18ae0e07fac33bc2d6edc16b7af7af68
+      size: 5718
     outs:
     - path: data/procesado/factores.json
       hash: md5
-      md5: cf991614a52644b2a9e562b4bd2b3684
-      size: 3029
+      md5: 65b38d5a26b65dfbcea5f4387f5d07a9
+      size: 2917
