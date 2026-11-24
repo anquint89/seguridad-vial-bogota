@@ -121,7 +121,9 @@ def construir_layout():
     captura = metricas.get("captura_top5_2021", {})
     modelo_txt = (
         f"Modelo: {salud['modelo']} · captura del top 5 % en 2021: "
-        f"{num(captura.get('esperado'), 1)} % (línea base {num(captura.get('linea_base_historico'), 1)} %)"
+        # Dos decimales a proposito: con uno, 45,96 se redondea a 46,0 y deja de
+        # coincidir con la cifra que cita el reporte.
+        f"{num(captura.get('esperado'), 2)} % (línea base {num(captura.get('linea_base_historico'), 2)} %)"
     )
 
     barra = html.Header(
